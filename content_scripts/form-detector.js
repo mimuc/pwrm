@@ -1,4 +1,4 @@
-console.log("script injected");
+console.log("form-detector.js injected");
 
 var title = document.title;
 var url = document.URL;
@@ -20,12 +20,18 @@ for (index = 0; index < inputs.length; ++index) {
   if(i.getAttribute("type").toUpperCase() === attr_mail.toUpperCase() ||
     new RegExp(regex_name).test(i.outerHTML)){
       console.log("username input found -->");
-      console.log(i);
+    //testing
+     i.style.color = "blue";
+     i.style.border = "5px solid blue";
+      //console.log(i);
   }
   if(i.getAttribute("type").toUpperCase() === attr_pw.toUpperCase() ||
     new RegExp(regex_pw).test(i.outerHTML)){
       console.log("password input found -->");
-      console.log(i);
+      //console.log(i);
+       //testing
+       i.style.color = "green";
+       i.style.border = "5px solid green";
   }
 }
 //console.log(url);
