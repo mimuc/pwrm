@@ -8,7 +8,7 @@ var url_enc = window.btoa(url);
 var api_key = "Xtf5w8wFGjX1OCHcmVok&hash=66eb681f798372718a5e272a86d204b3";
 var request_url = "https://api.webshrinker.com/categories/v2/"+url_enc+"?key="+api_key;
 
-console.log(request_url);
+//console.log(request_url);
 
 request.open("GET",request_url);
 request.setRequestHeader("X-Test","test1");

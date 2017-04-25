@@ -1,0 +1,12 @@
+/* injected style sheet */
+
+.hintbox{
+	border: 3px solid black;
+	position: absolute;
+	z-index: 9999;
+	background-color: black;
+	color: white;
+	padding: 5px;
+
+}
+

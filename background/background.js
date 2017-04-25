@@ -1,6 +1,6 @@
 /* initialise variables */
 
-var inputName = document.querySelector('.name');
+var inputCategory = document.querySelector('.category');
 var inputURL = document.querySelector('.url');
 var inputUsername = document.querySelector('.username');
 var inputPassword = document.querySelector('.password');
@@ -15,7 +15,7 @@ addBtn.addEventListener('click', addEntry);
 
 /* listen for new website loaded */
 function logURL(requestDetails) {
-  console.log("Loading: " + requestDetails.url);
+  //console.log("Loading: " + requestDetails.url);
 }
 browser.webRequest.onHeadersReceived.addListener(logURL,
   {urls: ["<all_urls>"]}
@@ -34,7 +34,7 @@ function initialize() {
   var gettingAllStorageItems = browser.storage.local.get(null);
   gettingAllStorageItems.then((results) => {
     var entryKeys = Object.keys(results);
-   
+
 
     for(entryKey of entryKeys) {
       var curValue = results[entryKey];
@@ -47,7 +47,7 @@ function initialize() {
 
 function addEntry() {
 
-  var entryName = inputName.value;
+  var entryCategory = inputCategory.value;
   var entryURL = inputURL.value;
   var entryUsername = inputUsername.value;
   var entryPassword = inputPassword.value;
@@ -60,30 +60,30 @@ function addEntry() {
       entryURL.value = '';
       entryUsername.value = '';
       entryPassword.value = '';
-      entryName.value ='';
-      var credential = [entryURL,entryUsername, entryPassword];
-      storeEntry(entryName, credential);
+      entryCategory.value ='';
+      var credential = {category: entryCategory, username: entryUsername, password: entryPassword};
+      storeEntry(entryURL, credential);
     }
   }, onError);
 }
 
 /* function to store a new entry in storage */
 
-function storeEntry(name, credential) {
-  var storingEntry = browser.storage.local.set({ [name] : credential });
+function storeEntry(url, credential) {
+  var storingEntry = browser.storage.local.set({ [url] : credential });
   storingEntry.then(() => {
-    displayEntry(name, credential);
+    displayEntry(url, credential);
   }, onError);
 }
 
 /* function to display a entry in the entry box */
 
-function displayEntry(name, credential) {
+function displayEntry(url, credential) {
 
   /* create entry display box */
   var entry = document.createElement('div');
   var entryDisplay = document.createElement('div');
-  var entryH = document.createElement('h2');
+  var entryH = document.createElement('p');
   var entryPara = document.createElement('p');
   var entryPara2 = document.createElement('p');
   var entryPara3 = document.createElement('p');
@@ -92,10 +92,10 @@ function displayEntry(name, credential) {
 
   entry.setAttribute('class','entry');
 
-  entryH.textContent = name;
-  entryPara.textContent = credential[0];
-  entryPara2.textContent = credential[1];
-  entryPara3.textContent = credential[2];
+  entryH.textContent = url;
+  entryPara.textContent = credential.category;
+  entryPara2.textContent = credential.username;
+  entryPara3.textContent = 'pw hidden';/*credential.password;*/
 
   deleteBtn.setAttribute('class','delete');
   deleteBtn.textContent = 'Delete entry';
@@ -115,12 +115,12 @@ function displayEntry(name, credential) {
   deleteBtn.addEventListener('click',function(e){
     evtTgt = e.target;
     evtTgt.parentNode.parentNode.parentNode.removeChild(evtTgt.parentNode.parentNode);
-    browser.storage.local.remove(name);
+    browser.storage.local.remove(url);
   })
 
   /* create entry edit box */
   var entryEdit = document.createElement('div');
-  var entrynameEdit = document.createElement('input');
+  var entryCategoryEdit = document.createElement('input');
   var entryurlEdit = document.createElement('textarea');
   var clearFix2 = document.createElement('div');
 
@@ -132,10 +132,10 @@ function displayEntry(name, credential) {
   cancelBtn.setAttribute('class','cancel');
   cancelBtn.textContent = 'Cancel update';
 
-  entryEdit.appendChild(entrynameEdit);
-  entrynameEdit.value = name;
+  entryEdit.appendChild(entryCategoryEdit);
+  entryCategoryEdit.value = url;
   entryEdit.appendChild(entryurlEdit);
-  entryurlEdit.textContent = credential[0];
+  entryurlEdit.textContent = credential.category;
   entryEdit.appendChild(updateBtn);
   entryEdit.appendChild(cancelBtn);
 
@@ -162,13 +162,13 @@ function displayEntry(name, credential) {
   cancelBtn.addEventListener('click',function(){
     entryDisplay.style.display = 'block';
     entryEdit.style.display = 'none';
-    entrynameEdit.value = name;
+    entryCategoryEdit.value = name;
     entryurlEdit.value = url;
   })
 
   updateBtn.addEventListener('click',function(){
-    if(entrynameEdit.value !== name || entryurlEdit.value !== url) {
-      updateentry(name,entrynameEdit.value,entryurlEdit.value);
+    if(entryCategoryEdit.value !== name || entryurlEdit.value !== url) {
+      updateentry(name,entryCategoryEdit.value,entryurlEdit.value);
       entry.parentNode.removeChild(entry);
     } 
   });
@@ -191,3 +191,14 @@ function updateentry(delentry,newname,newurl) {
   }, onError);
 }
 
+
+
+function handleMessage(request, sender, sendResponse) {
+  //this message is send on every single page load after the dom was scanned by form-detector.js 
+  if(request.subject == 'docInfo' && request.mode == 'login'){
+    //check if there is an entry in the local storage that matches the received URL
+    sendResponse("copy that");
+   }
+ }
+
+ browser.runtime.onMessage.addListener(handleMessage);

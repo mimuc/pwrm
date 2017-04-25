@@ -1,0 +1,25 @@
+
+.topbar-sticky-shrink {
+  padding: 2rem;
+  transition: padding 0.25s ease;
+  background: #3D5768;
+}
+
+.topbar-sticky-shrink .menu {
+  background: #3D5768;
+}
+
+.is-stuck .topbar-sticky-shrink {
+  padding: 1rem;
+  transition: padding 0.25s ease;
+}
+
+[data-sticky] {
+  width: 100%;
+}
+
+.topbar-sticky-shrink-header {
+  padding: 10rem 0;
+background-color: #2c3840
+}
+

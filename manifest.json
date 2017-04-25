@@ -21,13 +21,14 @@
     {
       "matches": ["<all_urls>"],
       "js": ["content_scripts/form-detector.js", 
-             "content_scripts/categorizer.js"]
+             "content_scripts/categorizer.js"],
+       "css" : ["content_scripts/inject.css"]
     }
   ],
 
   "background": {
   "scripts": ["background/background.js"],
-  "page": ["background/background.php"]
+  "page": ["background/background.html"]
 },
 
   "browser_action": {
