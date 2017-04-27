@@ -5,7 +5,7 @@
   "version": "0.1",
 
   "description": "Here comes my description",
-  "homepage_url": "https://google.com",
+  "homepage_url": "https://gitlab.lrz.de/fuasmattn/password-reuse-manager",
   "icons": {
     "48": "icons/border-48.png"
   },
@@ -20,7 +20,8 @@
   "content_scripts":[
     {
       "matches": ["<all_urls>"],
-      "js": ["content_scripts/form-detector.js", 
+      "js": ["content_scripts/require.js", 
+      	"content_scripts/form-detector.js", 
              "content_scripts/categorizer.js"],
        "css" : ["content_scripts/inject.css"]
     }

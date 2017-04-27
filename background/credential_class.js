@@ -1,2 +1,0 @@
-//js prototype class
-
