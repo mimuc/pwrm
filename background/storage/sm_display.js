@@ -38,6 +38,9 @@ define(function(sm_display) {
 			deleteBtn.addEventListener('click',function(e){
 				evtTgt = e.target;
 				evtTgt.parentNode.parentNode.parentNode.removeChild(evtTgt.parentNode.parentNode);
+				
+				//TODO adapt to new storage design
+
 				browser.storage.local.remove(url);
 			})
 

@@ -1,15 +1,18 @@
 /* storagemanager */
 /* storage is logically split in "entries" and "categories" */
-define(["storage/sm_display", "entry"], function(sm_display, entry) {
+define(["storage/sm_display", "storage/sm_category"], function(sm_display, sm_category) {
 	return {
 		initialize: function() {
 			console.log("Function : initialize");
 
-			//create distinct categories elements
-			browser.storage.local.set({"categories" : {}});
+			//create distinct categories elements: testing create one
+			browser.storage.local.set({"categories" : {Banking : "test", Email : "foo"}});
+
 			var gettingCategories = browser.storage.local.get("categories");
 			gettingCategories.then((results) => {
-				console.log(Object.keys(results)); //categories
+
+				var categories = results["categories"];
+				sm_category.displayCategories(categories);
 			});
 
 
