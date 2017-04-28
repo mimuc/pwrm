@@ -12,16 +12,21 @@ addBtn.addEventListener('click', addEntry);
 document.addEventListener("DOMContentLoaded", init);
 
 
+/* creates programmatically an entry */
 function createEntry(mUrl, mUsername, mCategory, mPassword){
   require(["storage/entry"], function createEntry(e){
     var test = e.createEntry(mUrl, mUsername, mCategory, mPassword);
-     console.log(test);
- 
   });
 }
 
-createEntry("tester", "A", "B", "C");
+/* manually create new category */
+function createCategory(){
+  //TODO
+}
 
+function assignCategory(entryKey, categoryKey){
+//TODO
+}
 
 /* display previously-saved stored entrys on startup */
 function init(){

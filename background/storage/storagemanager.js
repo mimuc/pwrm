@@ -1,28 +1,50 @@
 /* storagemanager */
+/* storage is logically split in "entries" and "categories" */
 define(["storage/sm_display", "entry"], function(sm_display, entry) {
 	return {
 		initialize: function() {
 			console.log("Function : initialize");
-			var gettingAllStorageItems = browser.storage.local.get(null);
-			gettingAllStorageItems.then((results) => {
-				var entryKeys = Object.keys(results);
-				for(entryKey of entryKeys) {
-					var curValue = results[entryKey];
-					sm_display.displayEntry(entryKey,curValue);
+
+			//create distinct categories elements
+			browser.storage.local.set({"categories" : {}});
+			var gettingCategories = browser.storage.local.get("categories");
+			gettingCategories.then((results) => {
+				console.log(Object.keys(results)); //categories
+			});
+
+
+			var gettingEntries = browser.storage.local.get("entries");
+			gettingEntries.then((results) => {
+				var res = results["entries"];
+				for(key in res){
+					// TODO
+					// display entries according to their categories 
+					sm_display.displayEntry(key,res[key]);
 				}
 			}, onError);
 		},
 
 		storeEntry: function(mUrl, mCredential) {
 			console.log("Function : storeEntry");
-			var storingEntry = browser.storage.local.set({ [mUrl] : mCredential });
-			
-			storingEntry.then(() => {
-				console.log("store success");
-				sm_display.displayEntry(mUrl, mCredential);
-				
+			//first get current storage
+			var gettingEntries = browser.storage.local.get("entries");
+			gettingEntries.then((results) => {
+				var entries = results;
+				//push new entry
+				entries.entries[mUrl] = mCredential;
+				//store changes
+				var storingEntry = browser.storage.local.set(entries);
+				storingEntry.then(() => {
+					console.log("store success");
+					//display new entry
+					sm_display.displayEntry(mUrl, mCredential);
+
 				//console.log()
 			}, onError);
+
+			});
+
+			
 			
 		},
 
@@ -41,7 +63,7 @@ define(["storage/sm_display", "entry"], function(sm_display, entry) {
 				if(objTest.length < 1 && entryURL !== '' && entryUsername !== '') {
 					entryURL.value = ''; entryUsername.value = '';
 					entryPassword.value = ''; entryCategory.value ='';
-					
+
 					var credential = {category: entryCategory, username: entryUsername, password: entryPassword};
 					this.storeEntry(entryURL, credential);
 					

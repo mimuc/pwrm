@@ -13,7 +13,7 @@ console.log(URL);
 var attr_name = "email";
 var attr_pw = "password";
 //if there is no match, check via regex to find inputs
-var regex_name = /e-mail$|num(?!=)|^email$|name(?!=)/;
+var regex_name = /e-mail$|num(?!=)|^email$|name(?!=)|login/;
 var regex_pw = /pass/;
 
 
