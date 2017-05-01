@@ -1,22 +1,22 @@
 html,body{
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 .clearfix{
-  clear: both;
+	clear: both;
 }
 
 .entry{
-  border: 1px solid black;
-  padding: 5px;
-  margin: 5px;
+	border: 1px solid black;
+	padding: 5px;
+	margin: 5px;
 }
-
 .categoryWrapper{
+	padding: 5px;
 
 }
-
 .categoryContent{
-	
+	padding:5px;
+	background-color: grey;
 }

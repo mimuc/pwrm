@@ -1,9 +1,5 @@
-/* initialise variables */
-var inputCategory = document.querySelector('.category');
-var inputURL = document.querySelector('.url');
-var inputUsername = document.querySelector('.username');
-var inputPassword = document.querySelector('.password');
-var entryContainer = document.querySelector('.container');
+
+
 var addBtn = document.querySelector('.add');
 
 /*  add event listeners to buttons */
@@ -14,7 +10,7 @@ document.addEventListener("DOMContentLoaded", init);
 
 /* creates programmatically an entry */
 function createEntry(mUrl, mUsername, mCategory, mPassword){
-  require(["storage/entry"], function createEntry(e){
+  require(["scripts/modules/storage/entry"], function createEntry(e){
     var test = e.createEntry(mUrl, mUsername, mCategory, mPassword);
   });
 }
@@ -30,13 +26,14 @@ function assignCategory(entryKey, categoryKey){
 
 /* display previously-saved stored entrys on startup */
 function init(){
-  require(["storage/storagemanager"], function init(sm){sm.initialize();});
+  //init storage logic
+  require(["scripts/modules/storage/storagemanager"], function init(sm){sm.initialize();});
 }
 
 /* add new entry when clicked on button */
 /* TODO: needs some form checks */
 function addEntry(){
-  require(["storage/storagemanager"], function (sm){sm.addEntry();});
+  require(["scripts/modules/storage/storagemanager"], function (sm){sm.addEntry();});
 }
 
 /* generic error handler */

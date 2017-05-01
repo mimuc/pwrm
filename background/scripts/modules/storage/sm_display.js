@@ -1,8 +1,12 @@
 /* display entries */
-define(function(sm_display) {
+define(['scripts/modules/storage/sm_category'],function(sm_category, sm_display) {
 	return {
 		displayEntry: function(url, credential) {
 			console.log("Function : displayEntry");
+
+			var entryContainer = document.querySelector('#listGroup_'+credential.category+' .list-group');
+			//check if there is a category element for this category (should be if well-created)
+		
 
 			var entry = document.createElement('div');
 			var entryDisplay = document.createElement('div');
@@ -21,8 +25,10 @@ define(function(sm_display) {
 			entryPara3.textContent = 'pw hidden';
 
 			deleteBtn.setAttribute('class','delete');
+			deleteBtn.setAttribute('id', url);
 			deleteBtn.textContent = 'Delete entry';
 			clearFix.setAttribute('class','clearfix');
+			
 
 			entryDisplay.appendChild(entryH);
 			entryDisplay.appendChild(entryPara);
@@ -33,15 +39,35 @@ define(function(sm_display) {
 
 			entry.appendChild(entryDisplay);
 
+			function deleteThisEntry(url){
+				console.log("Function : deleteThisEntry");
 
+				var gettingEntries = browser.storage.local.get("entries");
 
+				gettingEntries.then((results) => {
+					var oldEntries = results.entries;					
+					delete oldEntries[url];	
+					
+					//save the altered version of the entry-element in storage
+					var storingEntry = browser.storage.local.set({"entries" : oldEntries});
+					storingEntry.then(() => {
+						console.log("element" + url + "deleted. Entries updated.");
+
+					}, onError);
+
+			//save it again
+		});
+			}
+
+			//id (== url) is saved in button
 			deleteBtn.addEventListener('click',function(e){
 				evtTgt = e.target;
-				evtTgt.parentNode.parentNode.parentNode.removeChild(evtTgt.parentNode.parentNode);
-				
 				//TODO adapt to new storage design
+				deleteThisEntry(evtTgt.getAttribute('id'));
 
-				browser.storage.local.remove(url);
+				//remove from DOM
+				evtTgt.parentNode.parentNode.parentNode.removeChild(evtTgt.parentNode.parentNode);		
+				
 			})
 
 			var entryEdit = document.createElement('div');
@@ -98,7 +124,11 @@ define(function(sm_display) {
 			});
 			
 		}
+		
+
+		
 	}
+
 });
 
 

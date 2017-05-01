@@ -1,27 +1,38 @@
 /* storagemanager */
 /* storage is logically split in "entries" and "categories" */
-define(["storage/sm_display", "storage/sm_category"], function(sm_display, sm_category) {
+define(["scripts/modules/storage/sm_display", "scripts/modules/storage/sm_category"], function(sm_display, sm_category) {
 	return {
 		initialize: function() {
 			console.log("Function : initialize");
 
-			//create distinct categories elements: testing create one
-			browser.storage.local.set({"categories" : {Banking : "test", Email : "foo"}});
+			//create distinct categories elements depending on existing entries
+			//TODO
+			//testing
+			browser.storage.local.set({"categories" : {Banking : "description", Email : "description"}});
 
 			var gettingCategories = browser.storage.local.get("categories");
 			gettingCategories.then((results) => {
 
 				var categories = results["categories"];
-				sm_category.displayCategories(categories);
+				sm_category.displayCategories(categories); //calls loadEntries on callback
 			});
 
+		},
 
+		loadEntries: function(){
 			var gettingEntries = browser.storage.local.get("entries");
 			gettingEntries.then((results) => {
 				var res = results["entries"];
+
+				//create empty entries-storage if empty
+				if(res == null){
+					storingEntry = browser.storage.local.set({"entries" : {}});
+				}
+
 				for(key in res){
 					// TODO
 					// display entries according to their categories 
+					//must be after categories are displayed! TODO
 					sm_display.displayEntry(key,res[key]);
 				}
 			}, onError);
@@ -53,8 +64,13 @@ define(["storage/sm_display", "storage/sm_category"], function(sm_display, sm_ca
 
 		addEntry: function() {
 			console.log("Function : addEntry");
+			/* initialise variables */
+			var inputCategoryDropdown = document.querySelectorAll('option:checked');
+			var inputURL = document.querySelector('.url');
+			var inputUsername = document.querySelector('.username');
+			var inputPassword = document.querySelector('.password');
 			
-			var entryCategory = inputCategory.value;
+			var entryCategory = inputCategoryDropdown[0].value;
 			var entryURL = inputURL.value;
 			var entryUsername = inputUsername.value;
 			var entryPassword = inputPassword.value;
