@@ -23,7 +23,8 @@
       "js": ["content_scripts/require.js", 
       	"content_scripts/form-detector.js", 
              "content_scripts/categorizer.js"],
-       "css" : ["content_scripts/inject.css"]
+       "css" : ["content_scripts/inject.css", 
+       	"https://fonts.googleapis.com/icon?family=Material+Icons"]
     }
   ],
 

@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="css/bootstrap.css">
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/header.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <script data-main="app" src="scripts/requirejs/require.js"></script>
 
@@ -18,50 +19,54 @@
 
 <body>
   <div class="container">
-
-    <div id="categoryContainer"></div>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-newEntry">New Entry</button>
 
     <div class="row content container" id="content">
-     <form>
-      <div class="row">
-        <div class="col-lg-12">
-          <label>Category</label>
-          <select id="categoryDropdown">
-            <option value="Banking">Banking</option>
-            <option value="Email">Email</option>
-            
-          </select>
-        </div>
-      </div>
-      <div class="row">
-       
-        <div class="col-lg-3">
-          <label>URL</label>
-          <input class="new-entry url" type="text" placeholder="large-4.columns" />
-        </div>
-        <div class="col-lg-3">
-          <label>Username</label>
-          <input class="new-entry username" type="text" placeholder="large-4.columns" />
-        </div>
-        <div class="col-lg-3">
-          <label>Password</label>
-          <input class="new-entry password" type="text" placeholder="large-4.columns" />
-        </div>
-      </div>
-      <div class="row">
-       <p><a href="#" class="button add">Save entry</a><br/>
-       </div>
-     </form>
-
-
-
+     <div id="categoryContainer"></div>
    </div>
  </div>
 
- <script src="scripts/jquery/jquery.js"></script>
- <script src="scripts/background.js"></script>
- <script src="scripts/bootstrap/bootstrap.js"></script>
- <script src="app.js"></script>
+ <div id="modal-newEntry" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Add new entry</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="categoryDropdown">Category</label>
+            <select class="form-control" id="categoryDropdown">
+             <!-- fill <options> on init() -->
+           </select>
+         </div>
+         <div class="form-group">
+          <label for="enterURL">URL</label>             
+          <input id="enterURL" class="form-control new-entry url" type="text" placeholder="" />
+        </div>
+
+        <div class="form-group">
+          <label for="enterName">Username</label>   
+          <input id="enterName" class="form-control new-entry username" type="text" placeholder="" />
+        </div>
+
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button id="addEntry" type="button" class="btn btn-primary">Save entry</button>
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script src="scripts/jquery/jquery.js"></script>
+<script src="scripts/background.js"></script>
+<script src="scripts/bootstrap/bootstrap.js"></script>
+<script src="app.js"></script>
 </body>
 
 </html>

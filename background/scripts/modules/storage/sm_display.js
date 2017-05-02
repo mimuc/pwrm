@@ -1,5 +1,5 @@
 /* display entries */
-define(['scripts/modules/storage/sm_category'],function(sm_category, sm_display) {
+define(['scripts/modules/storage/sm_category'],function(sm_category) {
 	return {
 		displayEntry: function(url, credential) {
 			console.log("Function : displayEntry");
@@ -11,18 +11,16 @@ define(['scripts/modules/storage/sm_category'],function(sm_category, sm_display)
 			var entry = document.createElement('div');
 			var entryDisplay = document.createElement('div');
 			var entryH = document.createElement('p');
-			var entryPara = document.createElement('p');
+			
 			var entryPara2 = document.createElement('p');
-			var entryPara3 = document.createElement('p');
 			var deleteBtn = document.createElement('button');
 			var clearFix = document.createElement('div');
 
 			entry.setAttribute('class','entry');
 
 			entryH.textContent = url;
-			entryPara.textContent = credential.category;
+			
 			entryPara2.textContent = credential.username;
-			entryPara3.textContent = 'pw hidden';
 
 			deleteBtn.setAttribute('class','delete');
 			deleteBtn.setAttribute('id', url);
@@ -31,9 +29,8 @@ define(['scripts/modules/storage/sm_category'],function(sm_category, sm_display)
 			
 
 			entryDisplay.appendChild(entryH);
-			entryDisplay.appendChild(entryPara);
+	
 			entryDisplay.appendChild(entryPara2);
-			entryDisplay.appendChild(entryPara3);
 			entryDisplay.appendChild(deleteBtn);
 			entryDisplay.appendChild(clearFix);
 
@@ -104,10 +101,7 @@ define(['scripts/modules/storage/sm_category'],function(sm_category, sm_display)
 				entryEdit.style.display = 'block';
 			})
 
-			entryPara.addEventListener('click',function(){
-				entryDisplay.style.display = 'none';
-				entryEdit.style.display = 'block';
-			}) 
+			
 
 			cancelBtn.addEventListener('click',function(){
 				entryDisplay.style.display = 'block';

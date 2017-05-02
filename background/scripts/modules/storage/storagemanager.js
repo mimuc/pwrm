@@ -8,12 +8,18 @@ define(["scripts/modules/storage/sm_display", "scripts/modules/storage/sm_catego
 			//create distinct categories elements depending on existing entries
 			//TODO
 			//testing
-			browser.storage.local.set({"categories" : {Banking : "description", Email : "description"}});
+			browser.storage.local.set({"categories" : {
+				Banking : ["I'm the banking category","euro_symbol"],
+				Email : ["description", "email"],
+				Unwichtig : ["ich bin unwichtig", "folder"]
+			}});
 
 			var gettingCategories = browser.storage.local.get("categories");
 			gettingCategories.then((results) => {
 
 				var categories = results["categories"];
+				//display options in dropdown #categoryDropdown
+				sm_category.fillDropdown(categories);
 				sm_category.displayCategories(categories); //calls loadEntries on callback
 			});
 
@@ -30,9 +36,7 @@ define(["scripts/modules/storage/sm_display", "scripts/modules/storage/sm_catego
 				}
 
 				for(key in res){
-					// TODO
-					// display entries according to their categories 
-					//must be after categories are displayed! TODO
+					// TODO 3x				
 					sm_display.displayEntry(key,res[key]);
 				}
 			}, onError);
@@ -52,6 +56,10 @@ define(["scripts/modules/storage/sm_display", "scripts/modules/storage/sm_catego
 					console.log("store success");
 					//display new entry
 					sm_display.displayEntry(mUrl, mCredential);
+					//dismiss modal
+					require(['jquery'], function($) {
+						$('#modal-newEntry').modal('toggle');
+					});
 
 				//console.log()
 			}, onError);
@@ -68,22 +76,18 @@ define(["scripts/modules/storage/sm_display", "scripts/modules/storage/sm_catego
 			var inputCategoryDropdown = document.querySelectorAll('option:checked');
 			var inputURL = document.querySelector('.url');
 			var inputUsername = document.querySelector('.username');
-			var inputPassword = document.querySelector('.password');
 			
 			var entryCategory = inputCategoryDropdown[0].value;
 			var entryURL = inputURL.value;
 			var entryUsername = inputUsername.value;
-			var entryPassword = inputPassword.value;
-
 
 			var gettingItem = browser.storage.local.get(entryURL);
 			gettingItem.then((result) => {
 				var objTest = Object.keys(result);
 				if(objTest.length < 1 && entryURL !== '' && entryUsername !== '') {
-					entryURL.value = ''; entryUsername.value = '';
-					entryPassword.value = ''; entryCategory.value ='';
+					entryURL.value = ''; entryUsername.value = ''; entryCategory.value ='';
 
-					var credential = {category: entryCategory, username: entryUsername, password: entryPassword};
+					var credential = {category: entryCategory, username: entryUsername};
 					this.storeEntry(entryURL, credential);
 					
 					//var credential = entry.createEntry(entryURL, entryCategory, entryUsername, entryPassword);

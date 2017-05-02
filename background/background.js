@@ -1,6 +1,6 @@
 
 
-var addBtn = document.querySelector('.add');
+var addBtn = document.querySelector('#addEntry');
 
 /*  add event listeners to buttons */
 addBtn.addEventListener('click', addEntry);
@@ -14,6 +14,11 @@ function createEntry(mUrl, mUsername, mCategory, mPassword){
     var test = e.createEntry(mUrl, mUsername, mCategory, mPassword);
   });
 }
+
+/* init the new entry modal */
+$('#modal-newEntry').on('shown.bs.modal', function () {
+  $('#modal-newEntry').focus()
+})
 
 /* manually create new category */
 function createCategory(){
@@ -45,6 +50,7 @@ function onError(error) {
 
 /* function to update entrys */
 function updateentry(delentry,newname,newurl) {
+  /*
   var storingentry = browser.storage.local.set({ [newname] : newurl });
   storingentry.then(() => {
     if(delentry !== newname) {
@@ -56,6 +62,7 @@ function updateentry(delentry,newname,newurl) {
       displayentry(newname, newurl);
     }
   }, onError);
+  */
 }
 
 /* receives and answers messages from content_scripts [if needed]

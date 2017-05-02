@@ -17,7 +17,7 @@ var regex_name = /e-mail$|num(?!=)|^email$|name(?!=)|login/;
 var regex_pw = /pass/;
 
 
-function findLogin(credentials){
+function findLogin(credentials, categoryIcon){
 //highlight inputs if existing account
 
 //query all forms
@@ -37,6 +37,8 @@ if(form != null){
 //TODO: add boxes and auto-fill username etc depending on user preferences
 for (index = 0; index < inputs.length; ++index) {
   var i = inputs[index];
+    //escape submit buttons, hidden inputs
+    if(i.type != "submit" && i.type != "hidden"){
 
     //find username / mail input
     //test by type attribute, if false test as string with regular expression
@@ -44,18 +46,19 @@ for (index = 0; index < inputs.length; ++index) {
       new RegExp(regex_name).test(i.outerHTML)){
       //console.log("username input found -->");
      //testing
-      highlightUsername(i, credentials);
+     highlightUsername(i, credentials);
+   }
 
-  }
+ }
   //find password input
   if(i.getAttribute("type").toUpperCase() === attr_pw.toUpperCase() ||
     new RegExp(regex_pw).test(i.outerHTML)){
         //console.log("password input found -->");
         //testing
         hasLogin = true;
-        highlightPassword(i, credentials);
-       }
-     }
+        highlightPassword(i, credentials, categoryIcon);
+      }
+    }
 
 
 /* //if needed: communicate with background.js 
@@ -65,23 +68,26 @@ for (index = 0; index < inputs.length; ++index) {
 
 
  function lookupStorage(){
-   var requestPromise = browser.storage.local.get(URL);
+   var requestPromise = browser.storage.local.get();
    requestPromise.then(function(data){
+    var cat = data.categories;
+    var entries = data.entries;
 
-    if(data[URL] != null){
+    if(entries[URL] != null){
       console.log("Found an entry for this URL in local storage.");
-      console.log("username is: " + data[URL].username);
-      
+      console.log("username is: " + entries[URL].username);
+
       /* there is a matching URL / account in the storage */
-      findLogin(data[URL]);
+      /* second parameter is the matching between entry.categoryName and categories --> icon */
+      findLogin(entries[URL], cat[entries[URL].category][1]);
     }else{
       console.log("No saved entry found for this URL.");
-      console.log("URL is: " + URL);
+      console.log("URL is: " + entries);
     }
 
   }, 
   function(data){
-    consoloe.log("error: " + data);
+    consoloe.log("error: " + entries);
   });
  }
 
@@ -91,10 +97,13 @@ for (index = 0; index < inputs.length; ++index) {
 
   var hintbox_div = document.createElement('div');
   var hintbox_p = document.createElement('p');
+  var hintbox_p2 = document.createElement('p');
   hintbox_div.setAttribute('class', 'hintbox');
-  hintbox_p.textContent = 'You have an account as ' + credentials.username ;
+  hintbox_p.textContent = 'Your account(s):';
+  hintbox_p2.textContent = credentials.username; 
 
   hintbox_div.appendChild(hintbox_p);
+  hintbox_div.appendChild(hintbox_p2);
   i.parentNode.insertBefore(hintbox_div, i.nextSibling);
 
 
@@ -103,18 +112,25 @@ for (index = 0; index < inputs.length; ++index) {
     i.value = credentials.username;
   }
 
-  function highlightPassword(i, credentials){
+  function highlightPassword(i, credentials, icon){
     i.style.color = "green";
     i.style.border = "3px dotted green";
 
-    i.value = credentials.password;
+
 
     var hintbox_div = document.createElement('div');
     var hintbox_p = document.createElement('p');
+    var hintbox_p2 = document.createElement('p');
+    var hintbox_i = document.createElement('i');
+    hintbox_i.setAttribute('class', 'material-icons');
     hintbox_div.setAttribute('class', 'hintbox');
-    hintbox_p.textContent = 'You used the password from category ' + credentials.category ;
+    hintbox_i.textContent = icon;
+    hintbox_p.textContent = 'Password Category: ' ;
+    hintbox_p2.textContent = credentials.category;
 
     hintbox_div.appendChild(hintbox_p);
+    hintbox_div.appendChild(hintbox_i);
+    hintbox_div.appendChild(hintbox_p2);
     i.parentNode.insertBefore(hintbox_div, i.nextSibling);
   }
 
