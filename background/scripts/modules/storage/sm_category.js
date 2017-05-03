@@ -7,7 +7,7 @@ define(function() {
 
 			require(['jquery','scripts/modules/storage/storagemanager'], function($, sm) {
 				//load snippet
-				$('#categoryContainer').append('<div id="wrapper_'+categoryName+'"></div>');
+				$('#categoryContainer').append('<div id="wrapper_'+categoryName+'" class="mdl-cell mdl-cell--4-col"></div>');
 				$('#wrapper_'+categoryName).load('scripts/modules/ui/collapse_snippet.html',null,
 					function() {
 					//alter DOM (id, classnames)
@@ -27,6 +27,7 @@ define(function() {
 					.html(getIcon(iconName));					
 
 					$('#listGroup_'+categoryName).attr('aria-labelledby', 'heading_'+categoryName);
+					$('#listGroup_'+categoryName).collapse('hide');
 				});
 			});
 

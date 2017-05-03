@@ -1,6 +1,8 @@
 
 
 var addBtn = document.querySelector('#addEntry');
+var newEntry = document.querySelector('#newEntry');
+var dialogEntry = document.querySelector('#dialogEntry');
 
 /*  add event listeners to buttons */
 addBtn.addEventListener('click', addEntry);
@@ -15,10 +17,24 @@ function createEntry(mUrl, mUsername, mCategory, mPassword){
   });
 }
 
-/* init the new entry modal */
+/* init the new entry modal 
 $('#modal-newEntry').on('shown.bs.modal', function () {
   $('#modal-newEntry').focus()
 })
+*/
+
+//register dialog and setup listeners
+if (! dialogEntry.showModal) {
+  require(["scripts/dialog-polyfill-master/dialog-polyfill"], function registerDialog(e){
+    e.registerDialog(dialogEntry);
+  });
+}
+newEntry.addEventListener('click', function() {
+  dialogEntry.showModal();
+});
+dialogEntry.querySelector('.close').addEventListener('click', function() {
+  dialogEntry.close();
+});
 
 /* manually create new category */
 function createCategory(){
@@ -39,6 +55,7 @@ function init(){
 /* TODO: needs some form checks */
 function addEntry(){
   require(["scripts/modules/storage/storagemanager"], function (sm){sm.addEntry();});
+  dialogEntry.close();
 }
 
 /* generic error handler */

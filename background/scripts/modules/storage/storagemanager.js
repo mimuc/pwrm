@@ -9,7 +9,7 @@ define(["scripts/modules/storage/sm_display", "scripts/modules/storage/sm_catego
 			//TODO
 			//testing
 			browser.storage.local.set({"categories" : {
-				Banking : ["I'm the banking category","euro_symbol"],
+				Banking : ["Info","euro_symbol"],
 				Email : ["description", "email"],
 				Unwichtig : ["ich bin unwichtig", "folder"]
 			}});

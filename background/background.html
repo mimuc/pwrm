@@ -6,64 +6,92 @@
 
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.teal-green.min.css" /> 
   <link rel="stylesheet" href="../css/default.css"/>
-  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="../css/mdl-tmp.css"/>
+
+  <!--<link rel="stylesheet" href="css/bootstrap.css">  bs in use for collapse elements -->
+
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/header.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="scripts/dialog-polyfill-master/dialog-polyfill.css" />
 
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script data-main="app" src="scripts/requirejs/require.js"></script>
 
   <title>Background Page</title>
 </head>
 
-<body>
-  <div class="container">
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-newEntry">New Entry</button>
-
-    <div class="row content container" id="content">
-     <div id="categoryContainer"></div>
-   </div>
- </div>
-
- <div id="modal-newEntry" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Add new entry</h4>
+<body class="mdl-tmp">    
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
+      <div class="mdl-layout--large-screen-only mdl-layout__header-row">
       </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="categoryDropdown">Category</label>
-            <select class="form-control" id="categoryDropdown">
-             <!-- fill <options> on init() -->
-           </select>
-         </div>
-         <div class="form-group">
-          <label for="enterURL">URL</label>             
-          <input id="enterURL" class="form-control new-entry url" type="text" placeholder="" />
-        </div>
+      <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+        <h3>Password Reuse Manager</h3>
+      </div>
+      <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+      </div>
+      <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
+        <a href="#overview" class="mdl-layout__tab is-active">Categories</a>
+        <a href="#settings" class="mdl-layout__tab">Settings</a>
+      </div>
+    </header>
+    <main class="mdl-layout__content">
+      <div class="mdl-layout__tab-panel is-active" id="overview">
 
-        <div class="form-group">
-          <label for="enterName">Username</label>   
-          <input id="enterName" class="form-control new-entry username" type="text" placeholder="" />
-        </div>
+        <section id="categoryContainer" class="section--center mdl-grid">
+        
+          <button id="newEntry" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            New Entry
+          </button>
+        
+       </section>
+
+      </div>
+      <div class="mdl-layout__tab-panel" id="settings">
+        <section class="section--center mdl-grid mdl-grid--no-spacing">
+          <p>empty</p>
+        </section>
+      </div>
+  
+   </main>
 
 
-      </form>
+
+
+   <dialog class="mdl-dialog" id="dialogEntry">
+    <h4 class="mdl-dialog__title">New Entry</h4>
+    <div class="mdl-dialog__content">
+     <form>
+      <div class="form-group">
+        <label for="categoryDropdown">Category</label>
+        <select class="form-control" id="categoryDropdown">
+         <!-- fill <options> on init() -->
+       </select>
+     </div>
+     <div class="form-group">
+      <label for="enterURL">URL</label>             
+      <input id="enterURL" class="form-control new-entry url" type="text" placeholder="" />
     </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      <button id="addEntry" type="button" class="btn btn-primary">Save entry</button>
-    </div>
-  </div><!-- /.modal-content -->
-</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
+    <div class="form-group">
+      <label for="enterName">Username</label>   
+      <input id="enterName" class="form-control new-entry username" type="text" placeholder="" />
+    </div>
+  </form>
+</div>
+<div class="mdl-dialog__actions">
+  <button type="button" id="addEntry" class="mdl-button">Save</button>
+  <button type="button" class="mdl-button close">Discard</button>
+</div>
+</dialog>
+</div>
 <script src="scripts/jquery/jquery.js"></script>
+
+<script src="scripts/materiallight/material.min.js"></script>
 <script src="scripts/background.js"></script>
 <script src="scripts/bootstrap/bootstrap.js"></script>
 <script src="app.js"></script>
