@@ -21,7 +21,10 @@ requirejs.config({
 requirejs.config({
 	baseUrl: '',
 	paths: {
-		"jquery" : "scripts/jquery/jquery"
+		"jquery" : "scripts/jquery/jquery",
+		"bootstrap" : "scripts/bootstrap/bootstrap",
+		"storagemanager" : "scripts/modules/storage/storagemanager"
+		
 	}
 });
 /*

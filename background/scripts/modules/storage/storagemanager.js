@@ -1,27 +1,41 @@
 /* storagemanager */
 /* storage is logically split in "entries" and "categories" */
-define(["scripts/modules/storage/sm_display", "scripts/modules/storage/sm_category"], function(sm_display, sm_category) {
+define(["scripts/modules/tools","scripts/modules/storage/sm_display", "scripts/modules/storage/sm_category"], function(tools, sm_display, sm_category) {
 	return {
 		initialize: function() {
 			console.log("Function : initialize");
 
 			//create distinct categories elements depending on existing entries
 			//TODO
-			//testing
-			browser.storage.local.set({"categories" : {
-				Banking : ["Info","euro_symbol"],
-				Email : ["description", "email"],
-				Unwichtig : ["ich bin unwichtig", "folder"]
-			}});
+			//testing 
+			
 
 			var gettingCategories = browser.storage.local.get("categories");
 			gettingCategories.then((results) => {
 
 				var categories = results["categories"];
+
+				
+				if(categories == null || categories.length == 0){
+					browser.storage.local.set({"categories" : {
+						Banking : ["Info","euro_symbol"],
+						Email : ["Info", "email"],
+						Social_Media : ["Info", "folder"],
+						Wichtig : ["Info", "folder"],
+						Unwichtig : ["Info", "folder"]
+					}});
+				}else{
 				//display options in dropdown #categoryDropdown
 				sm_category.fillDropdown(categories);
-				sm_category.displayCategories(categories); //calls loadEntries on callback
-			});
+				sm_category.displayCategories(categories, true); //calls loadEntries on callback
+			}
+		});
+
+			//in case there is no categoy yet, create empty object in storage
+			function initCategories(){
+				console.log("Function : initCategories");
+				browser.storage.local.set({"categories" : {}});
+			}
 
 		},
 
@@ -29,16 +43,21 @@ define(["scripts/modules/storage/sm_display", "scripts/modules/storage/sm_catego
 			var gettingEntries = browser.storage.local.get("entries");
 			gettingEntries.then((results) => {
 				var res = results["entries"];
+				console.log(res);
 
 				//create empty entries-storage if empty
+				//TODO
 				if(res == null){
 					storingEntry = browser.storage.local.set({"entries" : {}});
 				}
 
 				for(key in res){
-					// TODO 3x				
+					// TODO 3x		
+					console.log("call display entry");
 					sm_display.displayEntry(key,res[key]);
 				}
+
+				sm_category.displayNumberEntries();
 			}, onError);
 		},
 
@@ -48,6 +67,11 @@ define(["scripts/modules/storage/sm_display", "scripts/modules/storage/sm_catego
 			var gettingEntries = browser.storage.local.get("entries");
 			gettingEntries.then((results) => {
 				var entries = results;
+				//check if there is an entry with the same url
+				if(entries.entries[mUrl] != null){
+					alert("yo, there is an entry for "+ mUrl);
+					//TODO
+				}
 				//push new entry
 				entries.entries[mUrl] = mCredential;
 				//store changes
@@ -56,10 +80,8 @@ define(["scripts/modules/storage/sm_display", "scripts/modules/storage/sm_catego
 					console.log("store success");
 					//display new entry
 					sm_display.displayEntry(mUrl, mCredential);
-					//dismiss modal
-					require(['jquery'], function($) {
-						$('#modal-newEntry').modal('toggle');
-					});
+					sm_category.displayNumberEntries();
+
 
 				//console.log()
 			}, onError);
@@ -73,6 +95,8 @@ define(["scripts/modules/storage/sm_display", "scripts/modules/storage/sm_catego
 		addEntry: function() {
 			console.log("Function : addEntry");
 			/* initialise variables */
+			
+			var randID = tools.guidGenerator();
 			var inputCategoryDropdown = document.querySelectorAll('option:checked');
 			var inputURL = document.querySelector('.url');
 			var inputUsername = document.querySelector('.username');
@@ -87,7 +111,7 @@ define(["scripts/modules/storage/sm_display", "scripts/modules/storage/sm_catego
 				if(objTest.length < 1 && entryURL !== '' && entryUsername !== '') {
 					entryURL.value = ''; entryUsername.value = ''; entryCategory.value ='';
 
-					var credential = {category: entryCategory, username: entryUsername};
+					var credential = {category: entryCategory, username: entryUsername, id: randID};
 					this.storeEntry(entryURL, credential);
 					
 					//var credential = entry.createEntry(entryURL, entryCategory, entryUsername, entryPassword);
