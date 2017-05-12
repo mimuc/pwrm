@@ -1,0 +1,37 @@
+/* login.css */
+
+html, body.blue{
+	background-color: #303f9f;
+}
+
+.hidden{
+	display: none;
+	transition: all 1s;
+}
+
+body.login{
+	padding-top: 0;
+}
+.blue{
+	background-color: #303f9f;
+	color: white;
+}
+
+form.mpw{
+	width:50%;
+	margin: 0 auto;
+	margin-top:20px;
+}
+.form-group.mpw input{
+	height: 50px;
+	font-size: 1.2em;
+}
+
+.progress.strength{
+	margin-top: 10px;
+	background-color: #c4c4f14d;
+}
+
+.password-verdict::before{
+	content: 'Password strength: ';
+}

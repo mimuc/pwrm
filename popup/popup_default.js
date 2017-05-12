@@ -12,10 +12,10 @@ function openManagerPage() {
 function openPopup() {
   //console.log("injecting");
    browser.windows.create({
-     "url": "/login.html",
+     "url": "login.html",
       type: "popup",
       height: 600,
-      width: 800
+      width: 600
    });
 }
 

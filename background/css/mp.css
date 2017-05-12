@@ -9,6 +9,16 @@ h4{
 	font-size: 14px !important;
 }
 
+.btn-mp{
+	border-radius: 2px;
+	border:none;
+	padding:10px 12px;
+}
+
+.btn-mp:hover{
+	border:none;
+}
+
 
 .panel-group .panel{
 	border-radius: 2px;
