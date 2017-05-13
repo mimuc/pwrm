@@ -9,6 +9,10 @@ h4{
 	font-size: 14px !important;
 }
 
+h2{
+	margin-bottom:40px;
+}
+
 .btn-mp{
 	border-radius: 2px;
 	border:none;
