@@ -16,32 +16,52 @@
 </head>
 <body>
   <div id="fab_wrapper">
-   <div class="water-drop"></div>
-   <div class="button button-floating"></div>
-   <div class="button-floating-shadow"></div>
-   <div class="button button-sub" data-toggle="modal" data-target="#modal-newEntry"><div class="text-center"><i class="material-icons">bookmark</i></div></div>
-   <div class="button button-sub" data-toggle="modal" data-target="#modalCategory"><div class="text-center"><i class="material-icons">class</i></div></div>
+    <div id="fab_content">
+     <div class="water-drop"></div>
+     <div class="button button-floating"></div>
+     <div class="button-floating-shadow"></div>
+     <div class="button button-sub" data-toggle="modal" data-target="#modal-newEntry"><p class="next-to-button">New Entry</p><div class="text-center"><i class="material-icons">bookmark</i></div></div>
+     <div class="button button-sub" data-toggle="modal" data-target="#modalCategory"><p class="next-to-button">New Category</p><div class="text-center"><i class="material-icons">class</i></div></div>
+   </div>
  </div>
 
 
  <nav class="navbar navbar-default navbar-fixed-top navbar-mp">
   <div class="container">
-
+    <form>
+      <div class="form-group has-feedback has-feedback-left">
+        <input id="search" type="text" class="form-control" placeholder="Search" />
+        <i id="search-icon" class="form-control-feedback material-icons">search</i>
+      </div>
+    </form>
   </div>
 </nav>
 
 
 
 <div class="container">
-  <!-- Button trigger modal -->
-
   <div class="row content container" id="content">
    <div class="page-header">
      <h1>Password Categories <small> organise your re-used passwords</small></h1>
    </div>
    <div id="categoryContainer"></div>
-
  </div>
+ <hr>
+ <div id="entryContainer">
+ <div class="row entry-row">
+    <div class="col-lg-2"><a href="http://placehold.it"><img class="placeholder-img" src="http://placehold.it/40x40"></a>  LaLiLu</div>
+    <div class="col-lg-3">URL: https://www.lala.de/login/</div>
+    <div class="col-lg-2">Username: Martin</div>
+    <div class="col-lg-5">
+     <div class="row">
+       <div class="col-lg-6">Password: ********</div>
+       <div class="col-lg-2"><a class="btn btn-mp light">Show</a></div>
+       <div class="col-lg-2"><a class="btn btn-mp light">Edit</a></div>
+       <div class="col-lg-2"><a class="btn btn-mp light">Goto</a></div>
+     </div>
+   </div>
+ </div>
+</div>
 </div>
 <!-- Modal Category -->
 <div class="modal modal-mp fade" id="modalCategory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -60,8 +80,8 @@
       </form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      <button id="addCategory" type="button" class="btn btn-primary">Save</button>
+      <button type="button" class="btn btn-default btn-mp light" data-dismiss="modal">Close</button>
+      <button id="addCategory" type="button" class="btn btn-primary btn-mp">Save</button>
     </div>
   </div>
 </div>
@@ -71,7 +91,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-      <button type="button" class="close btn-mp" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close btn-mp" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">Add new entry</h4>
       </div>
       <div class="modal-body">
@@ -93,7 +113,7 @@
       </form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-default btn-mp" data-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-default btn-mp light" data-dismiss="modal">Close</button>
       <button id="addEntry" type="button" class="btn btn-primary btn-mp">Save entry</button>
     </div>
   </div><!-- /.modal-content -->
@@ -101,8 +121,8 @@
 </div><!-- /.modal -->
 <script src="scripts/jquery/jquery.js"></script>
 <script src="scripts/fab.js"></script>
-<script src="scripts/background.js"></script>
 <script src="scripts/bootstrap/bootstrap.js"></script>
+<script src="scripts/background.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

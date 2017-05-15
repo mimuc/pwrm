@@ -32,6 +32,7 @@ define(function() {
 			});
 			function getIcon(name){
 				console.log("Function : getIcon");
+				/*
 				var iconString = "folder";
 				switch(name){
 					case "euro_symbol":
@@ -41,7 +42,10 @@ define(function() {
 					iconString = "email";
 					break;
 				}
+
 				return iconString
+				*/
+				return name;
 			}
 		},
 		displayCategories: function(categories, loadEntries) {
@@ -138,6 +142,39 @@ define(function() {
 				});
 
 		},
+
+		changeCategoryIcon: function(catName, iconName){
+			console.log("Function : changeCategoryIcon");
+			var gettingEntries = browser.storage.local.get("categories");
+			gettingEntries.then((results) => {
+				var id;
+				var cat = results.categories;					
+				for(key in cat){
+					if(key == catName){
+						(cat[key][1] = iconName);
+					}
+				}
+
+				var newCat = {"categories" : cat};
+				console.log(newCat);
+
+				//store entries
+				var storingEntry = browser.storage.local.set(newCat);
+				storingEntry.then(() => {
+					console.log("store success");
+					//display new entry			
+					//remove from DOM
+					this.displayCategories(newCat.categories, true);
+				
+
+
+				//console.log()
+			}, onError);
+				
+
+			});
+		},
+
 
 		//move entry with identifier "url" to a new Category newCategory
 		moveToCategory: function(url, newCategory){

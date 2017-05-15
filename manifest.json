@@ -20,17 +20,19 @@
   "content_scripts":[
     {
       "matches": ["<all_urls>"],
-      "js": ["content_scripts/jquery.js",
-            "content_scripts/form-detector.js", 
-             "content_scripts/categorizer.js"],
-       "css" : ["content_scripts/inject.css"]
+      "js": [
+        "content_scripts/jquery.js",
+        "http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js",
+        "content_scripts/form-detector.js", 
+        "content_scripts/categorizer.js"],
+      "css" : ["content_scripts/inject.css"]
     }
   ],
 
   "background": {
-  "scripts": ["background/background.js"],
-  "page": ["background/background.html"]
-},
+    "scripts": ["background/background.js"],
+    "page": ["background/background.html"]
+  },
 
   "browser_action": {
     "default_icon": "icons/border-48.png",
@@ -40,6 +42,6 @@
 
   "web_accessible_resources": [
   //
-  ]
+]
 
 }

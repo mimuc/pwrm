@@ -1,17 +1,24 @@
-
-
 var addBtn = document.querySelector('#addEntry');
 var addCategory = document.querySelector('#addCategory');
 var modalCategory = document.querySelector('#modalCategory');
 
 
-// add event listeners to buttons 
+// add event listeners to buttons and inputs
 addBtn.addEventListener('click', addEntry);
 addCategory.addEventListener('click', createCategory);
+
 /* call init on page load */
 document.addEventListener("DOMContentLoaded", init);
 
+//listen for searchfield input
+$('#search').on('keyup', function() {
+  if (this.value.length > 0) searchAsync(this.value);
+});
 
+//searches for entries and displays results matching the typed letters
+function searchAsync(value){
+  console.log("searchAsync: " + value);
+}
 // creates programmatically an entry 
 function createEntry(mUrl, mUsername, mCategory, mPassword, mID){
   require(["scripts/modules/storage/entry"], function createEntry(e){
@@ -19,16 +26,29 @@ function createEntry(mUrl, mUsername, mCategory, mPassword, mID){
   });
 }
 
-function deleteCategory(name){
-   require(["scripts/modules/storage/sm_category"], function deleteCategory(sm_category){
-    sm_category.deleteCategory(name);
-  });
+function changeCategoryIcon(catName, iconName){
+ require(["scripts/modules/storage/sm_category"], function changeCategoryIcon(sm_category){
+  sm_category.changeCategoryIcon(catName, iconName);
+});
 }
 
+function deleteCategory(name){
+ require(["scripts/modules/storage/sm_category"], function deleteCategory(sm_category){
+  sm_category.deleteCategory(name);
+});
+}
+
+function renameCategory(newName){
+ require(["scripts/modules/storage/sm_category"], function deleteCategory(sm_category){
+  sm_category.deleteCategory(name);
+});
+}
+
+
 function moveToCategory(entryID, newCategory){
-   require(["scripts/modules/storage/sm_category"], function moveToCategory(sm_category){
-    sm_category.moveToCategory(entryID, newCategory);
-  });
+ require(["scripts/modules/storage/sm_category"], function moveToCategory(sm_category){
+  sm_category.moveToCategory(entryID, newCategory);
+});
 }
 
 
@@ -39,7 +59,7 @@ function createCategory(){
   require(["scripts/modules/storage/sm_category"], function createCategory(sm_category){
     sm_category.createCategory(value);
   });
- 
+
 }
 
 function assignCategory(entryKey, categoryKey){

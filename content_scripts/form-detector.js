@@ -1,12 +1,13 @@
 console.log("form-detector.js injected");
 /* trigger storage lookup for matching accounts */
-window.addEventListener("onLoad", lookupStorage());
+window.addEventListener("onLoad", init());
 var submitBtn = document.querySelector('[type=submit]');
 submitBtn.addEventListener('click', checkAccount);
 
 var inputUsername;
-
+var inputs;
 var hasLogin = false;
+var hasSignup = false;
 
 
 //var URL = document.URL;
@@ -25,13 +26,45 @@ var regex_name = /e-mail$|konto(?!=)|num(?!=)|^email$|name(?!=)|login/;
 var regex_pw = /pass/;
 
 
+function init(){
+  findSignup();
+}
+
+function findSignup(){
+  var forms = document.forms;
+  //first check if there are 2 password inputs to determine whether it's a login or a signup
+  //false positive on (like facebook) login-signup double page 
+  console.log("Number forms on this page: " +forms.length);
+
+  for (i = 0; i < forms.length; ++i) {
+    var pwInputs = forms[i].querySelectorAll('input[type="password"]:not([type="hidden"]):not([type="submit"])');
+    var allInputs = forms[i].querySelectorAll('input:not([type="hidden"]):not([type="submit"])');
+    console.log("Form "+ i +" has "+ pwInputs.length +" PW Input and "+ allInputs.length +" other Input Elements.");
+
+    //form is supposed to be a signup form if:
+    //there are 2 PW inputs
+    //there is 1 PW input and more than 1 other input element in the same form
+   
+    if(pwInputs.length == 2 || (pwInputs.length == 1 && allInputs.length > 2)){
+      console.log("Form " + i + " is a Signup Form.");
+    }else if(pwInputs.length == 1){
+       console.log("Form " + i + " is a Login Form.");
+        lookupStorage(); //calls findLogin(..) in case of existing entry for this url
+    }else if(pwInputs.length > 2){
+       console.log("Form " + i + " might be a Reset Form.");
+    }
+    
+  }
+}
+
+
 function findLogin(credentials, categoryIcon){
   console.log("Function : findLogin");
 //highlight inputs if existing account
 
 //query all forms
 var loginForm = document.querySelectorAll('form');
-var inputs;
+
 //handle multiple forms (trivial solution: select first in page)
 //check if there is a form element. if not query the whole page for inputs
 //WARNING: can result in only finding a search field but not the login inputs!
@@ -41,31 +74,27 @@ if(form != null){
  inputs = form.getElementsByTagName('input');
 }else{
   console.log("Error getting form: " + data);
-  console.log("Querying whole document...");*/
+  console.log("Querying whole document...");
   inputs = document.getElementsByTagName('input');
-//}
-
+}*/
+inputs = document.getElementsByTagName('input');
 //TODO: add boxes and auto-fill username etc depending on user preferences
 for (index = 0; index < inputs.length; ++index) {
   var i = inputs[index];
-    //escape submit buttons, hidden inputs
-    if(i.type != "submit" && i.type != "hidden"){
-    //find username / mail input
-    //test by type attribute, if false test as string with regular expression
-    if(i.getAttribute("type").toUpperCase() === attr_name.toUpperCase() ||
-      new RegExp(regex_name).test(i.outerHTML)){
-      //console.log("username input found -->");
-    console.log("Username/PIN input found.");
+  //escape submit buttons, hidden inputs
+  if(i.type != "submit" && i.type != "hidden"){
+  //find username / mail input
+  //test by type attribute, if false test as string with regular expression
+  if(i.getAttribute("type").toUpperCase() === attr_name.toUpperCase() ||
+    new RegExp(regex_name).test(i.outerHTML)){
     inputUsername = i;
-    highlightUsername(i, credentials);
-  }
+  highlightUsername(i, credentials);
+} 
 
 }
   //find password input
   if(i.getAttribute("type").toUpperCase() === attr_pw.toUpperCase() ||
     new RegExp(regex_pw).test(i.outerHTML)){
-        //console.log("password input found -->");
-      console.log("Password input found.");
       hasLogin = true;
       highlightPassword(i, credentials, categoryIcon);
     }
@@ -164,8 +193,8 @@ function checkAccount(){
     if(!accountFound || (accountFound && existingUsername != username)){
       //TODO: how popup "want to add this account?"
      // notifyBackgroundPage();
-    }
-  });
+   }
+ });
 
 }
 

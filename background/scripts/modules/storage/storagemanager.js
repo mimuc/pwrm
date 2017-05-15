@@ -18,8 +18,8 @@ define(["scripts/modules/tools","scripts/modules/storage/sm_display", "scripts/m
 				
 				if(categories == null || categories.length == 0){
 					browser.storage.local.set({"categories" : {
-						Banking : ["Info","euro_symbol"],
-						Email : ["Info", "email"],
+						Dings : ["Info","folder"],
+						Email : ["Info", "folder"],
 						Social_Media : ["Info", "folder"],
 						Wichtig : ["Info", "folder"],
 						Unwichtig : ["Info", "folder"]
