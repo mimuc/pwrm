@@ -75,7 +75,7 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 
 				//standartize urlKeys by using only the Subleveldomain
 					
-				mUrl = mUrl.split("/")[2]; // Get the hostname
+				//mUrl = mUrl.split("/")[2]; // Get the hostname
 				var parsed = psl.parse(mUrl);
 				var urlKey = parsed.domain; // facebook.com
 				console.log("urlKey: " + urlKey);	

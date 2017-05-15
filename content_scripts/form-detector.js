@@ -1,6 +1,7 @@
 console.log("form-detector.js injected");
 /* trigger storage lookup for matching accounts */
 window.addEventListener("DOMContentLoaded", init());
+//window.addEventListener("DOMSubtreeModified", findSignup());
 var submitBtn = document.querySelector('[type=submit]');
 submitBtn.addEventListener('click', checkAccount);
 
@@ -29,10 +30,37 @@ var regex_pw = /pass/;
 
 
 function init(){
-  findSignup();
+  console.log("Function : init");
+  //workaround to wait for DOM Elements being loaded async after DOMContentLoaded
+  setTimeout(function() { findSignup(); }, 1000);
+  //findSignup();
+  //alternative: DOM Mutation Observer
+  //setTimeout(function() { setupObserver(); }, 2000);
 }
+/*
+function setupObserver(){
+  console.log("Function : setupObserver");
+  MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+  var observer = new MutationObserver(function(mutations) {
+   mutations.forEach(function(mutation) {
+    if(!isHidden(mutation.target)){
+    console.log("inputs shown");
+    console.log(mutation.oldValue);
+  }
+  
+  });    
+ });
+  var config = { attributes: true,attributeOldValue: true, attributeFilter: ['type']};
+   //observe all inputs and wait for changes
+   var observableInputs = filterHiddenInputs(document.querySelectorAll('input'));
+   for(oi=0;oi<observableInputs.length;oi++){
+    observer.observe(observableInputs[oi], config);
+   }
+
+}
+*/
 function isHidden(element) {
-  return (element.offsetParent === null)
+  return (element.type =='hidden' ||element.offsetParent === null)
 }
 //consider only inputs that are visible in DOM
 function filterHiddenInputs(inputs){
