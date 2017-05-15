@@ -1,6 +1,6 @@
 /* storagemanager */
 /* storage is logically split in "entries" and "categories" */
-define(["scripts/modules/tools","scripts/modules/storage/sm_display", "scripts/modules/storage/sm_category"], function(tools, sm_display, sm_category) {
+define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display", "scripts/modules/storage/sm_category"], function(psl,tools, sm_display, sm_category) {
 	return {
 		initialize: function() {
 			console.log("Function : initialize");
@@ -72,14 +72,21 @@ define(["scripts/modules/tools","scripts/modules/storage/sm_display", "scripts/m
 					alert("yo, there is an entry for "+ mUrl);
 					//TODO
 				}
+
+				//standartize urlKeys by using only the Subleveldomain
+					
+				mUrl = mUrl.split("/")[2]; // Get the hostname
+				var parsed = psl.parse(mUrl);
+				var urlKey = parsed.domain; // facebook.com
+				console.log("urlKey: " + urlKey);	
 				//push new entry
-				entries.entries[mUrl] = mCredential;
+				entries.entries[urlKey] = mCredential;
 				//store changes
 				var storingEntry = browser.storage.local.set(entries);
 				storingEntry.then(() => {
 					console.log("store success");
 					//display new entry
-					sm_display.displayEntry(mUrl, mCredential);
+					sm_display.displayEntry(urlKey, mCredential);
 					sm_category.displayNumberEntries();
 
 

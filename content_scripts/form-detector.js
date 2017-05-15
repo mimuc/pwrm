@@ -1,6 +1,6 @@
 console.log("form-detector.js injected");
 /* trigger storage lookup for matching accounts */
-window.addEventListener("onLoad", init());
+window.addEventListener("DOMContentLoaded", init());
 var submitBtn = document.querySelector('[type=submit]');
 submitBtn.addEventListener('click', checkAccount);
 
@@ -13,11 +13,13 @@ var hasSignup = false;
 //var URL = document.URL;
 // use location.origin to extract base url
 //var URL = location.origin;
-var parts = location.hostname.split('.');
-var subdomain = parts.shift();
-var upperleveldomain = parts.join('.');
-console.log(upperleveldomain);
-var URL = upperleveldomain;
+var murl = document.URL;
+
+murl = murl.split("/")[2]; // Get the hostname
+var parsed = psl.parse(murl); // Parse the domain
+
+var URL = parsed.domain;
+console.log("parsed domain: " + URL);
 //check against type-attribute 
 var attr_name = "email";
 var attr_pw = "password";
@@ -29,9 +31,30 @@ var regex_pw = /pass/;
 function init(){
   findSignup();
 }
+function isHidden(element) {
+  return (element.offsetParent === null)
+}
+//consider only inputs that are visible in DOM
+function filterHiddenInputs(inputs){
+  //http://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
+  var filteredInputs = [];
+
+  for(ii = 0;ii<inputs.length;ii++){
+    if(!isHidden(inputs[ii])){
+      filteredInputs.push(inputs[ii]);
+    }
+  }
+  //console.log(filteredInputs);
+  return filteredInputs;
+
+
+}
+
 
 function findSignup(){
-  var forms = document.forms;
+  console.log("Function : findSignup");
+  var forms = document.getElementsByTagName('form');
+  console.log(forms);
   //first check if there are 2 password inputs to determine whether it's a login or a signup
   //false positive on (like facebook) login-signup double page 
   console.log("Number forms on this page: " +forms.length);
@@ -39,45 +62,36 @@ function findSignup(){
   for (i = 0; i < forms.length; ++i) {
     var pwInputs = forms[i].querySelectorAll('input[type="password"]:not([type="hidden"]):not([type="submit"])');
     var allInputs = forms[i].querySelectorAll('input:not([type="hidden"]):not([type="submit"])');
-    console.log("Form "+ i +" has "+ pwInputs.length +" PW Input and "+ allInputs.length +" other Input Elements.");
+    
+    //console.log(pwInputs);
+    //console.log("filtering pwinputs ...");
+    var visiblePWInputs = filterHiddenInputs(pwInputs);
+    //console.log(allInputs);
+    //console.log("filtering allinputs ...");
+    var visibleAllInputs = filterHiddenInputs(allInputs);
 
+    console.log("Form "+ i +" has "+ visiblePWInputs.length +" PW Input and "+ visibleAllInputs.length +" other Input Elements.");
     //form is supposed to be a signup form if:
     //there are 2 PW inputs
     //there is 1 PW input and more than 1 other input element in the same form
-   
-    if(pwInputs.length == 2 || (pwInputs.length == 1 && allInputs.length > 2)){
+
+    if(visiblePWInputs.length == 2 || (visiblePWInputs.length == 1 && visibleAllInputs.length > 2)){
       console.log("Form " + i + " is a Signup Form.");
-    }else if(pwInputs.length == 1){
-       console.log("Form " + i + " is a Login Form.");
-        lookupStorage(); //calls findLogin(..) in case of existing entry for this url
-    }else if(pwInputs.length > 2){
+    }else if(visiblePWInputs.length < 2){
+     console.log("Form " + i + " is a Login Form.");
+        lookupStorage(forms[i]); //calls findLogin(..) in case of existing entry for this url
+      }else if(visiblePWInputs.length > 2){
        console.log("Form " + i + " might be a Reset Form.");
-    }
-    
-  }
-}
+     }
+
+   } //end of for-loop
+ }
 
 
-function findLogin(credentials, categoryIcon){
+ function findLogin(form, credentials, categoryIcon){
   console.log("Function : findLogin");
-//highlight inputs if existing account
 
-//query all forms
-var loginForm = document.querySelectorAll('form');
-
-//handle multiple forms (trivial solution: select first in page)
-//check if there is a form element. if not query the whole page for inputs
-//WARNING: can result in only finding a search field but not the login inputs!
-/*
-var form = loginForm.item(0);
-if(form != null){
- inputs = form.getElementsByTagName('input');
-}else{
-  console.log("Error getting form: " + data);
-  console.log("Querying whole document...");
-  inputs = document.getElementsByTagName('input');
-}*/
-inputs = document.getElementsByTagName('input');
+  inputs = form.getElementsByTagName('input');
 //TODO: add boxes and auto-fill username etc depending on user preferences
 for (index = 0; index < inputs.length; ++index) {
   var i = inputs[index];
@@ -95,10 +109,10 @@ for (index = 0; index < inputs.length; ++index) {
   //find password input
   if(i.getAttribute("type").toUpperCase() === attr_pw.toUpperCase() ||
     new RegExp(regex_pw).test(i.outerHTML)){
-      hasLogin = true;
-      highlightPassword(i, credentials, categoryIcon);
-    }
-  }
+    hasLogin = true;
+  highlightPassword(i, credentials, categoryIcon);
+}
+}
 
 
 /* //if needed: communicate with background.js 
@@ -107,12 +121,11 @@ for (index = 0; index < inputs.length; ++index) {
  }
 
 
- function lookupStorage(){
+ function lookupStorage(form){
    var requestPromise = browser.storage.local.get();
    requestPromise.then(function(data){
     var cat = data.categories;
     var entries = data.entries;
-
 
     if(entries[URL] != null){
       console.log("Found an entry for this URL in local storage.");
@@ -120,10 +133,10 @@ for (index = 0; index < inputs.length; ++index) {
 
       /* there is a matching URL / account in the storage */
       /* second parameter is the matching between entry.categoryName and categories --> icon */
-      findLogin(entries[URL], cat[entries[URL].category][1]);
+      findLogin(form, entries[URL], cat[entries[URL].category][1]);
     }else{
       console.log("No saved entry found for this URL.");
-      console.log("URL is: " + entries);
+      console.log(URL);
     }
 
   }, 
