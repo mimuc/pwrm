@@ -25,7 +25,8 @@
         "content_scripts/psl.min.js",
         "content_scripts/form-detector.js", 
         "content_scripts/categorizer.js"],
-      "css" : ["content_scripts/inject.css"]
+      "css" : [
+        "content_scripts/inject.css"]
     }
   ],
 
@@ -41,7 +42,7 @@
   },
 
   "web_accessible_resources": [
-  //
+      
 ]
 
 }

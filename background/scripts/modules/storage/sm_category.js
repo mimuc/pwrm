@@ -2,17 +2,22 @@
 define(function() {
 	return {
 		createCategoryElement: function(categoryName, notes, iconName){
+
+			
 			var container = document.querySelector('#categoryContainer');
 			require(['jquery','scripts/modules/storage/storagemanager'], function($, sm) {
+
+
 				//load snippet
 				$('#categoryContainer').append('<div id="wrapper_'+categoryName+'"></div>');
-				$('#wrapper_'+categoryName).load('scripts/modules/ui/collapse_snippet.html',null,
+				$('#wrapper_'+categoryName).load('scripts/modules/ui/category_snippet.html',null,
+				//$('#wrapper_'+categoryName).load('scripts/modules/ui/collapse_snippet.html',null,
 					function() {
 					//alter DOM (id, classnames)
 					var catName = categoryName.replace('_', ' ');
-					$('#_heading_').attr('id', 'heading_'+categoryName);
-					$('#_listGroup_').attr('id', 'listGroup_'+categoryName);	
 
+					$(this).children(":first").attr('id','categorywrapper_'+categoryName);
+					$('#_heading_').attr('id', 'panel_'+categoryName);
 					$('#_numberAccounts_').attr('id', 'numberAccounts_'+categoryName);			
 					
 					$('#_title_').attr('href', '#listGroup_'+categoryName)
@@ -20,6 +25,15 @@ define(function() {
 					.attr('aria-controls', 'listGroup_'+categoryName)
 					.html('<div class="cat-title">'+catName+'</div>');
 					
+					$(this).click(function(event) {
+						$('.panel-card').addClass('low-color');
+						$('.panel-card').removeClass('category-focused');
+						$('#panel_'+categoryName).removeClass('low-color');
+					
+						$('#panel_'+categoryName).addClass('category-focused');
+						$('#entryContainer').empty();
+						sm.loadEntries(categoryName);
+					});
 					/*$('#cat-subtitle').attr('id', categoryName+'-subtitle')
 					.html(notes);*/
 
@@ -47,6 +61,7 @@ define(function() {
 				*/
 				return name;
 			}
+			this.displayNumberEntries();
 		},
 		displayCategories: function(categories, loadEntries) {
 			console.log("Function : displayCategories");
@@ -55,11 +70,13 @@ define(function() {
 			}
 			//dirty call (loadEntries should be called after all categories are created [async])
 			//works fine for now
+			/*
 			if(loadEntries){
 				require(["scripts/modules/storage/storagemanager"], function(sm){
 					sm.loadEntries();
 				});
 			}
+			*/
 		},
 		fillDropdown: function(categories) {
 			console.log("Function : fillDropdown");

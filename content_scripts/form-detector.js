@@ -1,7 +1,7 @@
 console.log("form-detector.js injected");
 /* trigger storage lookup for matching accounts */
 window.addEventListener("DOMContentLoaded", init());
-//window.addEventListener("DOMSubtreeModified", findSignup());
+//window.addEventListener("DOMSubtreeModified", findForms());
 var submitBtn = document.querySelector('[type=submit]');
 submitBtn.addEventListener('click', checkAccount);
 
@@ -13,14 +13,16 @@ var hasSignup = false;
 
 //var URL = document.URL;
 // use location.origin to extract base url
-//var URL = location.origin;
-var murl = document.URL;
+var URL = location.origin;
 
+/*
+var murl = document.URL;
 murl = murl.split("/")[2]; // Get the hostname
 var parsed = psl.parse(murl); // Parse the domain
 
 var URL = parsed.domain;
 console.log("parsed domain: " + URL);
+*/
 //check against type-attribute 
 var attr_name = "email";
 var attr_pw = "password";
@@ -32,8 +34,8 @@ var regex_pw = /pass/;
 function init(){
   console.log("Function : init");
   //workaround to wait for DOM Elements being loaded async after DOMContentLoaded
-  setTimeout(function() { findSignup(); }, 1000);
-  //findSignup();
+  setTimeout(function() { findForms(); }, 1000);
+  //findForms();
   //alternative: DOM Mutation Observer
   //setTimeout(function() { setupObserver(); }, 2000);
 }
@@ -75,12 +77,11 @@ function filterHiddenInputs(inputs){
   //console.log(filteredInputs);
   return filteredInputs;
 
-
 }
 
 
-function findSignup(){
-  console.log("Function : findSignup");
+function findForms(){
+  console.log("Function : findForms");
   var forms = document.getElementsByTagName('form');
   console.log(forms);
   //first check if there are 2 password inputs to determine whether it's a login or a signup
@@ -98,11 +99,12 @@ function findSignup(){
     //console.log("filtering allinputs ...");
     var visibleAllInputs = filterHiddenInputs(allInputs);
 
-    console.log("Form "+ i +" has "+ visiblePWInputs.length +" PW Input and "+ visibleAllInputs.length +" other Input Elements.");
+    console.log("Form "+ i +" has "+ visiblePWInputs.length +" (visible) PW Input and "+ visibleAllInputs.length +" other Input Elements.");
     //form is supposed to be a signup form if:
     //there are 2 PW inputs
     //there is 1 PW input and more than 1 other input element in the same form
 
+    
     if(visiblePWInputs.length == 2 || (visiblePWInputs.length == 1 && visibleAllInputs.length > 2)){
       console.log("Form " + i + " is a Signup Form.");
     }else if(visiblePWInputs.length < 2){
@@ -129,8 +131,8 @@ for (index = 0; index < inputs.length; ++index) {
   //test by type attribute, if false test as string with regular expression
   if(i.getAttribute("type").toUpperCase() === attr_name.toUpperCase() ||
     new RegExp(regex_name).test(i.outerHTML)){
-    inputUsername = i;
-  highlightUsername(i, credentials);
+
+    highlightUsername(i, credentials);
 } 
 
 }
@@ -187,35 +189,33 @@ for (index = 0; index < inputs.length; ++index) {
 
   hintbox_div.appendChild(hintbox_p);
   hintbox_div.appendChild(hintbox_p2);
+
   i.parentNode.insertBefore(hintbox_div, i.nextSibling);
 
+  //autofill username test
+  i.value = credentials.username;
+}
 
-    //autofill test
-
-    i.value = credentials.username;
-  }
-
-  function highlightPassword(i, credentials, icon){
-    i.style.color = "green";
-    i.style.border = "3px dotted green";
+function highlightPassword(i, credentials, icon){
+  i.style.color = "green";
+  i.style.border = "3px dotted green";
 
 
+  var hintbox_div = document.createElement('div');
+  var hintbox_p = document.createElement('p');
+  var hintbox_p2 = document.createElement('p');
+  var hintbox_i = document.createElement('i');
+  hintbox_i.setAttribute('class', 'material-icons');
+  hintbox_div.setAttribute('class', 'hintbox');
+  hintbox_i.textContent = icon;
+  hintbox_p.textContent = 'Password Category: ' ;
+  hintbox_p2.textContent = credentials.category;
 
-    var hintbox_div = document.createElement('div');
-    var hintbox_p = document.createElement('p');
-    var hintbox_p2 = document.createElement('p');
-    var hintbox_i = document.createElement('i');
-    hintbox_i.setAttribute('class', 'material-icons');
-    hintbox_div.setAttribute('class', 'hintbox');
-    hintbox_i.textContent = icon;
-    hintbox_p.textContent = 'Password Category: ' ;
-    hintbox_p2.textContent = credentials.category;
-
-    hintbox_div.appendChild(hintbox_p);
-    hintbox_div.appendChild(hintbox_i);
-    hintbox_div.appendChild(hintbox_p2);
-    i.parentNode.insertBefore(hintbox_div, i.nextSibling);
-  }
+  hintbox_div.appendChild(hintbox_p);
+  hintbox_div.appendChild(hintbox_i);
+  hintbox_div.appendChild(hintbox_p2);
+  i.parentNode.insertBefore(hintbox_div, i.nextSibling);
+}
 
 //submit button clicked. Check if there is an entry with this username for this website
 function checkAccount(){
@@ -239,23 +239,19 @@ function checkAccount(){
 
 }
 
-//messaging
-function handleResponse(message) {
-  console.log(message);
-  console.log('Message from the background script:' + message.subject);
-}
+
 function handleError(error) {
   console.log('Error: '+ error);
 }
-function notifyBackgroundPage(e) {
-  console.log("Function : notifyBackgroundPage");
-  var sending = browser.runtime.sendMessage({
-    subject: 'showPopup',
-    mode: 'login', //possible other modes: create account, restore pw..
-    hasLogin: hasLogin, 
-    title: document.title,
-    url: URL
-  });
-  sending.then(handleResponse, handleError);  
-}
+
+
+
+chrome.runtime.onMessage.addListener(handleMessage);
+
+function handleMessage(request, sender, sendResponse){
+  if(request == "detect"){
+    //start detector
+    init();
+  }
+ }
 

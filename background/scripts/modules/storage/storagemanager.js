@@ -39,25 +39,24 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 
 		},
 
-		loadEntries: function(){
+		loadEntries: function(categoryName){
 			var gettingEntries = browser.storage.local.get("entries");
 			gettingEntries.then((results) => {
 				var res = results["entries"];
-				console.log(res);
-
 				//create empty entries-storage if empty
 				//TODO
 				if(res == null){
 					storingEntry = browser.storage.local.set({"entries" : {}});
 				}
-
 				for(key in res){
 					// TODO 3x		
 					console.log("call display entry");
-					sm_display.displayEntry(key,res[key]);
+					if(res[key].category == categoryName){
+						sm_display.displayEntry(key,res[key]);
+					}
 				}
 
-				sm_category.displayNumberEntries();
+				
 			}, onError);
 		},
 
@@ -73,20 +72,14 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 					//TODO
 				}
 
-				//standartize urlKeys by using only the Subleveldomain
-					
-				//mUrl = mUrl.split("/")[2]; // Get the hostname
-				var parsed = psl.parse(mUrl);
-				var urlKey = parsed.domain; // facebook.com
-				console.log("urlKey: " + urlKey);	
 				//push new entry
-				entries.entries[urlKey] = mCredential;
+				entries.entries[mUrl] = mCredential;
 				//store changes
 				var storingEntry = browser.storage.local.set(entries);
 				storingEntry.then(() => {
 					console.log("store success");
 					//display new entry
-					sm_display.displayEntry(urlKey, mCredential);
+					//sm_display.displayEntry(mUrl, mCredential);
 					sm_category.displayNumberEntries();
 
 

@@ -1,6 +1,6 @@
 
 #fab_wrapper {
-    position: absolute;
+    position: fixed;
     top: 25px;
     right:4%;
     padding: 24px;

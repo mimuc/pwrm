@@ -51,7 +51,20 @@ function moveToCategory(entryID, newCategory){
 });
 }
 
+//listen for tab changes to trigger form-detection (no reload needed)
+function handleActivated(activeInfo) {
+  console.log("Tab " + activeInfo.tabId +" was activated");
+  //TODO: pass message to content script to trigger form-detection
+  sendMessage("detect");
+}
 
+browser.tabs.onActivated.addListener(handleActivated);
+
+function sendMessage(msg) {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, msg);
+    });
+}
 
 // manually create new category 
 function createCategory(){
