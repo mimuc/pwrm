@@ -2,7 +2,7 @@
 #fab_wrapper {
     position: fixed;
     top: 25px;
-    right:4%;
+    right:10%;
     padding: 24px;
     overflow: hidden;   
     z-index:9999;

@@ -55,7 +55,7 @@ function moveToCategory(entryID, newCategory){
 function handleActivated(activeInfo) {
   console.log("Tab " + activeInfo.tabId +" was activated");
   //TODO: pass message to content script to trigger form-detection
-  sendMessage("detect");
+  sendMessage("task_detect");
 }
 
 browser.tabs.onActivated.addListener(handleActivated);
@@ -118,15 +118,7 @@ function updateentry(delentry,newname,newurl) {
 
 //receives and answers messages from content_scripts [if needed]
 function handleMessage(request, sender, sendResponse) {
-  //this message is send on every single page load after the dom was scanned by form-detector.js 
-  if(request.subject == 'docInfo' && request.mode == 'login'){
-    //check if there is an entry in the local storage that matches the received URL
-    sendResponse("copy that");
-  }
-  if(request.subject == 'showPopup' && request.mode == 'login'){
-    //check if there is an entry in the local storage that matches the received URL
-    sendResponse("background says: showing Popup");
-  }
+ console.log("Message received in background: " +request);
 }
 
 browser.runtime.onMessage.addListener(handleMessage);
