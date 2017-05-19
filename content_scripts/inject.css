@@ -10,6 +10,14 @@
 	margin-top:10px;
 	max-width:150px;
 	overflow: hidden;
+}
 
+.highlight_username{
+	color: blue;
+	border: 3px dotted blue;
+}
+
+.hidden{
+	display:none;
 }
 

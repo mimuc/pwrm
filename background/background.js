@@ -1,44 +1,78 @@
-
-
 var addBtn = document.querySelector('#addEntry');
-var newEntry = document.querySelector('#newEntry');
-var dialogEntry = document.querySelector('#dialogEntry');
+var addCategory = document.querySelector('#addCategory');
+var modalCategory = document.querySelector('#modalCategory');
 
-/*  add event listeners to buttons */
+
+// add event listeners to buttons and inputs
 addBtn.addEventListener('click', addEntry);
+addCategory.addEventListener('click', createCategory);
+
 /* call init on page load */
 document.addEventListener("DOMContentLoaded", init);
 
+//listen for searchfield input
+$('#search').on('keyup', function() {
+  if (this.value.length > 0) searchAsync(this.value);
+});
 
-/* creates programmatically an entry */
-function createEntry(mUrl, mUsername, mCategory, mPassword){
+//searches for entries and displays results matching the typed letters
+function searchAsync(value){
+  console.log("searchAsync: " + value);
+}
+// creates programmatically an entry 
+function createEntry(mUrl, mUsername, mCategory, mPassword, mID){
   require(["scripts/modules/storage/entry"], function createEntry(e){
-    var test = e.createEntry(mUrl, mUsername, mCategory, mPassword);
+    var test = e.createEntry(mUrl, mUsername, mCategory, mPassword, mID);
   });
 }
 
-/* init the new entry modal 
-$('#modal-newEntry').on('shown.bs.modal', function () {
-  $('#modal-newEntry').focus()
-})
-*/
-
-//register dialog and setup listeners
-if (! dialogEntry.showModal) {
-  require(["scripts/dialog-polyfill-master/dialog-polyfill"], function registerDialog(e){
-    e.registerDialog(dialogEntry);
-  });
+function changeCategoryIcon(catName, iconName){
+ require(["scripts/modules/storage/sm_category"], function changeCategoryIcon(sm_category){
+  sm_category.changeCategoryIcon(catName, iconName);
+});
 }
-newEntry.addEventListener('click', function() {
-  dialogEntry.showModal();
-});
-dialogEntry.querySelector('.close').addEventListener('click', function() {
-  dialogEntry.close();
-});
 
-/* manually create new category */
+function deleteCategory(name){
+ require(["scripts/modules/storage/sm_category"], function deleteCategory(sm_category){
+  sm_category.deleteCategory(name);
+});
+}
+
+function renameCategory(newName){
+ require(["scripts/modules/storage/sm_category"], function deleteCategory(sm_category){
+  sm_category.deleteCategory(name);
+});
+}
+
+
+function moveToCategory(entryID, newCategory){
+ require(["scripts/modules/storage/sm_category"], function moveToCategory(sm_category){
+  sm_category.moveToCategory(entryID, newCategory);
+});
+}
+
+//listen for tab changes to trigger form-detection (no reload needed)
+function handleActivated(activeInfo) {
+  console.log("Tab " + activeInfo.tabId +" was activated");
+  //TODO: pass message to content script to trigger form-detection
+  sendMessage("detect");
+}
+
+browser.tabs.onActivated.addListener(handleActivated);
+
+function sendMessage(msg) {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, msg);
+    });
+}
+
+// manually create new category 
 function createCategory(){
-  //TODO
+  var value = modalCategoryName.value;
+  require(["scripts/modules/storage/sm_category"], function createCategory(sm_category){
+    sm_category.createCategory(value);
+  });
+
 }
 
 function assignCategory(entryKey, categoryKey){
@@ -49,13 +83,13 @@ function assignCategory(entryKey, categoryKey){
 function init(){
   //init storage logic
   require(["scripts/modules/storage/storagemanager"], function init(sm){sm.initialize();});
+
 }
 
 /* add new entry when clicked on button */
 /* TODO: needs some form checks */
 function addEntry(){
   require(["scripts/modules/storage/storagemanager"], function (sm){sm.addEntry();});
-  dialogEntry.close();
 }
 
 /* generic error handler */
@@ -65,7 +99,7 @@ function onError(error) {
 
 
 
-/* function to update entrys */
+// function to update entrys 
 function updateentry(delentry,newname,newurl) {
   /*
   var storingentry = browser.storage.local.set({ [newname] : newurl });
@@ -82,14 +116,17 @@ function updateentry(delentry,newname,newurl) {
   */
 }
 
-/* receives and answers messages from content_scripts [if needed]
+//receives and answers messages from content_scripts [if needed]
 function handleMessage(request, sender, sendResponse) {
   //this message is send on every single page load after the dom was scanned by form-detector.js 
   if(request.subject == 'docInfo' && request.mode == 'login'){
     //check if there is an entry in the local storage that matches the received URL
     sendResponse("copy that");
   }
+  if(request.subject == 'showPopup' && request.mode == 'login'){
+    //check if there is an entry in the local storage that matches the received URL
+    sendResponse("background says: showing Popup");
+  }
 }
 
 browser.runtime.onMessage.addListener(handleMessage);
-*/

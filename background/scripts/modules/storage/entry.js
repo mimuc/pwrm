@@ -2,13 +2,14 @@
 
 define(function() {
 	return {
-		createEntry: function(mUrl, mUsername, mPassword, mCategory) {
+		createEntry: function(mUrl, mUsername, mPassword, mCategory, mID) {
 			console.log("Function : createEntry");
 			var entry = {
 				"url" : mUrl,				
 				"username" : mUsername,
 				"password" : mPassword,
-				"category" : mCategory
+				"category" : mCategory,
+				"id" : mID
 			}
 			return entry;
 		}

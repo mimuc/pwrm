@@ -1,64 +1,148 @@
 console.log("form-detector.js injected");
+/* trigger storage lookup for matching accounts */
+window.addEventListener("DOMContentLoaded", init());
+//window.addEventListener("DOMSubtreeModified", findForms());
+var submitBtn = document.querySelector('[type=submit]');
+submitBtn.addEventListener('click', checkAccount);
 
-
+var inputUsername;
+var inputs;
 var hasLogin = false;
+var hasSignup = false;
 
 
 //var URL = document.URL;
 // use location.origin to extract base url
 var URL = location.origin;
 
-console.log(URL);
+/*
+var murl = document.URL;
+murl = murl.split("/")[2]; // Get the hostname
+var parsed = psl.parse(murl); // Parse the domain
+
+var URL = parsed.domain;
+console.log("parsed domain: " + URL);
+*/
 //check against type-attribute 
 var attr_name = "email";
 var attr_pw = "password";
 //if there is no match, check via regex to find inputs
-var regex_name = /e-mail$|num(?!=)|^email$|name(?!=)|login/;
+var regex_name = /e-mail$|konto(?!=)|num(?!=)|^email$|name(?!=)|login/;
 var regex_pw = /pass/;
 
 
-function findLogin(credentials, categoryIcon){
-//highlight inputs if existing account
+function init(){
+  console.log("Function : init");
+  //workaround to wait for DOM Elements being loaded async after DOMContentLoaded
+  setTimeout(function() { findForms(); }, 1000);
+  //findForms();
+  //alternative: DOM Mutation Observer
+  //setTimeout(function() { setupObserver(); }, 2000);
+}
+/*
+function setupObserver(){
+  console.log("Function : setupObserver");
+  MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+  var observer = new MutationObserver(function(mutations) {
+   mutations.forEach(function(mutation) {
+    if(!isHidden(mutation.target)){
+    console.log("inputs shown");
+    console.log(mutation.oldValue);
+  }
+  
+  });    
+ });
+  var config = { attributes: true,attributeOldValue: true, attributeFilter: ['type']};
+   //observe all inputs and wait for changes
+   var observableInputs = filterHiddenInputs(document.querySelectorAll('input'));
+   for(oi=0;oi<observableInputs.length;oi++){
+    observer.observe(observableInputs[oi], config);
+   }
 
-//query all forms
-var loginForm = document.querySelectorAll('form');
-var inputs;
-//handle multiple forms (trivial solution: select first in page)
-//check if there is a form element. if not query the whole page for inputs
-var form = loginForm.item(0);
-if(form != null){
- inputs = form.getElementsByTagName('input');
-}else{
-  console.log("Error getting form: " + data);
-  console.log("Querying whole document...");
-  inputs = document.getElementsByTagName('input');
+}
+*/
+function isHidden(element) {
+  return (element.type =='hidden' ||element.offsetParent === null)
+}
+//consider only inputs that are visible in DOM
+function filterHiddenInputs(inputs){
+  //http://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
+  var filteredInputs = [];
+
+  for(ii = 0;ii<inputs.length;ii++){
+    if(!isHidden(inputs[ii])){
+      filteredInputs.push(inputs[ii]);
+    }
+  }
+  //console.log(filteredInputs);
+  return filteredInputs;
+
 }
 
+
+function findForms(){
+  console.log("Function : findForms");
+  var forms = document.getElementsByTagName('form');
+  console.log(forms);
+  //first check if there are 2 password inputs to determine whether it's a login or a signup
+  //false positive on (like facebook) login-signup double page 
+  console.log("Number forms on this page: " +forms.length);
+
+  for (i = 0; i < forms.length; ++i) {
+    var pwInputs = forms[i].querySelectorAll('input[type="password"]:not([type="hidden"]):not([type="submit"])');
+    var allInputs = forms[i].querySelectorAll('input:not([type="hidden"]):not([type="submit"])');
+    
+    //console.log(pwInputs);
+    //console.log("filtering pwinputs ...");
+    var visiblePWInputs = filterHiddenInputs(pwInputs);
+    //console.log(allInputs);
+    //console.log("filtering allinputs ...");
+    var visibleAllInputs = filterHiddenInputs(allInputs);
+
+    console.log("Form "+ i +" has "+ visiblePWInputs.length +" (visible) PW Input and "+ visibleAllInputs.length +" other Input Elements.");
+    //form is supposed to be a signup form if:
+    //there are 2 PW inputs
+    //there is 1 PW input and more than 1 other input element in the same form
+
+    
+    if(visiblePWInputs.length == 2 || (visiblePWInputs.length == 1 && visibleAllInputs.length > 2)){
+      console.log("Form " + i + " is a Signup Form.");
+    }else if(visiblePWInputs.length < 2){
+     console.log("Form " + i + " is a Login Form.");
+        lookupStorage(forms[i]); //calls findLogin(..) in case of existing entry for this url
+      }else if(visiblePWInputs.length > 2){
+       console.log("Form " + i + " might be a Reset Form.");
+     }
+
+   } //end of for-loop
+ }
+
+
+ function findLogin(form, credentials, categoryIcon){
+  console.log("Function : findLogin");
+
+  inputs = form.getElementsByTagName('input');
 //TODO: add boxes and auto-fill username etc depending on user preferences
 for (index = 0; index < inputs.length; ++index) {
   var i = inputs[index];
-    //escape submit buttons, hidden inputs
-    if(i.type != "submit" && i.type != "hidden"){
+  //escape submit buttons, hidden inputs
+  if(i.type != "submit" && i.type != "hidden"){
+  //find username / mail input
+  //test by type attribute, if false test as string with regular expression
+  if(i.getAttribute("type").toUpperCase() === attr_name.toUpperCase() ||
+    new RegExp(regex_name).test(i.outerHTML)){
 
-    //find username / mail input
-    //test by type attribute, if false test as string with regular expression
-    if(i.getAttribute("type").toUpperCase() === attr_name.toUpperCase() ||
-      new RegExp(regex_name).test(i.outerHTML)){
-      //console.log("username input found -->");
-     //testing
-     highlightUsername(i, credentials);
-   }
+    highlightUsername(i, credentials);
+} 
 
- }
+}
   //find password input
   if(i.getAttribute("type").toUpperCase() === attr_pw.toUpperCase() ||
     new RegExp(regex_pw).test(i.outerHTML)){
-        //console.log("password input found -->");
-        //testing
-        hasLogin = true;
-        highlightPassword(i, credentials, categoryIcon);
-      }
-    }
+    hasLogin = true;
+  highlightPassword(i, credentials, categoryIcon);
+}
+}
 
 
 /* //if needed: communicate with background.js 
@@ -67,7 +151,7 @@ for (index = 0; index < inputs.length; ++index) {
  }
 
 
- function lookupStorage(){
+ function lookupStorage(form){
    var requestPromise = browser.storage.local.get();
    requestPromise.then(function(data){
     var cat = data.categories;
@@ -79,10 +163,10 @@ for (index = 0; index < inputs.length; ++index) {
 
       /* there is a matching URL / account in the storage */
       /* second parameter is the matching between entry.categoryName and categories --> icon */
-      findLogin(entries[URL], cat[entries[URL].category][1]);
+      findLogin(form, entries[URL], cat[entries[URL].category][1]);
     }else{
       console.log("No saved entry found for this URL.");
-      console.log("URL is: " + entries);
+      console.log(URL);
     }
 
   }, 
@@ -92,6 +176,7 @@ for (index = 0; index < inputs.length; ++index) {
  }
 
  function highlightUsername(i, credentials){
+  console.log("Function : highlightUsername");
   i.style.color = "blue";
   i.style.border = "3px dotted blue";
 
@@ -104,61 +189,69 @@ for (index = 0; index < inputs.length; ++index) {
 
   hintbox_div.appendChild(hintbox_p);
   hintbox_div.appendChild(hintbox_p2);
+
   i.parentNode.insertBefore(hintbox_div, i.nextSibling);
 
+  //autofill username test
+  i.value = credentials.username;
+}
 
-    //autofill test
-
-    i.value = credentials.username;
-  }
-
-  function highlightPassword(i, credentials, icon){
-    i.style.color = "green";
-    i.style.border = "3px dotted green";
+function highlightPassword(i, credentials, icon){
+  i.style.color = "green";
+  i.style.border = "3px dotted green";
 
 
+  var hintbox_div = document.createElement('div');
+  var hintbox_p = document.createElement('p');
+  var hintbox_p2 = document.createElement('p');
+  var hintbox_i = document.createElement('i');
+  hintbox_i.setAttribute('class', 'material-icons');
+  hintbox_div.setAttribute('class', 'hintbox');
+  hintbox_i.textContent = icon;
+  hintbox_p.textContent = 'Password Category: ' ;
+  hintbox_p2.textContent = credentials.category;
 
-    var hintbox_div = document.createElement('div');
-    var hintbox_p = document.createElement('p');
-    var hintbox_p2 = document.createElement('p');
-    var hintbox_i = document.createElement('i');
-    hintbox_i.setAttribute('class', 'material-icons');
-    hintbox_div.setAttribute('class', 'hintbox');
-    hintbox_i.textContent = icon;
-    hintbox_p.textContent = 'Password Category: ' ;
-    hintbox_p2.textContent = credentials.category;
+  hintbox_div.appendChild(hintbox_p);
+  hintbox_div.appendChild(hintbox_i);
+  hintbox_div.appendChild(hintbox_p2);
+  i.parentNode.insertBefore(hintbox_div, i.nextSibling);
+}
 
-    hintbox_div.appendChild(hintbox_p);
-    hintbox_div.appendChild(hintbox_i);
-    hintbox_div.appendChild(hintbox_p2);
-    i.parentNode.insertBefore(hintbox_div, i.nextSibling);
-  }
-
-//messaging
-function handleResponse(message) {
-  console.log(message);
- /* console.log('Message from the background script:' + message.subject);
-   console.log(message.result);
-  if(message.subject == 'credentials'){
-    console.log("received credentials from local storage");
-    console.log(result);
-  }
-  */
+//submit button clicked. Check if there is an entry with this username for this website
+function checkAccount(){
+  var username = inputUsername.value;
+  var requestPromise = browser.storage.local.get();
+  requestPromise.then(function(data){
+    var cat = data.categories; var entries = data.entries;
+    var accountFound = false; var existingUsername;
+    for(e in entries){
+      if(e === URL){
+        accountFound = true;
+        existingUsername = entries[e].username;
+      }
+    }
+    //if there was no account found or there is an account for this page but a different username was saved
+    if(!accountFound || (accountFound && existingUsername != username)){
+      //TODO: how popup "want to add this account?"
+     // notifyBackgroundPage();
+   }
+ });
 
 }
+
+
 function handleError(error) {
   console.log('Error: '+ error);
 }
-function notifyBackgroundPage(e) {
-  var sending = browser.runtime.sendMessage({
-    subject: 'docInfo',
-    mode: 'login', //possible other modes: create account, restore pw..
-    hasLogin: hasLogin, 
-    title: document.title,
-    url: document.URL
-  });
-  sending.then(handleResponse, handleError);  
-}
 
-/* trigger storage lookup for matching accounts */
-window.addEventListener("DOMContentLoaded", lookupStorage());
+
+
+chrome.runtime.onMessage.addListener(handleMessage);
+
+function handleMessage(request, sender, sendResponse){
+  if(request == "detect"){
+    //start detector
+    init();
+  }
+ }
+

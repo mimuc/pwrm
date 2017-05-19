@@ -1,46 +1,47 @@
 /* display entries */
-define(['scripts/modules/storage/sm_category'],function(sm_category) {
+define(['psl','jquery','scripts/modules/storage/sm_category'],function(psl,$,sm_category) {
 	return {
 		displayEntry: function(url, credential) {
 			console.log("Function : displayEntry");
-
-			var entryContainer = document.querySelector('#listGroup_'+credential.category+' .list-group');
+			//var entryContainer = document.querySelector('#listGroup_'+credential.category+' .list-group');
+			var entryContainer = document.querySelector('#entryContainer');
 			//check if there is a category element for this category (should be if well-created)
-		
+			var entryWrapper = document.createElement('div');
+			entryWrapper.setAttribute('id', 'entryWrapper_'+credential.id);
+			entryWrapper.setAttribute('class', 'entry-row row');
+			entryContainer.appendChild(entryWrapper);
 
-			var entry = document.createElement('div');
-			var entryDisplay = document.createElement('div');
-			var entryH = document.createElement('p');
+			var turl = url.split("/")[2]; // Get the hostname
+			var parsed = psl.parse(turl); // Parse the domain
+			var urlName = parsed.sld;
+
+			var wrapper = $('#entryWrapper_'+credential.id);
+			wrapper.append('<div class="col-lg-2"><a href="http://placehold.it"><img class="placeholder-img" src="http://placehold.it/40x40"></a>'+ urlName +'</div><div class="col-lg-4">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-6">********</div><div class="col-lg-2"><a class="btn btn-mp light">Show</a></div><div class="col-lg-2"><a id="'+ url +'" class="btn btn-mp light">Delete</a></div><div class="col-lg-2"><a id="open_'+credential.id+'" class="btn btn-mp light">Goto</a></div></div></div>');
+			//wrapper.append('<div class="row entry"><div class="col-lg-12"><h4>'+url+'</h4><hr><div class="row"><div class="col-lg-8"><p>'+credential.username+'</p></div><div class="col-lg-2 entry-icons"><i id="'+url+'" class="material-icons">delete</i></div><div class="col-lg-2 entry-icons"><i id="open_'+credential.id+'" class="material-icons">open_in_new</i></div></div>');
+			var deleteBtn = document.getElementById(url);
+			var openBtn = document.getElementById("open_"+credential.id);
 			
-			var entryPara2 = document.createElement('p');
-			var deleteBtn = document.createElement('button');
-			var clearFix = document.createElement('div');
-
-			entry.setAttribute('class','entry');
-
-			entryH.textContent = url;
+			openBtn.addEventListener('click', function(e){
+				var creating = browser.tabs.create({
+					url: url
+				});
+			});
+			//id (== url) is saved in button
 			
-			entryPara2.textContent = credential.username;
-
-			deleteBtn.setAttribute('class','delete');
-			deleteBtn.setAttribute('id', url);
-			deleteBtn.textContent = 'Delete entry';
-			clearFix.setAttribute('class','clearfix');
+			deleteBtn.addEventListener('click',function(e){
+				evtTgt = e.target;
+				//TODO adapt to new storage design
+				deleteThisEntry(evtTgt.getAttribute('id'));
+				//remove from DOM
+				evtTgt.parentNode.parentNode.parentNode.removeChild(evtTgt.parentNode.parentNode);		
+				
+			});
 			
 
-			entryDisplay.appendChild(entryH);
-	
-			entryDisplay.appendChild(entryPara2);
-			entryDisplay.appendChild(deleteBtn);
-			entryDisplay.appendChild(clearFix);
-
-			entry.appendChild(entryDisplay);
 
 			function deleteThisEntry(url){
 				console.log("Function : deleteThisEntry");
-
 				var gettingEntries = browser.storage.local.get("entries");
-
 				gettingEntries.then((results) => {
 					var oldEntries = results.entries;					
 					delete oldEntries[url];	
@@ -48,81 +49,17 @@ define(['scripts/modules/storage/sm_category'],function(sm_category) {
 					//save the altered version of the entry-element in storage
 					var storingEntry = browser.storage.local.set({"entries" : oldEntries});
 					storingEntry.then(() => {
-						console.log("element" + url + "deleted. Entries updated.");
+						console.log("element " + url + " deleted. Entries updated.");
+						sm_category.displayNumberEntries();
+					}, onError);	
 
-					}, onError);
-
-			//save it again
-		});
+				});
 			}
 
-			//id (== url) is saved in button
-			deleteBtn.addEventListener('click',function(e){
-				evtTgt = e.target;
-				//TODO adapt to new storage design
-				deleteThisEntry(evtTgt.getAttribute('id'));
 
-				//remove from DOM
-				evtTgt.parentNode.parentNode.parentNode.removeChild(evtTgt.parentNode.parentNode);		
-				
-			})
-
-			var entryEdit = document.createElement('div');
-			var entryCategoryEdit = document.createElement('input');
-			var entryurlEdit = document.createElement('textarea');
-			var clearFix2 = document.createElement('div');
-
-			var updateBtn = document.createElement('button');
-			var cancelBtn = document.createElement('button');
-
-			updateBtn.setAttribute('class','update');
-			updateBtn.textContent = 'Update entry';
-			cancelBtn.setAttribute('class','cancel');
-			cancelBtn.textContent = 'Cancel update';
-
-			entryEdit.appendChild(entryCategoryEdit);
-			entryCategoryEdit.value = url;
-			entryEdit.appendChild(entryurlEdit);
-			entryurlEdit.textContent = credential.category;
-			entryEdit.appendChild(updateBtn);
-			entryEdit.appendChild(cancelBtn);
-
-			entryEdit.appendChild(clearFix2);
-			clearFix2.setAttribute('class','clearfix');
-
-			entry.appendChild(entryEdit);
-
-			entryContainer.appendChild(entry);
-			entryEdit.style.display = 'none';
-
-
-			entryH.addEventListener('click',function(){
-				entryDisplay.style.display = 'none';
-				entryEdit.style.display = 'block';
-			})
-
-			
-
-			cancelBtn.addEventListener('click',function(){
-				entryDisplay.style.display = 'block';
-				entryEdit.style.display = 'none';
-				entryCategoryEdit.value = credential.category;
-				entryurlEdit.value = url;
-			})
-
-			updateBtn.addEventListener('click',function(){
-				if(entryCategoryEdit.value !== credential.category || entryurlEdit.value !== url) {
-					updateentry(credential.category,entryCategoryEdit.value,entryurlEdit.value);
-					entry.parentNode.removeChild(entry);
-				} 
-			});
 			
 		}
 		
-
 		
 	}
-
 });
-
-
