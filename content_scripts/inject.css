@@ -1,15 +1,77 @@
 /* injected style sheet */
-
+/*
 .hintbox{
-	border: 3px solid black;
+	border: none;
 	position: absolute;
+	transition: all 0.5s cubic-bezier(.25,.8,.25,1);
 	z-index: 9999;
-	background-color: black;
-	color: white;
-	padding: 5px;
-	margin-top:10px;
-	max-width:150px;
+	background-color: white;
+	color: black;
+	margin-top:0px;
+	width:200px;
+	min-height: 50px;
+	max-width:200px;
 	overflow: hidden;
+	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+*/
+.hintbox{
+	border: none;
+position: absolute;
+transition: all 0.5s cubic-bezier(.25,.8,.25,1);
+z-index: 9999;
+background-color: white;
+color: black;
+margin-top: 10px;
+width: 340px;
+min-height: 50px;
+max-width: 218px;
+overflow: hidden;
+box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+position: relative;
+float: right;
+margin-bottom: 11px;
+}
+
+.hintbox_head.focused{
+	
+}
+
+.hintbox_head:hover{
+	cursor: pointer;
+}
+
+.hintbox_head{
+	background-color: #303f9f;
+	padding: 10px 5px;
+	color: white;
+	font-size: 1.3em;
+	height:100%;
+	width:100%;	
+	line-height: 25px
+}
+
+.grid{
+	display: inline;
+	margin-left:5px;
+}
+
+.grid.left{
+	float: left;
+	width:10%; 
+}
+.grid.middle{
+	width:60%; 
+	margin-left:10px;
+}
+.grid.right{
+	width:10%; 
+	float:right;
+	margin-right: 20px
+}
+.hintbox_content{
+	padding: 5px 10px;
+	transition: all 0.5s cubic-bezier(.25,.8,.25,1);
 }
 
 .highlight_username{
@@ -17,7 +79,40 @@
 	border: 3px dotted blue;
 }
 
-.hidden{
-	display:none;
+hr{
+	margin: 12px 0;
 }
 
+.material-icons.hastext{
+	top: 7px;
+	position: relative;
+}
+
+
+.mp-hidden {
+	height:0px !important;
+	-webkit-transition:height, 0.2s cubic-bezier(.25,.8,.25,1);
+	-moz-transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
+	-ms-transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
+	-o-transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
+	transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
+}
+.mp-hidden.open {
+	height:132px !important;
+	-webkit-transition:height,  0.2s cubic-bezier(.25,.8,.25,1);
+	-moz-transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
+	-ms-transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
+	-o-transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
+	transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
+}
+
+#ic_arrow{
+	transition: all 0.5s cubic-bezier(.25,.8,.25,1);
+}
+#ic_arrow.upsideDown{
+	-moz-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+	transform: rotate(180deg);
+}

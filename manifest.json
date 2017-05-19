@@ -26,6 +26,7 @@
         "content_scripts/form-detector.js", 
         "content_scripts/categorizer.js"],
       "css" : [
+        "content_scripts/material-icons/material-icons.css",
         "content_scripts/inject.css"]
     }
   ],
@@ -42,7 +43,8 @@
   },
 
   "web_accessible_resources": [
-      
+      "content_scripts/hintbox_snippet.html",
+      "content_scripts/material-icons/*"
 ]
 
 }

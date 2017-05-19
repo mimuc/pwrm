@@ -1,4 +1,13 @@
 console.log("form-detector.js injected");
+
+/* load material iconfont */
+var mi = document.createElement('style');
+mi.type = 'text/css';
+mi.textContent = '@font-face { font-family: material-icons; src: url("'
++ chrome.extension.getURL('content_scripts/material-icons/MaterialIcons-Regular.woff')
++ '"); }';
+document.head.appendChild(mi);
+
 /* trigger storage lookup for matching accounts */
 window.addEventListener("DOMContentLoaded", init());
 //window.addEventListener("DOMSubtreeModified", findForms());
@@ -8,7 +17,7 @@ var submitBtn = document.querySelector('[type=submit]');
 
 var inputUsername;
 var inputs;
-var hasLogin = false;
+var hasLogin = false; 
 var hasSignup = false;
 
 
@@ -142,7 +151,7 @@ for (index = 0; index < inputs.length; ++index) {
   if(i.getAttribute("type").toUpperCase() === attr_pw.toUpperCase() ||
     new RegExp(regex_pw).test(i.outerHTML)){
     hasLogin = true;
-  highlightPassword(i, credentials, categoryIcon);
+    showHintbox(i, credentials, categoryIcon);
 }
 }
 
@@ -179,45 +188,44 @@ for (index = 0; index < inputs.length; ++index) {
 
  function highlightUsername(i, credentials){
   console.log("Function : highlightUsername");
-  i.style.color = "blue";
-  i.style.border = "3px dotted blue";
-
-  var hintbox_div = document.createElement('div');
-  var hintbox_p = document.createElement('p');
-  var hintbox_p2 = document.createElement('p');
-  hintbox_div.setAttribute('class', 'hintbox');
-  hintbox_p.textContent = 'Your account(s):';
-  hintbox_p2.textContent = credentials.username; 
-
-  hintbox_div.appendChild(hintbox_p);
-  hintbox_div.appendChild(hintbox_p2);
-
-  i.parentNode.insertBefore(hintbox_div, i.nextSibling);
+  i.style.color = "black";
+  i.style.border = "3px solid #69F0AE";
 
   //autofill username test
   i.value = credentials.username;
 }
 
-function highlightPassword(i, credentials, icon){
-  i.style.color = "green";
-  i.style.border = "3px dotted green";
+function showHintbox(i, credentials, icon){
+  i.style.color = "black";
+  i.style.border = "3px solid #69F0AE";
 
+  var hintbox = '<div class="hintbox"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">arrow_drop_down</i></div></div><div class="hintbox_content mp-hidden"><p>You used the password from category <strong>'+ credentials.category  +'</strong></p><div><i class="material-icons hastext">lock_open</i> No password stored</div><hr><a href="#">open in manager</a></div></div>';
 
-  var hintbox_div = document.createElement('div');
-  var hintbox_p = document.createElement('p');
-  var hintbox_p2 = document.createElement('p');
-  var hintbox_i = document.createElement('i');
-  hintbox_i.setAttribute('class', 'material-icons');
-  hintbox_div.setAttribute('class', 'hintbox');
-  hintbox_i.textContent = icon;
-  hintbox_p.textContent = 'Password Category: ' ;
-  hintbox_p2.textContent = credentials.category;
+  if($('#hbpwrm').length){ 
 
-  hintbox_div.appendChild(hintbox_p);
-  hintbox_div.appendChild(hintbox_i);
-  hintbox_div.appendChild(hintbox_p2);
-  i.parentNode.insertBefore(hintbox_div, i.nextSibling);
+  }else{
+    console.log("gibts ned");
+    var hintbox_div = document.createElement('div'); 
+    var hintbox_w = document.createElement('div');
+    hintbox_div.setAttribute('id', 'hbpwrm');
+    hintbox_w.innerHTML = hintbox;
+    hintbox_div.appendChild(hintbox_w);
+    i.parentNode.insertBefore(hintbox_div, i.nextSibling);
+
+    setupHintbox();
+
+  }
 }
+
+function setupHintbox(){
+  var hb = $('#hbpwrm');
+  hb.click(function(){
+    $('.hintbox_head').toggleClass('focused');
+    $('.hintbox_content').toggleClass('open');
+    $('#ic_arrow').toggleClass('upsideDown');
+  });
+}
+
 
 //submit button clicked. Check if there is an entry with this username for this website
 function checkAccount(){
@@ -255,5 +263,5 @@ function handleMessage(request, sender, sendResponse){
     //start detector
     init();
   }
- }
+}
 

@@ -2,7 +2,6 @@ var addBtn = document.querySelector('#addEntry');
 var addCategory = document.querySelector('#addCategory');
 var modalCategory = document.querySelector('#modalCategory');
 
-
 // add event listeners to buttons and inputs
 addBtn.addEventListener('click', addEntry);
 addCategory.addEventListener('click', createCategory);

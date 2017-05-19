@@ -8,14 +8,11 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 			//create distinct categories elements depending on existing entries
 			//TODO
 			//testing 
-			
-
 			var gettingCategories = browser.storage.local.get("categories");
 			gettingCategories.then((results) => {
 
 				var categories = results["categories"];
 
-				
 				if(categories == null || categories.length == 0){
 					browser.storage.local.set({"categories" : {
 						Dings : ["Info","folder"],
