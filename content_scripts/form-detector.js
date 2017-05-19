@@ -131,7 +131,7 @@ function findForms(){
 
  function findLogin(form, credentials, categoryIcon){
   console.log("Function : findLogin");
-
+  var inputUsername;
   inputs = form.getElementsByTagName('input');
 //TODO: add boxes and auto-fill username etc depending on user preferences
 for (index = 0; index < inputs.length; ++index) {
@@ -142,8 +142,8 @@ for (index = 0; index < inputs.length; ++index) {
   //test by type attribute, if false test as string with regular expression
   if(i.getAttribute("type").toUpperCase() === attr_name.toUpperCase() ||
     new RegExp(regex_name).test(i.outerHTML)){
-
-    highlightUsername(i, credentials);
+    var inputUsername = i;
+  highlightUsername(i, credentials);
 } 
 
 }
@@ -151,8 +151,14 @@ for (index = 0; index < inputs.length; ++index) {
   if(i.getAttribute("type").toUpperCase() === attr_pw.toUpperCase() ||
     new RegExp(regex_pw).test(i.outerHTML)){
     hasLogin = true;
-    showHintbox(i, credentials, categoryIcon);
-}
+    //check positions
+    var pos = "horizontal";
+    if($('#'+inputUsername.getAttribute('id')).position().top == $('#'+i.getAttribute('id')).top){
+      pos = "vertical";
+    }
+
+    showHintbox(i, credentials, categoryIcon, pos);
+  }
 }
 
 
@@ -189,42 +195,55 @@ for (index = 0; index < inputs.length; ++index) {
  function highlightUsername(i, credentials){
   console.log("Function : highlightUsername");
   i.style.color = "black";
-  i.style.border = "3px solid #69F0AE";
+  i.style.border = "3px dotted #303F9F";
 
   //autofill username test
   i.value = credentials.username;
 }
 
-function showHintbox(i, credentials, icon){
+// paramenter 'pos': determines the inputs alignments (vertical|horizontal)
+function showHintbox(i, credentials, icon, pos){
   i.style.color = "black";
-  i.style.border = "3px solid #69F0AE";
+  i.style.border = "3px dotted #303F9F";
+  var hintbox;
 
-  var hintbox = '<div class="hintbox"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">arrow_drop_down</i></div></div><div class="hintbox_content mp-hidden"><p>You used the password from category <strong>'+ credentials.category  +'</strong></p><div><i class="material-icons hastext">lock_open</i> No password stored</div><hr><a href="#">open in manager</a></div></div>';
+  if(credentials.password){
+   hintbox = '<div class="hintbox"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">arrow_drop_down</i></div></div><div class="hintbox_content mp-hidden"><p>You used the password from category <strong>'+ credentials.category  +'</strong></p><div id="pwhint_stored"><i class="material-icons hastext">lock</i>Password: ****** <span class="showPW">show</span></div><hr><a href="#">open in manager</a></div></div>';
+ }else{
+   hintbox = '<div class="hintbox"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">arrow_drop_down</i></div></div><div class="hintbox_content mp-hidden"><p>You used the password from category <strong>'+ credentials.category  +'</strong></p><div id="pwhint_notstored"><i class="material-icons hastext">lock_open</i> No password stored</div><hr><a href="#">open in manager</a></div></div>';
+ }
 
-  if($('#hbpwrm').length){ 
+ if($('#hbpwrm').length){ 
 
-  }else{
-    console.log("gibts ned");
-    var hintbox_div = document.createElement('div'); 
-    var hintbox_w = document.createElement('div');
-    hintbox_div.setAttribute('id', 'hbpwrm');
-    hintbox_w.innerHTML = hintbox;
-    hintbox_div.appendChild(hintbox_w);
+ }else{
+  console.log("gibts ned");
+  var hintbox_div = document.createElement('div'); 
+  var hintbox_w = document.createElement('div');
+  hintbox_div.setAttribute('id', 'hbpwrm');
+  hintbox_w.innerHTML = hintbox;
+  hintbox_div.appendChild(hintbox_w);
+
+  if(pos=="horizontal"){
     i.parentNode.insertBefore(hintbox_div, i.nextSibling);
-
-    setupHintbox();
+  }else{
 
   }
-}
 
-function setupHintbox(){
-  var hb = $('#hbpwrm');
-  hb.click(function(){
+
+  $('#hbpwrm').click(function(){
     $('.hintbox_head').toggleClass('focused');
     $('.hintbox_content').toggleClass('open');
     $('#ic_arrow').toggleClass('upsideDown');
   });
+
+  $('.showPW').click(function(){
+    //TODO: open manager page and show entry (pass url/category?)
+  });
+
 }
+}
+
+
 
 
 //submit button clicked. Check if there is an entry with this username for this website
