@@ -3,7 +3,8 @@ console.log("form-detector.js injected");
 window.addEventListener("DOMContentLoaded", init());
 //window.addEventListener("DOMSubtreeModified", findForms());
 var submitBtn = document.querySelector('[type=submit]');
-submitBtn.addEventListener('click', checkAccount);
+//check if is submit TODO
+//submitBtn.addEventListener('click', checkAccount);
 
 var inputUsername;
 var inputs;
@@ -14,7 +15,8 @@ var hasSignup = false;
 //var URL = document.URL;
 // use location.origin to extract base url
 var URL = location.origin;
-
+console.log(typeof location);
+console.log("test");
 /*
 var murl = document.URL;
 murl = murl.split("/")[2]; // Get the hostname
@@ -249,7 +251,7 @@ function handleError(error) {
 chrome.runtime.onMessage.addListener(handleMessage);
 
 function handleMessage(request, sender, sendResponse){
-  if(request == "detect"){
+  if(request == "task_detect"){
     //start detector
     init();
   }
