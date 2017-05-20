@@ -7,7 +7,7 @@
   "description": "Here comes my description",
   "homepage_url": "https://gitlab.lrz.de/fuasmattn/password-reuse-manager",
   "icons": {
-    "48": "icons/border-48.png"
+    "48": "icons/icon-48.png"
   },
 
   "permissions": [
@@ -30,17 +30,27 @@
         "content_scripts/inject.css"]
     }
   ],
+    "background_page": "background/background.html",
+  
+  "chrome_ui_overrides": {
+    "bookmarks_ui": {
+      "remove_bookmark_shortcut": true,
+      "remove_button": true
+    }
+  },
 
   "background": {
+    
     "scripts": ["background/background.js"],
     "page": ["background/background.html"]
   },
 
   "browser_action": {
-    "default_icon": "icons/border-48.png",
+    "default_icon": "icons/icon-48.png",
     "default_title": "PRM",
     "default_popup": "popup/popup_default.html"
   },
+
 
   "web_accessible_resources": [
       "content_scripts/hintbox_snippet.html",
