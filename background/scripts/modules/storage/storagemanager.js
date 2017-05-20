@@ -63,8 +63,9 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 			var gettingEntries = browser.storage.local.get("entries");
 			gettingEntries.then((results) => {
 				var entries = results;
+
 				//check if there is an entry with the same url
-				if(entries.entries[mUrl] != null){
+				if(entries.entries != null && entries.entries[mUrl] != null){
 					alert("yo, there is an entry for "+ mUrl);
 					//TODO
 				}
@@ -108,7 +109,7 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 				if(objTest.length < 1 && entryURL !== '' && entryUsername !== '') {
 					entryURL.value = ''; entryUsername.value = ''; entryCategory.value ='';
 
-					var credential = {category: entryCategory, username: entryUsername, id: randID};
+					var credential = {category: entryCategory, username: entryUsername, id: randID, password: "lala"};
 					this.storeEntry(entryURL, credential);
 					
 					//var credential = entry.createEntry(entryURL, entryCategory, entryUsername, entryPassword);

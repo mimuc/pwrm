@@ -70,13 +70,13 @@ define(function() {
 			}
 			//dirty call (loadEntries should be called after all categories are created [async])
 			//works fine for now
-			/*
+			
 			if(loadEntries){
 				require(["scripts/modules/storage/storagemanager"], function(sm){
 					sm.loadEntries();
 				});
 			}
-			*/
+			
 		},
 		fillDropdown: function(categories) {
 			console.log("Function : fillDropdown");
