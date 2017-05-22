@@ -53,12 +53,8 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 					}else{
 						if(res[key].category == categoryName){
 							sm_display.displayEntry(key,res[key], true);
-							console.log("ha");
 						}
 					}
-					
-					
-					
 				}
 			}, onError);
 		},

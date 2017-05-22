@@ -73,7 +73,7 @@
 .button-floating {
     z-index: 40;
     cursor: pointer;
-    background-color: #69F0AE;
+    background-color: var(--highlight-color);
     color: black;
     font-size: 42px;
     text-align: center;

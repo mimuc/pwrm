@@ -1,9 +1,20 @@
+:root {
+	--primary-color: #58568f; /* alternatives: #58568f; #a124ae; */
+	--highlight-color: #f0f069;
+	--dark-color: #353641;
+}
+
 html, body {
 	font-family: 'Roboto', 'Helvetica', sans-serif !important;
 	margin: 0;
 	padding: 0;
 	padding-top: 70px;
 }
+
+a, a:hover{
+	color: var(--primary-color);
+}
+
 
 h4{
 	font-size: 14px !important;
@@ -13,12 +24,20 @@ h2{
 	margin-bottom:40px;
 }
 
+.link{
+	color: #505050;
+}
+.link:hover{
+	color: black;
+	cursor: pointer;
+}
+
 .btn-mp{
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
 	border-radius: 2px;
 	border:none;
 	padding:10px 12px;
-	background-color: #69F0AE;
+	background-color: var(--highlight-color);
 	color:black;
 	font-weight: 400;
 }
@@ -31,11 +50,12 @@ h2{
 	background-color: #f9f9f9;
 }
 
-.btn-mp:hover{
+.btn-mp:hover, .btn-mp:active, .btn-mp:focus, .btn-mp:target{
 	border:none;
-	background-color:#4baf7e;
+	filter: brightness(0.95);
+	background-color: var(--highlight-color);
+	color: black;
 }
-
 
 .panel-group .panel{
 	border-radius: 2px;
@@ -45,7 +65,7 @@ h2{
 	/*	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);*/
 	transition: all 0.5s cubic-bezier(.25,.8,.25,1);
 	/*background-color: #303f9f;*/
-	background-color: #7E808E;
+	background-color: var(--dark-color);
 	color: white;
 	cursor: pointer;
 }
@@ -57,9 +77,9 @@ h2{
 
 .panel-default > .panel-heading.panel-card.category-focused{
 	/* background-color: #69f0ae; */
-	/*color:black;*/
+	color:black;
 	opacity: 1;
-	background-color: #303f9f;
+	background-color: var(--highlight-color);
 	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 	
 }
@@ -79,7 +99,7 @@ h2{
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 	border: none;
-	background-color: #303f9f;
+	background-color: var(--primary-color);
 	height: 80px;
 }
 
@@ -129,11 +149,11 @@ h2{
 
 #search{
 	outline: none;
-	border: none !important;
+	border: none;
 	-webkit-box-shadow: none !important;
 	-moz-box-shadow: none !important;
 	box-shadow: none !important;
-	background-color: #4f5ebe;
+	background-color: var(--primary-color);
 	line-height: 42px;
 	color:white;
 	height:45px;
@@ -143,9 +163,11 @@ h2{
 	font-size: 20px;
 }
 #search:focus{
-	background-color: #4f5ebe;
+	background-color: var(--primary-color);
 	opacity: 1;
 	width:50%;
+	border-radius: 0;
+	border-bottom: 1px solid rgba(255,255,255, 0.9);
 }
 #search:focus + #search-icon{
 	right: 51%;
@@ -240,4 +262,43 @@ h2.row-header{
 
 .modal-body{
 	padding: 20px 50px;
+}
+
+/* change bootstrap focus glow */
+textarea:focus,
+select:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus {   
+	/*border-color: rgba(161, 36, 174, 0.2);*/
+	border-color: black;
+	box-shadow: none;
+	/*box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(161, 36, 174, 0.1);*/
+	outline: 0 none;
+}
+
+.form-control{
+	display: block;
+	width: 100%;
+	height: 40px;
+	padding: 6px 12px;
+	font-size: 16px;
+	line-height: 1.42857143;
+	color: black;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #757575;
+	border-radius: 2px;
 }

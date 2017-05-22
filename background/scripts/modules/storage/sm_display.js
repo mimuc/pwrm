@@ -4,12 +4,18 @@ define(['psl','jquery','scripts/modules/storage/sm_category'],function(psl,$,sm_
 		displayEntry: function(url, credential, hasCategory) {
 			//console.log("Function : displayEntry, url: " + url + ", hasCat: " + hasCategory);
 			console.log("Function: displayEntry");
-			var entryContainer;
+			var entryContainer, content;
+
+			var turl = url.split("/")[2]; // Get the hostname
+			var parsed = psl.parse(turl); // Parse the domain
+			var urlName = parsed.domain;
+
 			if(credential.category != null){
 				entryContainer = document.querySelector('#entryContainer');
+				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-6">01.01.17</div><div class="col-lg-2"></div><div class="col-lg-2"><a id="'+ url +'"><i class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.id+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div>';
 			}else{
-				console.log(credential.category);
 				entryContainer = document.querySelector('#uniqueEntryContainer');
+				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-3">01.01.17</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="col-lg-2"><a><i class="material-icons hastext link">remove_red_eye</i></a></div><div class="col-lg-2"><a id="'+ url +'" href="#"><i class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.id+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div>';
 			}
 			//check if there is a category element for this category (should be if well-created)
 			var entryWrapper = document.createElement('div');
@@ -17,9 +23,7 @@ define(['psl','jquery','scripts/modules/storage/sm_category'],function(psl,$,sm_
 			entryWrapper.setAttribute('class', 'entry-row row');
 			entryContainer.appendChild(entryWrapper);
 
-			var turl = url.split("/")[2]; // Get the hostname
-			var parsed = psl.parse(turl); // Parse the domain
-			var urlName = parsed.domain;
+			
 			
 			var requestURL = "https://icons.better-idea.org/allicons.json?url="+urlName;
 			var wrapper = $('#entryWrapper_'+credential.id);
@@ -38,8 +42,7 @@ define(['psl','jquery','scripts/modules/storage/sm_category'],function(psl,$,sm_
 				}
 			}
 
-			wrapper.append('<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-6">01.01.17</div><div class="col-lg-2"></div><div class="col-lg-2"><a id="'+ url +'" class="btn btn-mp light">Delete</a></div><div class="col-lg-2"><a id="open_'+credential.id+'" class="btn btn-mp light">Goto</a></div></div></div>');
-    			
+			wrapper.append(content);
     		//wrapper.append('<div class="row entry"><div class="col-lg-12"><h4>'+url+'</h4><hr><div class="row"><div class="col-lg-8"><p>'+credential.username+'</p></div><div class="col-lg-2 entry-icons"><i id="'+url+'" class="material-icons">delete</i></div><div class="col-lg-2 entry-icons"><i id="open_'+credential.id+'" class="material-icons">open_in_new</i></div></div>');
     		var deleteBtn = document.getElementById(url);
     		var openBtn = document.getElementById("open_"+credential.id);
@@ -56,8 +59,7 @@ define(['psl','jquery','scripts/modules/storage/sm_category'],function(psl,$,sm_
 				//TODO adapt to new storage design
 				deleteThisEntry(evtTgt.getAttribute('id'));
 				//remove from DOM
-				evtTgt.parentNode.parentNode.parentNode.removeChild(evtTgt.parentNode.parentNode);		
-				
+				document.querySelector('#entryWrapper_'+credential.id).remove();	
 			});
 
 
