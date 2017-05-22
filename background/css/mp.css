@@ -111,6 +111,8 @@ h2{
 .placeholder-img{
 	border-radius: 50%;
 	margin-right: 10px;
+	width: 38px;
+	height: 38px;
 }
 
 .cat-title{
