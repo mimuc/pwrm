@@ -2,11 +2,13 @@
 define(['psl','jquery','scripts/modules/storage/sm_category'],function(psl,$,sm_category) {
 	return {
 		displayEntry: function(url, credential, hasCategory) {
-			console.log("Function : displayEntry");
+			//console.log("Function : displayEntry, url: " + url + ", hasCat: " + hasCategory);
+			console.log("Function: displayEntry");
 			var entryContainer;
-			if(hasCategory){
+			if(credential.category != null){
 				entryContainer = document.querySelector('#entryContainer');
 			}else{
+				console.log(credential.category);
 				entryContainer = document.querySelector('#uniqueEntryContainer');
 			}
 			//check if there is a category element for this category (should be if well-created)
@@ -26,7 +28,9 @@ define(['psl','jquery','scripts/modules/storage/sm_category'],function(psl,$,sm_
 				this.get = function(mpURL, mpCallback) {
 					var mpHttpRequest = new XMLHttpRequest();
 					mpHttpRequest.onreadystatechange = function() { 
-						if (mpHttpRequest.readyState == 4 && mpHttpRequest.status == 200)
+						if(mpHttpRequest.status === 404){
+							mpCallback(null);
+						}else if (mpHttpRequest.readyState == 4 && mpHttpRequest.status == 200)
 							mpCallback(mpHttpRequest.responseText);
 					}
 					mpHttpRequest.open( "GET", mpURL, true );            
@@ -34,18 +38,7 @@ define(['psl','jquery','scripts/modules/storage/sm_category'],function(psl,$,sm_
 				}
 			}
 
-			var client = new HttpClient();
-			client.get(requestURL, function(response) {
-    			// console.log(JSON.parse(response).icons[0].url);
-    			//console.log(response);
-    			var favIcon;
-    			if(response != null){
-    				favIcon = JSON.parse(response).icons[0].url;
-    			}else{
-    				//TODO create initial-placeholder
-    				favIcon = "http://placehold.it/50x50";
-    			}
-    			wrapper.append('<div class="col-lg-2"><a><img class="placeholder-img" src="'+ favIcon +'"></a>'+ urlName +'</div><div class="col-lg-4">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-6">01.01.17</div><div class="col-lg-2"></div><div class="col-lg-2"><a id="'+ url +'" class="btn btn-mp light">Delete</a></div><div class="col-lg-2"><a id="open_'+credential.id+'" class="btn btn-mp light">Goto</a></div></div></div>');
+			wrapper.append('<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-6">01.01.17</div><div class="col-lg-2"></div><div class="col-lg-2"><a id="'+ url +'" class="btn btn-mp light">Delete</a></div><div class="col-lg-2"><a id="open_'+credential.id+'" class="btn btn-mp light">Goto</a></div></div></div>');
     			
     		//wrapper.append('<div class="row entry"><div class="col-lg-12"><h4>'+url+'</h4><hr><div class="row"><div class="col-lg-8"><p>'+credential.username+'</p></div><div class="col-lg-2 entry-icons"><i id="'+url+'" class="material-icons">delete</i></div><div class="col-lg-2 entry-icons"><i id="open_'+credential.id+'" class="material-icons">open_in_new</i></div></div>');
     		var deleteBtn = document.getElementById(url);
@@ -67,13 +60,25 @@ define(['psl','jquery','scripts/modules/storage/sm_category'],function(psl,$,sm_
 				
 			});
 
+
+			var client = new HttpClient();
+			client.get(requestURL, function(response) {
+    			// console.log(JSON.parse(response).icons[0].url);
+    			
+    			favIcon = "http://placehold.it/50/ffffff?text="+urlName.substring(0,1);
+    			if(response != null){
+    				favIcon = JSON.parse(response).icons[0].url;
+    			}else{
+    				console.log("fallback to placeholder");
+    				//TODO create initial-placeholder
+    				favIcon = "http://placehold.it/50/ffffff?text="+urlName.substring(0,1);
+    			}
+
+    			$('#entryWrapper_'+credential.id+' .placeholder-img').attr('src', favIcon);
+    			
 		});
 
-			
-			
-			
-
-
+	
 			function deleteThisEntry(url){
 				console.log("Function : deleteThisEntry");
 				var gettingEntries = browser.storage.local.get("entries");

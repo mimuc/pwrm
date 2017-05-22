@@ -36,7 +36,7 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 
 		},
 
-		loadEntries: function(categoryName){
+		loadEntries: function(categoryName, showOnlyUnique){
 			var gettingEntries = browser.storage.local.get("entries");
 			gettingEntries.then((results) => {
 				var res = results["entries"];
@@ -46,15 +46,20 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 					storingEntry = browser.storage.local.set({"entries" : {}});
 				}
 
-				for(key in res){					
-					if(res[key].category == categoryName && categoryName != null){
-						sm_display.displayEntry(key,res[key], true);
-					}else if(categoryName == null){
-						sm_display.displayEntry(key, res[key], false); //hasCategory==false
+				for(key in res){	
+					if(showOnlyUnique){
+						if(categoryName == null && res[key].category == null)
+							sm_display.displayEntry(key, res[key], false); //hasCategory==false
+					}else{
+						if(res[key].category == categoryName){
+							sm_display.displayEntry(key,res[key], true);
+							console.log("ha");
+						}
 					}
+					
+					
+					
 				}
-
-				
 			}, onError);
 		},
 
@@ -64,31 +69,23 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 			var gettingEntries = browser.storage.local.get("entries");
 			gettingEntries.then((results) => {
 				var entries = results;
-
 				//check if there is an entry with the same url
 				if(entries.entries != null && entries.entries[mUrl] != null){
 					alert("yo, there is an entry for "+ mUrl);
 					//TODO
 				}
-
 				//push new entry
 				entries.entries[mUrl] = mCredential;
 				//store changes
 				var storingEntry = browser.storage.local.set(entries);
 				storingEntry.then(() => {
 					console.log("store success");
-					//display new entry
-					//sm_display.displayEntry(mUrl, mCredential);
+					//update display entries immediately that do not have a category
+					if(mCredential.category == null) sm_display.displayEntry(mUrl, mCredential, false);
 					sm_category.displayNumberEntries();
+				}, onError);
 
-
-				//console.log()
-			}, onError);
-
-			});
-
-			
-			
+			});		
 		},
 
 		addEntry: function() {
@@ -103,7 +100,7 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 				var inputCategoryDropdown = document.querySelectorAll('option:checked');
 				var entryCategory = inputCategoryDropdown[0].value;
 				
-			}else{
+			}else{ //option-pwd
 				var password = 	document.querySelector('#enterPWD').value;
 				useUniquePWD = true;
 			}
@@ -119,8 +116,6 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 			gettingItem.then((result) => {
 				var objTest = Object.keys(result);
 				if(useUniquePWD){
-					console.log("used unique pw");
-					
 					credential = {username: entryUsername, id: randID, password: password};
 					this.storeEntry(entryURL, credential);
 				}else{
@@ -130,10 +125,6 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 						credential = {category: entryCategory, username: entryUsername, id: randID};
 					}
 					this.storeEntry(entryURL, credential);
-					
-					//var credential = entry.createEntry(entryURL, entryCategory, entryUsername, entryPassword);
-					//var c = {category: credential.category, username: credential.username, password: credential.password};
-					//this.storeEntry(credential.url, c);
 				}
 			}, onError);
 			

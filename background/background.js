@@ -99,6 +99,8 @@ function init(){
 /* add new entry when clicked on button */
 /* TODO: needs some form checks */
 function addEntry(){
+  //close modal
+  $('#modal-newEntry').modal('toggle');
   require(["scripts/modules/storage/storagemanager"], function (sm){sm.addEntry();});
 }
 

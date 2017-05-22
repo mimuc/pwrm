@@ -74,10 +74,7 @@ define(function() {
 			this.displayNumberEntries();
 		},
 
-
-		
-
-		displayCategories: function(categories, loadEntries) {
+		displayCategories: function(categories, loadUniqueEntries) {
 			console.log("Function : displayCategories");
 			for(c in categories){				
 				this.createCategoryElement(c,categories[c][0],categories[c][1]);
@@ -85,9 +82,9 @@ define(function() {
 			//dirty call (loadEntries should be called after all categories are created [async])
 			//works fine for now
 			
-			if(loadEntries){
+			if(loadUniqueEntries){
 				require(["scripts/modules/storage/storagemanager"], function(sm){
-					sm.loadEntries();
+					sm.loadEntries(null, true);
 				});
 			}
 			
