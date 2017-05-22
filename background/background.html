@@ -46,16 +46,14 @@
    </div>
    <div id="categoryContainer"></div>
  </div>
- <hr>
+
  <div id="entryContainer"></div>
-  <div class="page-header">
-     <h1>Unique Passwords <small> i am small</small></h1>
-   </div>
-   <div class="row entry-row">
-   <div class="col-lg-2"><a href="http://placehold.it"><img class="placeholder-img" src="http://placehold.it/40x40"></a>foo</div><div class="col-lg-4">fooo</div><div class="col-lg-2">'ente</div><div class="col-lg-4"><div class="row"><div class="col-lg-6">s**********</div><div class="col-lg-2"><a class="btn btn-mp light">Show</a></div><div class="col-lg-2"><a id="'+ url +'" class="btn btn-mp light">Delete</a></div><div class="col-lg-2"><a id="open_'+credential.id+'" class="btn btn-mp light">Goto</a></div></div></div></div>
-</div>
-<!-- Modal Category -->
-<div class="modal modal-mp fade" id="modalCategory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+ <div class="page-header">
+   <h1>Unique Passwords <small></small></h1>
+ </div>
+ <div id="uniqueEntryContainer"></div>
+ <!-- Modal Category -->
+ <div class="modal modal-mp fade" id="modalCategory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -86,29 +84,48 @@
         <h4 class="modal-title">Add new entry</h4>
       </div>
       <div class="modal-body">
-        <form>
+        <form>      
           <div class="form-group">
-            <label for="categoryDropdown">Category</label>
-            <select class="form-control" id="categoryDropdown">
-             <!-- fill <options> on init() -->
-           </select>
-         </div>
-         <div class="form-group">
-          <label for="enterURL">URL</label>             
-          <input id="enterURL" class="form-control new-entry url" type="text" placeholder="" />
-        </div>
-        <div class="form-group">
-          <label for="enterName">Username</label>   
-          <input id="enterName" class="form-control new-entry username" type="text" placeholder="" />
-        </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-default btn-mp light" data-dismiss="modal">Close</button>
-      <button id="addEntry" type="button" class="btn btn-primary btn-mp">Save entry</button>
-    </div>
-  </div><!-- /.modal-content -->
-</div><!-- /.modal-dialog -->
+            <label for="enterURL">URL</label>             
+            <input id="enterURL" class="form-control new-entry url" type="text" placeholder="" />
+          </div>
+          <div class="form-group">
+            <label for="enterName">Username</label>   
+            <input id="enterName" class="form-control new-entry username" type="text" placeholder="" />
+          </div>
+        </form>
+        <form id="radio-form">
+          <div class="radio">
+            <label class="active">
+              <input type="radio" name="optionsRadios" id="optionsRadios1" value="option-category" checked="true">
+              Assign to a password category
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="optionsRadios" id="optionsRadios2" value="option-pwd">
+              Use a unique password
+            </label>
+          </div>
+        </form>
+        <form>
+          <div class="form-group radio-option option-category" value="option-category">
+            <label for="categoryDropdown">Choose Password Category</label>
+            <select class="form-control" id="categoryDropdown"><!-- fill <options> on init() --></select>
+          </div>
+          <div class="form-group radio-option option-pwd hidden" value="option-pwd">
+            <label for="enterPWD">Enter a Unique Password</label>
+            <input id="enterPWD" class="form-control new-entry pwd" type="text" placeholder="" />
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-mp light" data-dismiss="modal">Close</button>
+        <button id="addEntry" type="button" class="btn btn-primary btn-mp">Save entry</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <script src="scripts/jquery/jquery.js"></script>
 <script src="scripts/fab.js"></script>

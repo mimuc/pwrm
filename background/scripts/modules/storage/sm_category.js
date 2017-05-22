@@ -1,9 +1,7 @@
 /* manage to display categories retrieved from storage */
 define(function() {
 	return {
-		createCategoryElement: function(categoryName, notes, iconName){
-
-			
+		createCategoryElement: function(categoryName, notes, iconName, pwd){
 			var container = document.querySelector('#categoryContainer');
 			require(['jquery','scripts/modules/storage/storagemanager'], function($, sm) {
 
@@ -12,7 +10,7 @@ define(function() {
 				$('#categoryContainer').append('<div id="wrapper_'+categoryName+'"></div>');
 				$('#wrapper_'+categoryName).load('scripts/modules/ui/category_snippet.html',null,
 				//$('#wrapper_'+categoryName).load('scripts/modules/ui/collapse_snippet.html',null,
-					function() {
+				function() {
 					//alter DOM (id, classnames)
 					var catName = categoryName.replace('_', ' ');
 
@@ -29,9 +27,11 @@ define(function() {
 						$('.panel-card').addClass('low-color');
 						$('.panel-card').removeClass('category-focused');
 						$('#panel_'+categoryName).removeClass('low-color');
-					
+
 						$('#panel_'+categoryName).addClass('category-focused');
 						$('#entryContainer').empty();
+
+						displayCategoryHeader(categoryName, pwd);
 						sm.loadEntries(categoryName);
 					});
 					/*$('#cat-subtitle').attr('id', categoryName+'-subtitle')
@@ -44,6 +44,16 @@ define(function() {
 
 				});
 			});
+			function displayCategoryHeader(name, pwd){
+				var entryContainer = $('#entryContainer');
+				if(pwd!=null){
+					entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock</i>Password: ****** <span class="showPW">show</span><a href="#"><i class="material-icons hastext">edit</i></div></div><hr>');
+				}else{
+					entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lock_open</i> No password stored. <a href="#">Edit category</a></div><hr>');
+				}
+			}
+
+
 			function getIcon(name){
 				console.log("Function : getIcon");
 				/*
@@ -63,6 +73,10 @@ define(function() {
 			}
 			this.displayNumberEntries();
 		},
+
+
+		
+
 		displayCategories: function(categories, loadEntries) {
 			console.log("Function : displayCategories");
 			for(c in categories){				
@@ -182,7 +196,7 @@ define(function() {
 					//display new entry			
 					//remove from DOM
 					this.displayCategories(newCat.categories, true);
-				
+
 
 
 				//console.log()

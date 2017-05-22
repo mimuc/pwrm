@@ -45,11 +45,12 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 				if(res == null){
 					storingEntry = browser.storage.local.set({"entries" : {}});
 				}
-				for(key in res){
-					// TODO 3x		
-					console.log("call display entry");
-					if(res[key].category == categoryName){
-						sm_display.displayEntry(key,res[key]);
+
+				for(key in res){					
+					if(res[key].category == categoryName && categoryName != null){
+						sm_display.displayEntry(key,res[key], true);
+					}else if(categoryName == null){
+						sm_display.displayEntry(key, res[key], false); //hasCategory==false
 					}
 				}
 
@@ -93,23 +94,41 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 		addEntry: function() {
 			console.log("Function : addEntry");
 			/* initialise variables */
+			//check radio buttons
+			var useUniquePWD = false;
+			var selectedRadio = document.querySelector('.radio-option:not(.hidden)');
+			var selectedOption = selectedRadio.getAttribute("value");
+			
+			if(selectedOption == "option-category"){
+				var inputCategoryDropdown = document.querySelectorAll('option:checked');
+				var entryCategory = inputCategoryDropdown[0].value;
+				
+			}else{
+				var password = 	document.querySelector('#enterPWD').value;
+				useUniquePWD = true;
+			}
 			
 			var randID = tools.guidGenerator();
-			var inputCategoryDropdown = document.querySelectorAll('option:checked');
 			var inputURL = document.querySelector('.url');
 			var inputUsername = document.querySelector('.username');
 			
-			var entryCategory = inputCategoryDropdown[0].value;
 			var entryURL = inputURL.value;
 			var entryUsername = inputUsername.value;
 
 			var gettingItem = browser.storage.local.get(entryURL);
 			gettingItem.then((result) => {
 				var objTest = Object.keys(result);
-				if(objTest.length < 1 && entryURL !== '' && entryUsername !== '') {
-					entryURL.value = ''; entryUsername.value = ''; entryCategory.value ='';
-
-					var credential = {category: entryCategory, username: entryUsername, id: randID, password: "lala"};
+				if(useUniquePWD){
+					console.log("used unique pw");
+					
+					credential = {username: entryUsername, id: randID, password: password};
+					this.storeEntry(entryURL, credential);
+				}else{
+					if(objTest.length < 1 && entryURL !== '' && entryUsername !== '') {
+						entryURL.value = ''; entryUsername.value = ''; entryCategory.value ='';
+						var credential;
+						credential = {category: entryCategory, username: entryUsername, id: randID};
+					}
 					this.storeEntry(entryURL, credential);
 					
 					//var credential = entry.createEntry(entryURL, entryCategory, entryUsername, entryPassword);
@@ -117,6 +136,7 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 					//this.storeEntry(credential.url, c);
 				}
 			}, onError);
+			
 			
 		}
 

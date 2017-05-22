@@ -9,6 +9,12 @@ addCategory.addEventListener('click', createCategory);
 /* call init on page load */
 document.addEventListener("DOMContentLoaded", init);
 
+// add radio button listener (modal entry)
+$("#radio-form :input").change(function() {
+  $('.option-pwd').toggleClass('hidden'); 
+  $('.option-category').toggleClass('hidden'); 
+});
+
 //listen for searchfield input
 $('#search').on('keyup', function() {
   if (this.value.length > 0) searchAsync(this.value);
@@ -60,9 +66,9 @@ function handleActivated(activeInfo) {
 browser.tabs.onActivated.addListener(handleActivated);
 
 function sendMessage(msg) {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, msg);
-    });
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, msg);
+  });
 }
 
 // manually create new category 
@@ -80,6 +86,11 @@ function assignCategory(entryKey, categoryKey){
 
 /* display previously-saved stored entrys on startup */
 function init(){
+  //reset all forms 
+  // TODO
+  // reconfigure radiogroups
+   $('#optionsRadios1').prop('checked',true); 
+
   //init storage logic
   require(["scripts/modules/storage/storagemanager"], function init(sm){sm.initialize();});
 

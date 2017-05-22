@@ -92,13 +92,13 @@
 	background-color: rgba(0,0,0,0.3);
 }
 
-hr{
-	margin: 12px 0;
-}
 
 .material-icons.hastext{
 	top: 7px;
 	position: relative;
+}
+hr{
+	margin: 12px 0;
 }
 
 
