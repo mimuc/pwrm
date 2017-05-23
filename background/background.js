@@ -25,7 +25,6 @@ $('#search').on('keyup', function() {
 });
 
 function showPWDInput(){
-  
   var storePW = ($('#btnAddPWD').text() === 'add password') ? true : false;
   var txt = (storePW) ? 'remove password' : 'add password';
   var msg = (storePW) ? 'A category password will be stored.' : 'No password will be stored for this category and its entries.';
@@ -95,8 +94,12 @@ function sendMessage(msg) {
 // manually create new category 
 function createCategory(){
   var value = modalCategoryName.value;
+  var pw;
+  if(($('#enter-category-pwd').hasClass('hidden'))){ pw = null;}else{pw = $('#category-pwd').val();}
+  
+  console.log("pw: " + pw);
   require(["scripts/modules/storage/sm_category"], function createCategory(sm_category){
-    sm_category.createCategory(value);
+    sm_category.createCategory(value, pw);
   });
 
 }
@@ -111,8 +114,6 @@ function init(){
   // TODO
   // reconfigure radiogroups
   $('#optionsRadios1').prop('checked',true); 
-
-
   //init storage logic
   require(["scripts/modules/storage/storagemanager"], function init(sm){sm.initialize();});
 

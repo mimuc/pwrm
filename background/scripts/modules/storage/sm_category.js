@@ -4,7 +4,8 @@ define(function() {
 		createCategoryElement: function(categoryName, notes, iconName, pwd){
 			var container = document.querySelector('#categoryContainer');
 			require(['jquery','scripts/modules/storage/storagemanager'], function($, sm) {
-
+				var hasPW = (pwd!=null);
+				var icon_lock = (hasPW) ? 'lock':'lock_open';
 
 				//load snippet
 				$('#categoryContainer').append('<div id="wrapper_'+categoryName+'"></div>');
@@ -23,6 +24,8 @@ define(function() {
 					.attr('aria-controls', 'listGroup_'+categoryName)
 					.html('<div class="cat-title">'+catName+'</div>');
 					
+					$(this).find('.lock-icon').html(icon_lock);
+
 					$(this).click(function(event) {
 						event.stopImmediatePropagation(); //prevents firing twice per click
 						$('.panel-card').addClass('low-color');
@@ -32,7 +35,7 @@ define(function() {
 						$('#panel_'+categoryName).addClass('category-focused');
 						$('#entryContainer').empty();
 
-						displayCategoryHeader(catName, pwd);
+						displayCategoryHeader(catName, hasPW);
 						console.log("call loadEntries");
 						sm.loadEntries(categoryName, false);
 					});
@@ -44,9 +47,9 @@ define(function() {
 
 				});
 			});
-			function displayCategoryHeader(name, pwd){
+			function displayCategoryHeader(name, hasPW){
 				var entryContainer = $('#entryContainer');
-				var hasPW = (pwd!=null);
+
 				if(hasPW){
 					entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock</i>Password: ****** <span class="showPW">show</span><a id="editCategory" class="link" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div></div><hr>');
 				}else{
@@ -99,7 +102,7 @@ define(function() {
 		displayCategories: function(categories, loadUniqueEntries) {
 			console.log("Function : displayCategories");
 			for(c in categories){				
-				console.log(c + " password: " + categories[c]);
+				// console.log(c + " password: " + categories[c]);
 				this.createCategoryElement(c,categories[c][0],categories[c][1], categories[c][2]);
 			}
 			//dirty call (loadEntries should be called after all categories are created [async])
@@ -114,6 +117,7 @@ define(function() {
 		},
 		fillDropdown: function(categories) {
 			console.log("Function : fillDropdown");
+			$('#categoryDropdown').empty();
 			for(c in categories){
 				var e = document.createElement('option');
 				e.textContent = c;
@@ -124,7 +128,7 @@ define(function() {
 		
 		
 
-		createCategory: function(name){
+		createCategory: function(name, pw){
 
 			function guidGenerator() {
 				var S4 = function() {
@@ -132,29 +136,46 @@ define(function() {
 				};
 				return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 			}
+			function toggleConfirm(){
+				console.log("Function : toggleConfirm");
+				$('#modalYesNo').toggleClass('hidden');
+				$('#modalAction').toggleClass('hidden');
+			}
 
+			
+			
+			var context = this;
 			var randID = guidGenerator();
-			var cat = ["Info","folder", randID];
+			var cat = ["Info","folder", pw ,randID];
 			var gettingCategories = browser.storage.local.get("categories");
 			gettingCategories.then((results) => {
 				var categories = results;
-				//push new entry
-				categories.categories[name] = cat;
+				//check if same name exists (--> override/change name or pw)
+				if(categories.categories != null && categories.categories[name] != null){
+					// alert("yo, wait! You want to overwrite this category? change pw or name");
+					toggleConfirm();
+					$('#modalYes').on('click', function(){create(categories, context);});
+					$('#modalNo').on('click', function(){toggleConfirm();});
+				}else{
+					create(categories, context);
+				}
+
+			});
+			function create(categories, context){
+			//push new entry
+			categories.categories[name] = cat;
 				//store changes
 				var storingCategory = browser.storage.local.set(categories);
 				storingCategory.then(()=> {
-					
 					//empty entry container
 					var entryContainer = document.getElementById("entryContainer");
 					while (entryContainer.firstChild) {
 						entryContainer.removeChild(entryContainer.firstChild);
 					}
-					this.fillDropdown(categories.categories);
-					this.displayCategories(categories.categories, false);
+					context.fillDropdown(categories.categories);
+					context.displayCategories(categories.categories, false);
 				});
-			});
-
-
+			}
 		},
 
 		displayNumberEntries: function(){
