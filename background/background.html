@@ -9,12 +9,15 @@
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/header.css">
   <link rel="stylesheet" href="css/fab.css">
+ 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script data-main="app" src="scripts/requirejs/require.js"></script>
   <title>Password Reuse Manager</title>
 
 </head>
 <body>
+<datalist id="historyList"></datalist>
+
   <div id="fab_wrapper">
     <div id="fab_content">
      <div class="water-drop"></div>
@@ -58,8 +61,8 @@
     <div class="modal-content">
       <div class="modal-header">
        <h4 class="modal-title" id="myModalLabel">New Category</h4>
-      </div>
-      <div class="modal-body">
+     </div>
+     <div class="modal-body">
        <form>
         <div class="form-group">
           <label for="category-name">Category Name</label>
@@ -77,16 +80,16 @@
       </form>
     </div>
     <div class="modal-footer">
-           <div id="modalAction">
-          <button type="button" class="btn btn-default btn-mp light" data-dismiss="modal">Close</button>
-          <button id="addCategory" type="button" class="btn btn-primary btn-mp">Save entry</button>
-        </div>
-        <div id="modalYesNo" class="hidden"><span>Are you sure you want to update this category?</span>
-          <button id="modalNo" type="button" class="btn btn-default btn-mp light">Cancel</button>
-          <button id="modalYes" type="button" class="btn btn-primary btn-mp" data-dismiss="modal">Confirm</button>
-        </div>
+     <div id="modalAction">
+      <button type="button" class="btn btn-default btn-mp light" data-dismiss="modal">Close</button>
+      <button id="addCategory" type="button" class="btn btn-primary btn-mp">Save entry</button>
+    </div>
+    <div id="modalYesNo" class="hidden"><span>Are you sure you want to update this category?</span>
+      <button id="modalNo" type="button" class="btn btn-default btn-mp light">Cancel</button>
+      <button id="modalYes" type="button" class="btn btn-primary btn-mp" data-dismiss="modal">Confirm</button>
     </div>
   </div>
+</div>
 </div>
 </div>
 
@@ -100,7 +103,7 @@
         <form>      
           <div class="form-group">
             <label for="enterURL">URL</label>             
-            <input id="enterURL" class="form-control new-entry url" type="text" placeholder="" />
+            <input id="enterURL" list="historyList" class="form-control new-entry url" type="text" placeholder="" />
           </div>
           <div class="form-group">
             <label for="enterName">Username</label>   
@@ -145,6 +148,7 @@
 <script src="scripts/fab.js"></script>
 <script src="scripts/bootstrap/bootstrap.js"></script>
 <script src="scripts/background.js"></script>
+<script src="scripts/autocomplete.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

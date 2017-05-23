@@ -11,8 +11,6 @@ addCategory.addEventListener('click', createCategory);
 /* call init on page load */
 document.addEventListener("DOMContentLoaded", init);
 
-
-
 // add radio button listener (modal entry)
 $("#radio-form :input").change(function() {
   $('.option-pwd').toggleClass('hidden'); 
@@ -111,6 +109,7 @@ function assignCategory(entryKey, categoryKey){
 /* display previously-saved stored entrys on startup */
 function init(){
   clearInputs(); 
+
   // TODO
   // reconfigure radiogroups
   $('#optionsRadios1').prop('checked',true); 
