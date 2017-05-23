@@ -15,7 +15,7 @@ define(["jquery","psl","scripts/modules/tools/tools","scripts/modules/storage/sm
 
 				if(categories == null || categories.length == 0){
 					browser.storage.local.set({"categories" : {
-						Dings : ["Info","folder"],
+						Dings : ["Info","folder", "password123"],
 						Email : ["Info", "folder"],
 						Social_Media : ["Info", "folder"],
 						Wichtig : ["Info", "folder"],

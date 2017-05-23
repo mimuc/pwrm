@@ -46,20 +46,32 @@ define(function() {
 			});
 			function displayCategoryHeader(name, pwd){
 				var entryContainer = $('#entryContainer');
-				if(pwd!=null){
-					entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock</i>Password: ****** <span class="showPW">show</span><a href="#"><i class="material-icons hastext">edit</i></div></div><hr>');
+				var hasPW = (pwd!=null);
+				if(hasPW){
+					entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock</i>Password: ****** <span class="showPW">show</span><a id="editCategory" class="link" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div></div><hr>');
 				}else{
 					entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lock_open</i> No password stored. <a id="editCategory" class="link" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div><hr>');
-					
-					//configure module here (event.relatedTarget is created dynamically)
-					
-					$('#modalCategory').on('show.bs.modal', function (e) {
-						var oldValue = $('#editCategory').attr('oldValue');
-						$('#modalCategory #modalCategoryName').val(oldValue);
-					});
-					
-
 				}
+				//configure modal here (event.relatedTarget is created dynamically)
+				$('#modalCategory').on('show.bs.modal', function (e) {
+					var oldValue = $('#editCategory').attr('oldValue');
+					$('#modalCategory #modalCategoryName').val(oldValue);
+
+					var txt = (hasPW) ? 'remove password' : 'add password';
+					var msg = (hasPW) ? 'A category password will be stored.' : 'No password will be stored for this category and its entries.';
+					var icon = (hasPW) ? 'lock':'lock_open';
+					var pw = (hasPW) ? '*******' : '';
+					$('#btnAddPWD').html(txt);
+					$('#pw-hint span').html(msg);
+					$('#pw-hint i').html(icon);
+					$('#category-pwd').val(pw);
+					if(hasPW){			
+						$('#enter-category-pwd').removeClass('hidden');
+					}else{
+						$('#enter-category-pwd').addClass('hidden');
+					}
+				});
+
 			}
 
 
@@ -87,7 +99,8 @@ define(function() {
 		displayCategories: function(categories, loadUniqueEntries) {
 			console.log("Function : displayCategories");
 			for(c in categories){				
-				this.createCategoryElement(c,categories[c][0],categories[c][1]);
+				console.log(c + " password: " + categories[c]);
+				this.createCategoryElement(c,categories[c][0],categories[c][1], categories[c][2]);
 			}
 			//dirty call (loadEntries should be called after all categories are created [async])
 			//works fine for now
