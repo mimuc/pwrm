@@ -1,6 +1,6 @@
 /* storagemanager */
 /* storage is logically split in "entries" and "categories" */
-define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display", "scripts/modules/storage/sm_category"], function(psl,tools, sm_display, sm_category) {
+define(["jquery","psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display", "scripts/modules/storage/sm_category"], function($,psl,tools, sm_display, sm_category) {
 	return {
 		initialize: function() {
 			console.log("Function : initialize");
@@ -48,8 +48,10 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 
 				for(key in res){	
 					if(showOnlyUnique){
-						if(categoryName == null && res[key].category == null)
+						if(categoryName == null && res[key].category == null){
 							sm_display.displayEntry(key, res[key], false); //hasCategory==false
+						}
+
 					}else{
 						if(res[key].category == categoryName){
 							sm_display.displayEntry(key,res[key], true);
@@ -67,9 +69,9 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 				var entries = results;
 				//check if there is an entry with the same url
 				if(entries.entries != null && entries.entries[mUrl] != null){
-					alert("yo, there is an entry for "+ mUrl);
+					alert("You have already stored an entry for "+ mUrl +". It's assigned to category " + entries.entries[mUrl].category);
 					//TODO
-				}
+				}else{
 				//push new entry
 				entries.entries[mUrl] = mCredential;
 				//store changes
@@ -77,11 +79,22 @@ define(["psl","scripts/modules/tools/tools","scripts/modules/storage/sm_display"
 				storingEntry.then(() => {
 					console.log("store success");
 					//update display entries immediately that do not have a category
-					if(mCredential.category == null) sm_display.displayEntry(mUrl, mCredential, false);
+					//or if the chosen category is focused
+					var focusedCategory = document.querySelector('.category-focused');
+					if(focusedCategory!=null) var focusedCategoryName = focusedCategory.getAttribute('id').split('_')[1];
+					if(mCredential.category == null ){
+						sm_display.displayEntry(mUrl, mCredential, false);
+					}else if(focusedCategoryName != null && mCredential.category == focusedCategoryName){
+						sm_display.displayEntry(mUrl, mCredential, true);
+					}
 					sm_category.displayNumberEntries();
+					
 				}, onError);
+				//close modal
+					$('#modal-newEntry').modal('toggle');
+			}
 
-			});		
+		});		
 		},
 
 		addEntry: function() {

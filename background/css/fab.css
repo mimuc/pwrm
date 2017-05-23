@@ -5,7 +5,7 @@
     right:10%;
     padding: 24px;
     overflow: hidden;   
-    z-index:9999;
+    z-index: 1031;
     width:200px;
 }
 

@@ -1,17 +1,21 @@
 var addBtn = document.querySelector('#addEntry');
+var addPWD = document.querySelector('#btnAddPWD');
 var addCategory = document.querySelector('#addCategory');
 var modalCategory = document.querySelector('#modalCategory');
 
 // add event listeners to buttons and inputs
+addPWD.addEventListener('click', showPWDInput);
 addBtn.addEventListener('click', addEntry);
 addCategory.addEventListener('click', createCategory);
 
 /* call init on page load */
 document.addEventListener("DOMContentLoaded", init);
 
+
+
 // add radio button listener (modal entry)
 $("#radio-form :input").change(function() {
-  $('.option-pwd').toggleClass('hidden'); 
+  $('.option-pwd').slideToggle('hidden'); 
   $('.option-category').toggleClass('hidden'); 
 });
 
@@ -20,9 +24,26 @@ $('#search').on('keyup', function() {
   if (this.value.length > 0) searchAsync(this.value);
 });
 
+function showPWDInput(){
+  
+  var storePW = ($('#btnAddPWD').text() === 'add password') ? true : false;
+  var txt = (storePW) ? 'remove password' : 'add password';
+  var msg = (storePW) ? 'A category password will be stored.' : 'No password will be stored for this category and its entries.';
+  var icon = (storePW) ? 'lock':'lock_open';
+  $('#btnAddPWD').html(txt);
+  $('#pw-hint span').html(msg);
+  $('#pw-hint i').html(icon);
+  $('#category-pwd').val('');
+  $('#enter-category-pwd').toggleClass('hidden');
+
+}
 //searches for entries and displays results matching the typed letters
 function searchAsync(value){
   console.log("searchAsync: " + value);
+}
+
+function clearInputs(){
+  $('input').val('');
 }
 // creates programmatically an entry 
 function createEntry(mUrl, mUsername, mCategory, mPassword, mID){
@@ -86,10 +107,11 @@ function assignCategory(entryKey, categoryKey){
 
 /* display previously-saved stored entrys on startup */
 function init(){
-  //reset all forms 
+  clearInputs(); 
   // TODO
   // reconfigure radiogroups
-   $('#optionsRadios1').prop('checked',true); 
+  $('#optionsRadios1').prop('checked',true); 
+
 
   //init storage logic
   require(["scripts/modules/storage/storagemanager"], function init(sm){sm.initialize();});
@@ -99,8 +121,6 @@ function init(){
 /* add new entry when clicked on button */
 /* TODO: needs some form checks */
 function addEntry(){
-  //close modal
-  $('#modal-newEntry').modal('toggle');
   require(["scripts/modules/storage/storagemanager"], function (sm){sm.addEntry();});
 }
 
@@ -134,3 +154,9 @@ function handleMessage(request, sender, sendResponse) {
 }
 
 browser.runtime.onMessage.addListener(handleMessage);
+
+//programmatically preselect options in dropdown
+function setSelectedIndex(select, index){
+  select.options[index-1].selected = true;
+  return;
+}

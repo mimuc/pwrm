@@ -24,6 +24,7 @@ define(function() {
 					.html('<div class="cat-title">'+catName+'</div>');
 					
 					$(this).click(function(event) {
+						event.stopImmediatePropagation(); //prevents firing twice per click
 						$('.panel-card').addClass('low-color');
 						$('.panel-card').removeClass('category-focused');
 						$('#panel_'+categoryName).removeClass('low-color');
@@ -31,12 +32,11 @@ define(function() {
 						$('#panel_'+categoryName).addClass('category-focused');
 						$('#entryContainer').empty();
 
-						displayCategoryHeader(categoryName, pwd);
-						sm.loadEntries(categoryName);
+						displayCategoryHeader(catName, pwd);
+						console.log("call loadEntries");
+						sm.loadEntries(categoryName, false);
 					});
-					/*$('#cat-subtitle').attr('id', categoryName+'-subtitle')
-					.html(notes);*/
-
+					
 					$('#cat-icon').attr('id',categoryName+'-icon')
 					.html(getIcon(iconName));					
 					$('#listGroup_'+categoryName).attr('aria-labelledby', 'heading_'+categoryName);
@@ -49,9 +49,20 @@ define(function() {
 				if(pwd!=null){
 					entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock</i>Password: ****** <span class="showPW">show</span><a href="#"><i class="material-icons hastext">edit</i></div></div><hr>');
 				}else{
-					entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lock_open</i> No password stored. <a href="#">Edit category</a></div><hr>');
+					entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lock_open</i> No password stored. <a id="editCategory" class="link" oldValue="'+ name +'">Edit category</a></div><hr>');
+					
+					//configure module here (event.relatedTarget is created dynamically)
+					$('#editCategory').on('click', function(event){
+						$('#modalCategory').on('show.bs.modal', function (e) {
+							var oldValue = $('#editCategory').attr('oldValue');
+							$('#modalCategory #modalCategoryName').val(oldValue);
+						}).modal('show');
+					});
+					
+
 				}
 			}
+
 
 
 			function getIcon(name){
@@ -111,7 +122,7 @@ define(function() {
 			}
 
 			var randID = guidGenerator();
-			var cat = ["Info","euro_symbol", randID];
+			var cat = ["Info","folder", randID];
 			var gettingCategories = browser.storage.local.get("categories");
 			gettingCategories.then((results) => {
 				var categories = results;
@@ -121,8 +132,13 @@ define(function() {
 				var storingCategory = browser.storage.local.set(categories);
 				storingCategory.then(()=> {
 					
+					//empty entry container
+					var entryContainer = document.getElementById("entryContainer");
+					while (entryContainer.firstChild) {
+						entryContainer.removeChild(entryContainer.firstChild);
+					}
 					this.fillDropdown(categories.categories);
-					this.displayCategories(categories.categories, true);
+					this.displayCategories(categories.categories, false);
 				});
 			});
 

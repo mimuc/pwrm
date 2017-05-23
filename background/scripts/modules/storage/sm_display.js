@@ -12,12 +12,12 @@ define(['psl','jquery','scripts/modules/storage/sm_category'],function(psl,$,sm_
 
 			if(credential.category != null){
 				entryContainer = document.querySelector('#entryContainer');
-				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-6">01.01.17</div><div class="entry-actions"><div class="col-lg-2"></div><div class="col-lg-2"><a id="'+ url +'"><i class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.id+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
+				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-6">01.01.17</div><div class="entry-actions"><div class="col-lg-2"></div><div class="col-lg-2"><a><i id="'+ url +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.id+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
 			}else{
 				entryContainer = document.querySelector('#uniqueEntryContainer');
-				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-3">01.01.17</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2"><a><i class="material-icons hastext link">remove_red_eye</i></a></div><div class="col-lg-2"><a id="'+ url +'" href="#"><i class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.id+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
+				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-3">01.01.17</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2"><a><i class="material-icons hastext link">remove_red_eye</i></a></div><div class="col-lg-2"><a><i id="'+ url +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.id+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
 			}
-			//check if there is a category element for this category (should be if well-created)
+
 			var entryWrapper = document.createElement('div');
 			entryWrapper.setAttribute('id', 'entryWrapper_'+credential.id);
 			entryWrapper.setAttribute('class', 'entry-row row');
@@ -29,8 +29,6 @@ define(['psl','jquery','scripts/modules/storage/sm_category'],function(psl,$,sm_
 			}, function() {
 				$('#entryWrapper_'+credential.id+' .entry-actions').hide();
 			});
-	
-			
 			
 			var requestURL = "https://icons.better-idea.org/allicons.json?url="+urlName;
 			var wrapper = $('#entryWrapper_'+credential.id);
@@ -75,7 +73,9 @@ define(['psl','jquery','scripts/modules/storage/sm_category'],function(psl,$,sm_
     			// console.log(JSON.parse(response).icons[0].url);
     			
     			favIcon = "http://placehold.it/50/ffffff?text="+urlName.substring(0,1);
-    			if(response != null){
+    			var res = JSON.parse(response);
+    			if(res != null && res.icons != null && res.icons[0] != null){
+    				//console.log(response);
     				favIcon = JSON.parse(response).icons[0].url;
     			}else{
     				console.log("fallback to placeholder");

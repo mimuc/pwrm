@@ -240,6 +240,19 @@ h2.row-header{
 .category-element{
 
 }
+#pw-hint span{
+	margin-left: 10px;
+}
+#enter-category-pwd{
+	margin-top:20px;
+}
+#btnAddPWD{
+	left: 34px;
+	position: relative;
+}
+#btnAddPWD:hover{
+	cursor: pointer;
+}
 
 .material-icons.category_icons{
 	padding-top: 6px;
