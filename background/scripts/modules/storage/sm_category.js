@@ -57,6 +57,8 @@ define(function() {
 				}
 				//configure modal here (event.relatedTarget is created dynamically)
 				$('#modalCategory').on('show.bs.modal', function (e) {
+					$('#modalYesNo').addClass('hidden');
+					$('#modalAction').removeClass('hidden');
 					var oldValue = $('#editCategory').attr('oldValue');
 					$('#modalCategory #modalCategoryName').val(oldValue);
 
@@ -73,6 +75,11 @@ define(function() {
 					}else{
 						$('#enter-category-pwd').addClass('hidden');
 					}
+				});
+				$('#modalCategory').on('hidden.bs.modal', function (e) {
+					console.log("hide modal");
+					$('#modalYesNo').toggleClass('hidden');
+					$('#modalAction').toggleClass('hidden');
 				});
 
 			}
@@ -151,13 +158,12 @@ define(function() {
 				toggleConfirm();
 				console.log(categories);
 				$('#modalYes').on('click', function(event){
-					// event.stopImmediatePropagation(); 
-					toggleConfirm();
-					create(categories, context, oldName, name);
-
-					
-				});
-				$('#modalNo').on('click', function(){toggleConfirm();});
+					 // event.stopImmediatePropagation(); 
+					 create(categories, context, oldName, name);
+					});
+				$('#modalNo').on('click', function(event){
+					 event.stopImmediatePropagation(); 
+					toggleConfirm();});
 				
 			});
 
@@ -167,7 +173,7 @@ define(function() {
 				gettingEntries.then((results) => {
 					var entries = results.entries;
 					for(key in entries){
-							console.log("entries[key].category: " + entries[key].category);
+						console.log("entries[key].category: " + entries[key].category);
 						if(entries[key].category == oldName){
 							(entries[key].category = name);
 						}
@@ -180,11 +186,10 @@ define(function() {
 					console.log("store success");
 					//context.displayNumberEntries();
 					context.fillDropdown(categories.categories);
-					context.displayCategories(categories.categories, false);
 
 				}, onError);
-									
-				});
+
+			});
 			}
 			function create(categories, context, oldName, name){
 				console.log("Function : create");
@@ -201,7 +206,11 @@ define(function() {
 					if(name != oldName){
 						deleteCategory(oldName);
 						reassignEntries(oldName, name, context, categories);
+					}else{
+						context.displayCategories(categories.categories, false);
+						
 					}
+
 					
 				});
 			}
@@ -240,7 +249,7 @@ define(function() {
 					storingCategories.then(() => {
 						//remove element from DOM 
 						document.getElementById("wrapper_"+category).remove();
-						//this.displayCategories(oldCategories, true);
+						this.displayCategories(oldCategories, true);
 					}, onError);	
 
 				});
