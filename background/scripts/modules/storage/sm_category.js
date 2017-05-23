@@ -35,7 +35,7 @@ define(function() {
 						$('#panel_'+categoryName).addClass('category-focused');
 						$('#entryContainer').empty();
 
-						displayCategoryHeader(catName, hasPW);
+						displayCategoryHeader(catName, hasPW); //update hasPW before displaying header
 						console.log("call loadEntries");
 						sm.loadEntries(categoryName, false);
 					});
@@ -44,9 +44,9 @@ define(function() {
 					.html(getIcon(iconName));					
 					$('#listGroup_'+categoryName).attr('aria-labelledby', 'heading_'+categoryName);
 
-
 				});
 			});
+
 			function displayCategoryHeader(name, hasPW){
 				var entryContainer = $('#entryContainer');
 
@@ -105,16 +105,14 @@ define(function() {
 				// console.log(c + " password: " + categories[c]);
 				this.createCategoryElement(c,categories[c][0],categories[c][1], categories[c][2]);
 			}
-			//dirty call (loadEntries should be called after all categories are created [async])
-			//works fine for now
-			
+
 			if(loadUniqueEntries){
 				require(["scripts/modules/storage/storagemanager"], function(sm){
 					sm.loadEntries(null, true);
 				});
-			}
-			
+			}	
 		},
+
 		fillDropdown: function(categories) {
 			console.log("Function : fillDropdown");
 			$('#categoryDropdown').empty();
@@ -126,9 +124,8 @@ define(function() {
 			}
 		},
 		
-		
-
 		createCategory: function(name, pw){
+			var oldName = $('#editCategory').attr('oldValue');
 
 			function guidGenerator() {
 				var S4 = function() {
@@ -142,8 +139,6 @@ define(function() {
 				$('#modalAction').toggleClass('hidden');
 			}
 
-			
-			
 			var context = this;
 			var randID = guidGenerator();
 			var cat = ["Info","folder", pw ,randID];
@@ -151,18 +146,49 @@ define(function() {
 			gettingCategories.then((results) => {
 				var categories = results;
 				//check if same name exists (--> override/change name or pw)
-				if(categories.categories != null && categories.categories[name] != null){
-					// alert("yo, wait! You want to overwrite this category? change pw or name");
+				// if(categories.categories != null && categories.categories[name] != null){
+				// alert("yo, wait! You want to overwrite this category? change pw or name");
+				toggleConfirm();
+				console.log(categories);
+				$('#modalYes').on('click', function(event){
+					// event.stopImmediatePropagation(); 
 					toggleConfirm();
-					$('#modalYes').on('click', function(){create(categories, context);});
-					$('#modalNo').on('click', function(){toggleConfirm();});
-				}else{
-					create(categories, context);
-				}
+					create(categories, context, oldName, name);
 
+					
+				});
+				$('#modalNo').on('click', function(){toggleConfirm();});
+				
 			});
-			function create(categories, context){
-			//push new entry
+
+			function reassignEntries(oldName, name, context, categories){
+				console.log("Function : reassignEntries");
+				var gettingEntries = browser.storage.local.get("entries");
+				gettingEntries.then((results) => {
+					var entries = results.entries;
+					for(key in entries){
+							console.log("entries[key].category: " + entries[key].category);
+						if(entries[key].category == oldName){
+							(entries[key].category = name);
+						}
+						var newEntries = {"entries" : entries};
+						console.log(newEntries);
+					}
+				//store entries
+				var storingEntry = browser.storage.local.set(newEntries);
+				storingEntry.then(() => {
+					console.log("store success");
+					//context.displayNumberEntries();
+					context.fillDropdown(categories.categories);
+					context.displayCategories(categories.categories, false);
+
+				}, onError);
+									
+				});
+			}
+			function create(categories, context, oldName, name){
+				console.log("Function : create");
+			//push new entry 
 			categories.categories[name] = cat;
 				//store changes
 				var storingCategory = browser.storage.local.set(categories);
@@ -172,18 +198,20 @@ define(function() {
 					while (entryContainer.firstChild) {
 						entryContainer.removeChild(entryContainer.firstChild);
 					}
-					context.fillDropdown(categories.categories);
-					context.displayCategories(categories.categories, false);
+					if(name != oldName){
+						deleteCategory(oldName);
+						reassignEntries(oldName, name, context, categories);
+					}
+					
 				});
 			}
 		},
 
 		displayNumberEntries: function(){
-			console.log("Function : getNumberEntries");
+			console.log("Function : displayNumberEntries");
 			var gettingCategories = browser.storage.local.get("categories");
 			gettingCategories.then((catResults) => {
 				var categories = catResults["categories"];
-				
 				var gettingEntries = browser.storage.local.get("entries");
 				gettingEntries.then((eResults) => {
 					var entries = eResults["entries"];
@@ -196,7 +224,6 @@ define(function() {
 					}
 				});
 			});
-			
 		},
 
 		deleteCategory: function(category){
@@ -213,11 +240,10 @@ define(function() {
 					storingCategories.then(() => {
 						//remove element from DOM 
 						document.getElementById("wrapper_"+category).remove();
-						this.displayCategories(oldCategories, true);
+						//this.displayCategories(oldCategories, true);
 					}, onError);	
 
 				});
-
 		},
 
 		changeCategoryIcon: function(catName, iconName){
@@ -252,8 +278,6 @@ define(function() {
 			});
 		},
 
-
-		//move entry with identifier "url" to a new Category newCategory
 		moveToCategory: function(url, newCategory){
 			console.log("Function : moveToCategory");
 			var gettingEntries = browser.storage.local.get("entries");
@@ -289,7 +313,6 @@ define(function() {
 
 			});
 		}
-
 		
 	}
 });

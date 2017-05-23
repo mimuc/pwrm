@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", init);
 
 // add radio button listener (modal entry)
 $("#radio-form :input").change(function() {
-  $('.option-pwd').slideToggle('hidden'); 
+  $('.option-pwd').toggleClass('hidden'); 
   $('.option-category').toggleClass('hidden'); 
 });
 
