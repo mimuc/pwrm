@@ -49,14 +49,13 @@ define(function() {
 				if(pwd!=null){
 					entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock</i>Password: ****** <span class="showPW">show</span><a href="#"><i class="material-icons hastext">edit</i></div></div><hr>');
 				}else{
-					entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lock_open</i> No password stored. <a id="editCategory" class="link" oldValue="'+ name +'">Edit category</a></div><hr>');
+					entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lock_open</i> No password stored. <a id="editCategory" class="link" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div><hr>');
 					
 					//configure module here (event.relatedTarget is created dynamically)
-					$('#editCategory').on('click', function(event){
-						$('#modalCategory').on('show.bs.modal', function (e) {
-							var oldValue = $('#editCategory').attr('oldValue');
-							$('#modalCategory #modalCategoryName').val(oldValue);
-						}).modal('show');
+					
+					$('#modalCategory').on('show.bs.modal', function (e) {
+						var oldValue = $('#editCategory').attr('oldValue');
+						$('#modalCategory #modalCategoryName').val(oldValue);
 					});
 					
 
