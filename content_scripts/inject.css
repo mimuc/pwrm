@@ -1,4 +1,18 @@
 /* injected style sheet */
+:root {
+	--primary-color: #58568f; /* alternatives: #58568f; #a124ae; */
+	--highlight-color: #f0f069;
+	--dark-color: #353641;
+}
+
+.mpinput{
+	background-size: 13px;
+	background-repeat: no-repeat;
+	background-position: 98%;
+	border: 3px dotted #303F9F;
+	color: black;
+	cursor: pointer;
+}
 /*
 .hintbox{
 	border: none;
