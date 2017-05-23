@@ -4,6 +4,7 @@ define(function() {
 		createCategoryElement: function(categoryName, notes, iconName, pwd){
 			var container = document.querySelector('#categoryContainer');
 			require(['jquery','scripts/modules/storage/storagemanager'], function($, sm) {
+				
 				var hasPW = (pwd!=null);
 				var icon_lock = (hasPW) ? 'lock':'lock_open';
 
@@ -23,8 +24,9 @@ define(function() {
 					.attr('id', '#title_'+categoryName)
 					.attr('aria-controls', 'listGroup_'+categoryName)
 					.html('<div class="cat-title">'+catName+'</div>');
-					
+
 					$(this).find('.lock-icon').html(icon_lock);
+					
 
 					$(this).click(function(event) {
 						event.stopImmediatePropagation(); //prevents firing twice per click
@@ -35,11 +37,16 @@ define(function() {
 						$('#panel_'+categoryName).addClass('category-focused');
 						$('#entryContainer').empty();
 
-						displayCategoryHeader(catName, hasPW); //update hasPW before displaying header
-						console.log("call loadEntries");
+						// console.log($(this).attr('haspw'));
+						var ic = $(this).find('.lock-icon').text();
+						var _hasPW = (ic == 'lock') ? true : false;
+						console.log("hasPW: " + _hasPW);
+						displayCategoryHeader(catName, _hasPW); //update hasPW before displaying header
+						// TODO hier
+
 						sm.loadEntries(categoryName, false);
 					});
-					
+
 					$('#cat-icon').attr('id',categoryName+'-icon')
 					.html(getIcon(iconName));					
 					$('#listGroup_'+categoryName).attr('aria-labelledby', 'heading_'+categoryName);
@@ -162,7 +169,7 @@ define(function() {
 					 create(categories, context, oldName, name);
 					});
 				$('#modalNo').on('click', function(event){
-					 event.stopImmediatePropagation(); 
+					event.stopImmediatePropagation(); 
 					toggleConfirm();});
 				
 			});
@@ -191,6 +198,7 @@ define(function() {
 
 			});
 			}
+
 			function create(categories, context, oldName, name){
 				console.log("Function : create");
 			//push new entry 
@@ -210,8 +218,6 @@ define(function() {
 						context.displayCategories(categories.categories, false);
 						
 					}
-
-					
 				});
 			}
 		},
