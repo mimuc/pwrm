@@ -36,14 +36,15 @@
 	background-color: white;
 	color: black;
 	margin-top: 10px;
-	width: 340px;
+	/*width: 340px;*/
 	min-height: 50px;
-	max-width: 218px;
+	max-width: 100%;
 	overflow: hidden;
-	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+	/*box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);*/
 	position: relative;
 	float: right;
 	margin-bottom: 11px;
+	text-align: left !important;
 }
 
 .hintbox_head.focused{
@@ -55,7 +56,7 @@
 }
 
 .hintbox_head{
-	background-color: #303f9f;
+	background-color: var(--dark-color);
 	padding: 10px 5px;
 	color: white;
 	font-size: 1.3em;

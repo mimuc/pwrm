@@ -19,6 +19,12 @@ function openPopup() {
    });
 }
 
+$('.button-floating').click(function(){
+  console.log("Hey");
+    $('.content').toggleClass('open');
+   
+  });
+
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("manager")) {
     console.log("opening manager page");
