@@ -116,6 +116,11 @@ define(["jquery","psl","scripts/modules/tools/tools","scripts/modules/storage/sm
 			var inputUsername = document.querySelector('.username');
 			
 			var entryURL = inputURL.value;
+			console.log(entryURL.substring(entryURL.length-1));
+			if(entryURL.substring(entryURL.length-1)=='/'){
+				entryURL = entryURL.slice(0, -1);
+			}
+			
 			var entryUsername = inputUsername.value;
 
 			var gettingItem = browser.storage.local.get(entryURL);
