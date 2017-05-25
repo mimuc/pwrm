@@ -23,10 +23,7 @@ define(['scripts/modules/tools/showPW', 'psl','jquery','scripts/modules/storage/
 			entryWrapper.setAttribute('class', 'entry-row row');
 			entryContainer.appendChild(entryWrapper);
 
-			$('.showPW').on('click', function(){
-				showPW.trigger($(this));
-				$('#modalMPW').modal('show');
-			});
+			
 
 
 			$('#entryWrapper_'+credential.id).hover(function() {
@@ -54,6 +51,17 @@ define(['scripts/modules/tools/showPW', 'psl','jquery','scripts/modules/storage/
 			}
 
 			wrapper.append(content);
+
+			$('.showPW').on('click', function(){
+				showPW.trigger($(this));
+				if($(this).html() == 'show'){
+					$('#modalMPW').on('shown.bs.modal', function (e) {
+						$('#modalInputMPW').val('');
+						$('#modalInputMPW').focus();
+					});
+					$('#modalMPW').modal('show');
+				}
+			});
     		//wrapper.append('<div class="row entry"><div class="col-lg-12"><h4>'+url+'</h4><hr><div class="row"><div class="col-lg-8"><p>'+credential.username+'</p></div><div class="col-lg-2 entry-icons"><i id="'+url+'" class="material-icons">delete</i></div><div class="col-lg-2 entry-icons"><i id="open_'+credential.id+'" class="material-icons">open_in_new</i></div></div>');
     		var deleteBtn = document.getElementById(url);
     		var openBtn = document.getElementById("open_"+credential.id);

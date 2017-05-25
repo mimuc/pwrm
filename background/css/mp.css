@@ -283,8 +283,22 @@ h2.row-header{
 	background-color: #f5f5f5;
 }
 
+.pwd-hidden{
+	min-width: 160px;
+	display: inline-block;
+	padding-left: 10px;
+}
+
 .modal-body{
 	padding: 20px 50px;
+}
+
+#modalMPW .modal-body{
+	background-color: var(--primary-color);
+	color: white;
+}
+#modalMPW .modal-body a{
+	color: white;
 }
 
 /* change bootstrap focus glow */

@@ -45,7 +45,12 @@ define(['jquery'] ,function($){
 							//pw entry found
 							if(key == entry){
 								elem.parent().parent().parent().find('.pwd-hidden').html(e[key].password);
+								$('#modalMPW').modal('hide');
 								elem.html('hide');
+								elem.one('click', function(){
+									$(this).parent().parent().parent().find('.pwd-hidden').html('*******');
+								    $(this).html('show');
+								});
 							}
 						}
 					});
@@ -57,7 +62,12 @@ define(['jquery'] ,function($){
 
 							if(key == entry){
 								elem.parent().find('.pwd-hidden').html(ret = e[key][2]);
+								$('#modalMPW').modal('hide');
 								elem.html('hide');
+								elem.one('click', function(){
+									$(this).parent().find('.pwd-hidden').html('*******');
+									$(this).html('show');
+								});
 							}
 						}
 					});
