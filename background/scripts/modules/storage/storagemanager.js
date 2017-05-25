@@ -14,10 +14,17 @@ define(["jquery","psl","scripts/modules/tools/tools","scripts/modules/storage/sm
 				var categories = results["categories"];
 
 				if(categories == null || categories.length == 0){
-					browser.storage.local.set({"categories" : {
-						Wichtig : ["Info", "folder"],
-						Unwichtig : ["Info", "folder"]
-					}});
+					var cat = {"categories" : {
+						Banking : ["Info", "folder"],
+						Email : ["Info", "email"],
+						Social_Media : ["Info", "folder"]
+					}};
+					var setting = browser.storage.local.set(cat);
+					setting.then(function(){
+						sm_category.fillDropdown(cat.categories);
+						sm_category.displayCategories(cat.categories, true); //calls loadEntries on callback
+					});	
+
 				}else{
 				//display options in dropdown #categoryDropdown
 				sm_category.fillDropdown(categories);
@@ -88,7 +95,7 @@ define(["jquery","psl","scripts/modules/tools/tools","scripts/modules/storage/sm
 					
 				}, onError);
 				//close modal
-					$('#modal-newEntry').modal('toggle');
+				$('#modal-newEntry').modal('toggle');
 			}
 
 		});		

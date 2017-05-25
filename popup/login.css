@@ -19,8 +19,8 @@ a, a:hover{
 	color:white;
 }
 
-#btnUnlock{
-	margin-left:15px;
+.disabled{
+	opacity: 0.3;
 }
 
 #next{

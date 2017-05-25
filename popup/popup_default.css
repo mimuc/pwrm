@@ -9,10 +9,15 @@ html {overflow: -moz-scrollbars-none;}
 html, body {
 	padding:0;
 	margin:0;
+	min-width:250px;
 	max-width: 250px;
 	min-height: 200px;
 	font-family: 'Roboto', 'Helvetica', sans-serif !important;
 	overflow: hidden;
+}
+
+.popup{
+	cursor: pointer;
 }
 
 .button-floating, .button-floating-shadow{
@@ -34,6 +39,8 @@ html, body {
 	color: white;
 	height: 80px;
 }
+
+
 
 .footer{
 	padding: 10px 15px;

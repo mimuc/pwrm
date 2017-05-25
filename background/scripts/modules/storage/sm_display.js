@@ -1,5 +1,5 @@
 /* display entries */
-define(['psl','jquery','scripts/modules/storage/sm_category'],function(psl,$,sm_category) {
+define(['scripts/modules/tools/showPW', 'psl','jquery','scripts/modules/storage/sm_category'],function(showPW,psl,$,sm_category) {
 	return {
 		displayEntry: function(url, credential, hasCategory) {
 			//console.log("Function : displayEntry, url: " + url + ", hasCat: " + hasCategory);
@@ -15,13 +15,19 @@ define(['psl','jquery','scripts/modules/storage/sm_category'],function(psl,$,sm_
 				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-6">01.01.17</div><div class="entry-actions"><div class="col-lg-2"></div><div class="col-lg-2"><a><i id="'+ url +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.id+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
 			}else{
 				entryContainer = document.querySelector('#uniqueEntryContainer');
-				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-3">01.01.17</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2"><a><i class="material-icons hastext link">remove_red_eye</i></a></div><div class="col-lg-2"><a><i id="'+ url +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.id+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
+				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-3">01.01.17</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2"><span type="unique" url="'+url+'" class="showPW">show</span></div><div class="col-lg-2"><a><i id="'+ url +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.id+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
 			}
 
 			var entryWrapper = document.createElement('div');
 			entryWrapper.setAttribute('id', 'entryWrapper_'+credential.id);
 			entryWrapper.setAttribute('class', 'entry-row row');
 			entryContainer.appendChild(entryWrapper);
+
+			$('.showPW').on('click', function(){
+				showPW.trigger($(this));
+				$('#modalMPW').modal('show');
+			});
+
 
 			$('#entryWrapper_'+credential.id).hover(function() {
 				/* Stuff to do when the mouse enters the element */

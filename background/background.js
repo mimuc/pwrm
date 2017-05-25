@@ -8,19 +8,10 @@ addPWD.addEventListener('click', showPWDInput);
 addBtn.addEventListener('click', addEntry);
 addCategory.addEventListener('click', createCategory);
 
+
 /* call init on page load */
 document.addEventListener("DOMContentLoaded", init);
 
-// add radio button listener (modal entry)
-$("#radio-form :input").change(function() {
-  $('.option-pwd').toggleClass('hidden'); 
-  $('.option-category').toggleClass('hidden'); 
-});
-
-//listen for searchfield input
-$('#search').on('keyup', function() {
-  if (this.value.length > 0) searchAsync(this.value);
-});
 
 function showPWDInput(){
   var storePW = ($('#btnAddPWD').text() === 'add password') ? true : false;
@@ -110,12 +101,21 @@ function assignCategory(entryKey, categoryKey){
 function init(){
   clearInputs(); 
 
-  // TODO
+  // add radio button listener (modal entry)
+  $("#radio-form :input").change(function() {
+    $('.option-pwd').toggleClass('hidden'); 
+    $('.option-category').toggleClass('hidden'); 
+  });
+
+  //listen for searchfield input
+  $('#search').on('keyup', function() {
+    if (this.value.length > 0) searchAsync(this.value);
+  });
+
   // reconfigure radiogroups
   $('#optionsRadios1').prop('checked',true); 
   //init storage logic
   require(["scripts/modules/storage/storagemanager"], function init(sm){sm.initialize();});
-
 }
 
 /* add new entry when clicked on button */
