@@ -2,39 +2,30 @@
 Open a new tab, and load "my-page.html" into it.
 */
 function openManagerPage() {
-  //console.log("injecting");
+  console.log("openManagerPage");
    browser.tabs.create({
      "url": browser.extension.getURL("background/background.html")
    });
-
 }
 
 function openPopup() {
-  //console.log("injecting");
+   console.log("openPopup");
    browser.windows.create({
      "url": "login.html",
-      type: "popup",
+      type: "panel",
       height: 600,
       width: 600
    });
 }
 
 $('.button-floating').click(function(){
-  console.log("Hey");
     $('.content').toggleClass('open');
    
   });
 
-document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("manager")) {
-    console.log("opening manager page");
-     openManagerPage();
-    }
-     if (e.target.classList.contains("popup")) {
-    console.log("opening popup page");
-     openPopup();
-    }
-  });
+$('.manager').on('click', openManagerPage);
+$('.popup').on('click', openPopup);
+
 
 function onCreated(windowInfo) {
   console.log(`Created window: ${windowInfo.id}`);

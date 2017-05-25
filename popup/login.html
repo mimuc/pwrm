@@ -4,59 +4,130 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="../background/css/bootstrap.css"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="../background/css/mp.css"/>
   <link rel="stylesheet" href="login.css"/>
   <title>PWM Title</title>
 </head>
 
-<body class="blue login">
- <div class="container login blue hidden">
+<body class="bg login">
+ <div class="login-container login bg hidden">
    <div class="row">
-     <div class="col-lg-12 text-center">
-      <h2>Unlock your local storage</h2>
+     <div class="col-lg-12">
+      <h2 class="text-center">Unlock your local storage</h2>
     </div>
   </div>  
   <form>
-  <div class="form-group mpw">
-    <input type="password" class="form-control" id="inputMPW" placeholder="Your Masterpassword">
-  </div>
-   </form>
-</div>
-<div class="container onboarding blue hidden">
-   <div class="row">
-     <div class="col-lg-12 text-center">
-      <h2>Welcome to [PWRM]</h2>
-      <p>We don't save your account information in any cloud service.</p>
-      <p>Please choose a password to keep your local storage safe.</p>
+    <div class="form-group mpw">
+      <input type="password" class="form-control" id="inputMPW" placeholder="Your Masterpassword">
     </div>
-  </div>  
-  <form class="mpw">
+    <div class="text-right">
+      <a id="btnUnlock" class="btn btn-primary btn-mp btn-circle">unlock</a>
+    </div>
+  </form>
+</div>
+<div class="login-container onboarding bg hidden">
+ <div class="row">
+   <div class="col-lg-12">
+    <h2 class="text-center">Welcome to [PWRM]</h2>
+    <p>Please create a Master-Password to keep your local storage safe.</p>
+  </div>
+</div>  
+<form class="mpw">
   <div class="form-group">
     <input type="password" class="form-control" id="inputCreateMPW" placeholder="Your Masterpassword">
   </div>
   <div class="text-right">
-  <a class="btn btn-primary btn-mp">Next Step</a>
+    <a class="btn btn-primary btn-mp">Next Step</a>
   </div>
-   </form>
+</form>
 </div>
-<div class="container onboarding_2 blue hidden">
-   <div class="row">
-     <div class="col-lg-12 text-center">
-      <h2>Remember your masterpassword?</h2>
-      <p>Type it in again and make sure you don't forget it.</p>
-    </div>
-  </div>  
-  <form class="mpw">
+<div class="login-container onboarding_2 bg hidden">
+ <div class="row">
+   <div class="col-lg-12">
+    <h2 class="text-center">Remember it?</h2>
+    <p>Please type it again and make sure you don't forget it.</p>
+  </div>
+</div>  
+<form class="mpw">
   <div class="form-group">
-    <input type="password" class="form-control" id="inputconfirmMPW" placeholder="Re-type your Masterpassword">
+    <input type="password" class="form-control" id="inputConfirmMPW" placeholder="Re-type your Masterpassword">
   </div>
-  <div class="text-right">
-  <a class="btn btn-primary btn-mp">Let's Start</a>
+  <div class="text-right" style="margin-top: 85px">
+    <a class="btn btn-primary btn-mp">Let's Start</a>
   </div>
-   </form>
+</form>
+</div>
+<div class="login-container onboarding_3 bg hidden">
+ <div class="row">
+   <div class="col-lg-12">
+     <div class="slide-wrapper">
+      <div class="slide">
+        <h2 class="text-center">Isn't that great?</h2>
+        <p>We help to organise your <strong>unique</strong> and <strong>reused</strong> passwords just like you are already used to do.</p>
+        <p>You can create <strong>Password Categories</strong> without even storing a single password.</p>
+      </div>
+      <div class="slide">
+        <h2 class="text-center">How do you organise your passwords?</h2>
+        <div class="radio radio-mp">
+          <label>
+            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+            <div class="radio-content">
+             <div class="name">By Topic</div>
+             <div class="example">
+               <span class="label label-default label-mp">Social Media</span>
+               <span class="label label-default label-mp">Banking</span>
+               <span class="label label-default label-mp">Other</span>
+             </div>
+           </div>
+
+         </label>
+       </div>
+       <div class="radio radio-mp disabled">
+        <label>
+          <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+          <div class="radio-content">
+           <div class="name">By Importance</div>
+           <div class="example">
+            coming soon
+          </div>
+        </div>
+      </label>
+    </div>
+    <div class="radio radio-mp disabled">
+      <label>
+        <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled>
+        <div class="radio-content">
+         <div class="name">By Frequency</div>
+         <div class="example">coming soon</div>
+       </div>
+     </label>
+   </div>
+   <div class="radio radio-mp disabled">
+    <label>
+      <input type="radio" name="optionsRadios" id="optionsRadios4" value="option4" disabled>
+      <div class="radio-content">
+       <div class="name">Hints help me to organise</div>
+       <div class="example">coming soon</div>
+     </div>
+   </label>
+ </div>
+</div>
+<div class="slide last">
+        <h2 class="text-center">You are ready to start!</h2>
+        <div class="text-center">
+    <a id="btnOpenManager" class="btn btn-primary btn-mp">Open Manager</a>
+  </div>
+      </div>
+
+</div>
+<a id="next"><i class="material-icons">keyboard_arrow_right</i></a>
+</div>
+</div>  
 </div>
 <script type="text/javascript" src="../background/scripts/jquery/jquery.js"></script>
 <script type="text/javascript" src="../background/scripts/pwstrength/dist/pwstrength-bootstrap.min.js"></script>
+<script type="text/javascript" src="../background/scripts/modules/tools/crypt.js"></script>
 <script type="text/javascript" src="login.js"></script>
 </body>
 

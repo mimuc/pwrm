@@ -1,17 +1,20 @@
 /* login.js */
-//if no masterpw was set in local storage: init onboarding
-var gettingMPW = browser.storage.local.get("mpw");
-gettingMPW.then((results) => {
-	var mpwHash = results["mpw"];
-	if(mpwHash == null){
+$(document).ready(function() {
+	//if no masterpw was set in local storage: init onboarding
+	var gettingMPW = browser.storage.local.get("mpw");
+	gettingMPW.then((results) => {
+		var mpwHash = results["mpw"];
+	// if(mpwHash == null){
 		initOnboarding();
-	}else{
-		initLogin();
-	}
+	// }else{
+		// initLogin();
+	// }
+});
 });
 
 // show onboarding ui elements
 function initOnboarding(){
+	var slide = 0;
 	console.log("Function : initOnboarding");
 	$('.onboarding').removeClass("hidden");
 	//TODO check options
@@ -24,49 +27,103 @@ function initOnboarding(){
 	};
 	$('#inputCreateMPW').pwstrength(options);
 	$('.progress').addClass("strength");
+	$('#inputCreateMPW').focus();
+	$('#next .material-icons').on('click', function(){	
+		if(++slide == $('.slide').length-1){
+			$('.slide').animate({"left": "-=600"}, 500);
+			$('#next').fadeOut();
+		}else{
+			$('.slide').animate({"left": "-=600"}, 500);
+		}
+	});
+	$('#btnOpenManager').on('click', openManager)
+	
 }
 
+function openManager(){
+	var gettingAllWindows = browser.windows.getAll();
+	gettingAllWindows.then(function(aRes){
+		var gettingCurrent = browser.windows.getCurrent();
+		gettingCurrent.then(function(cRes){
+			for (var i = 0; i < aRes.length; i++) {
+				if(aRes.length == 1){
+					console.log("length: 1");
+					var removing = browser.windows.remove(cRes.id);
+					var creatingWindow = browser.windows.create({
+						"url": browser.extension.getURL("background/background.html"),
+						"state": "maximized"
+					});
+				}else{
+					if(aRes[i].id != cRes.id && aRes[i].type == "normal"){
+					//no other window is opened -> open in new window
+
+					//close self and open in any other opened window as a tab
+					var removing = browser.windows.remove(cRes.id);
+					var createTab = browser.tabs.create({
+						"url": browser.extension.getURL("background/background.html"),
+						"windowId": aRes[i].id,
+					});
+					createTab.then(function(){
+						browser.windows.update(aRes[i].id,{"focused":true})
+					});
+
+				}
+			}
+		}		
+	});
+	});
+}
+//first time mpw was entered -> encrypt and doublecheck hashes
 $('.onboarding a.btn-mp').click(function(){
+	var mpw = $('#inputCreateMPW').val();
+	console.log(mpw);
+	//store mpw
+
+	browser.storage.local.set({"mpw" : mpw});
 	$('.onboarding').fadeOut().addClass('hidden');
 	$('.onboarding_2').removeClass('hidden').fadeIn();
+	$('inputConfirmMPW').focus();
 });
+
+$('.onboarding_2 a.btn-mp').click(function(){
+	var mpwr = $('#inputConfirmMPW').val();
+	console.log("das zweite " + mpwr);
+	
+	doubleCheckMPW($('#inputConfirmMPW').val(),
+		function(){
+			$('.onboarding_2').fadeOut().addClass('hidden');
+			$('.onboarding_3').removeClass('hidden').fadeIn();
+		},
+		function(){
+			alert("hoidaus");
+		});
+});
+
+function doubleCheckMPW(a, doNext, showError){
+	var callback = function(res){
+		if(a==res.mpw){doNext();
+		}else{showError();}
+	}
+	getMPW(callback);
+}
+
+function getMPW(callback){
+	browser.storage.local.get("mpw").then(function(res){callback(res);});
+}
 
 // show login ui elements
 function initLogin(){
 	console.log("Function : initLogin");
 	$('.login').removeClass("hidden");
+	$('inputMPW').focus();
 }
 
+$('#btnUnlock').on('click', function(){
+	doubleCheckMPW(
+		$('#inputMPW').val(),
+		function(){console.log("basd");},
+		function(){alert("hoidaus");}
+		);
+});
 
-// example found at https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest 
-function sha256(str) {
-  // We transform the string into an arraybuffer.
-  var buffer = new TextEncoder("utf-8").encode(str);
-  return crypto.subtle.digest("SHA-256", buffer).then(function (hash) {
-  	return hex(hash);
-  });
-}
 
-function hex(buffer) {
-	var hexCodes = [];
-	var view = new DataView(buffer);
-	for (var i = 0; i < view.byteLength; i += 4) {
-    // Using getUint32 reduces the number of iterations needed (we process 4 bytes each time)
-    var value = view.getUint32(i)
-    // toString(16) will give the hex representation of the number without padding
-    var stringValue = value.toString(16)
-    // We use concatenation and slice for padding
-    var padding = '00000000'
-    var paddedValue = (padding + stringValue).slice(-padding.length)
-    hexCodes.push(paddedValue);
-}
-
-  // Join all the hex strings into one
-  return hexCodes.join("");
-}
-
-/*
-sha256("foobar").then(function(digest) {
-	console.log(digest);
-}); // outputs "c3ab8ff13720e8ad9047dd39466b3c8974e592c2fa383d4a3960714caef0c4f2"
-*/

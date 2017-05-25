@@ -7,6 +7,86 @@
 
 html, body{
 	background-color: var(--primary-color);
+	height:100%;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+p{
+	font-size: 1.2em;
+}
+a, a:hover{
+	color:white;
+}
+
+#next{
+	position: absolute;
+	right: 30px;
+	top: 200px;
+}
+
+#next i{
+	transition: all 0.5s cubic-bezier(.25,.8,.25,1);
+	opacity: 0.5;
+	font-size: 6em;
+	cursor: pointer;
+}
+#next i:hover{
+	opacity: 1;
+}
+.label.label-mp{
+	font-size:110%;
+	font-weight:400;
+	color: black;
+	background-color: var(--highlight-color);
+}
+.radio.radio-mp{
+	margin-bottom: 25px;
+}
+
+.radio-content{
+	padding-left: 15px;
+}
+
+.example{
+	margin-top:15px;
+}
+
+.radio-content .name{
+	font-size: 1.5em;
+	line-height: 1.5em;
+	margin-top: -5px;
+	
+}
+
+.login-container.onboarding_3{
+
+	width:600px;
+	overflow: hidden;
+}
+
+strong{
+	color: var(--highlight-color);
+}
+
+.login-container{
+	width: 60%;
+	margin: 0 auto;
+	text-align: left;
+	padding-top:30px;
+}
+.slide.last{
+	padding-top: 160px;
+}
+.slide{
+	position: relative;
+	width:600px;
+	float: left;
+	padding: 0 110px 0 75px;
+	height:510px;
+}
+.slide-wrapper{
+	width:9999px;
 }
 
 .hidden{
@@ -17,13 +97,13 @@ html, body{
 body.login{
 	padding-top: 0;
 }
-.blue{
+.bg{
 	background-color: var(--primary-color);
 	color: white;
 }
 
 form.mpw{
-	width:50%;
+	width:100%;
 	margin: 0 auto;
 	margin-top:20px;
 }
