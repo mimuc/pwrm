@@ -4,12 +4,21 @@ $(document).ready(function() {
 	var gettingMPW = browser.storage.local.get("mpw");
 	gettingMPW.then((results) => {
 		var mpwHash = results["mpw"];
-	// if(mpwHash == null){
-		initOnboarding();
-	// }else{
-		// initLogin();
-	// }
-});
+		if(mpwHash == null){
+			initOnboarding();
+		}else{
+			initLogin();
+		}
+	});
+	
+	$('#inputMPW').on('keyup', function() {
+		if (this.value.length > 0){
+			doubleCheckMPW($('#inputMPW').val(),
+				function(){
+					openManager();
+				});
+		}
+	});
 });
 
 // show onboarding ui elements
@@ -27,7 +36,6 @@ function initOnboarding(){
 	};
 	$('#inputCreateMPW').pwstrength(options);
 	$('.progress').addClass("strength");
-	$('#inputCreateMPW').focus();
 	$('#next .material-icons').on('click', function(){	
 		if(++slide == $('.slide').length-1){
 			$('.slide').animate({"left": "-=600"}, 500);
@@ -82,7 +90,6 @@ $('.onboarding a.btn-mp').click(function(){
 	browser.storage.local.set({"mpw" : mpw});
 	$('.onboarding').fadeOut().addClass('hidden');
 	$('.onboarding_2').removeClass('hidden').fadeIn();
-	$('inputConfirmMPW').focus();
 });
 
 $('.onboarding_2 a.btn-mp').click(function(){
@@ -114,15 +121,25 @@ function getMPW(callback){
 // show login ui elements
 function initLogin(){
 	console.log("Function : initLogin");
+	$('#inputMPW').get(0).focus();
+
+	var gettingCurrent = browser.windows.getCurrent();
+	gettingCurrent.then(function(cRes){
+		browser.windows.update(cRes.id,{"height":300});
+	});
 	$('.login').removeClass("hidden");
-	$('inputMPW').focus();
+
 }
 
 $('#btnUnlock').on('click', function(){
 	doubleCheckMPW(
 		$('#inputMPW').val(),
-		function(){console.log("basd");},
-		function(){alert("hoidaus");}
+		function(){
+			openManager();
+		},
+		function(){
+			alert("hoidaus!");
+		}
 		);
 });
 

@@ -19,6 +19,10 @@ a, a:hover{
 	color:white;
 }
 
+#btnUnlock{
+	margin-left:15px;
+}
+
 #next{
 	position: absolute;
 	right: 30px;
