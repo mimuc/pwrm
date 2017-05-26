@@ -3,15 +3,15 @@ Open a new tab, and load "my-page.html" into it.
 */
 function openManagerPage() {
   console.log("openManagerPage");
-   browser.tabs.create({
-     "url": browser.extension.getURL("background/background.html")
+   chrome.tabs.create({
+     "url": chrome.extension.getURL("background/background.html")
    });
 }
 
 function openPopup() {
    console.log("openPopup");
-   browser.windows.create({
-     "url": "login.html",
+   chrome.windows.create({
+     "url": "/login/login.html",
       type: "panel",
       height: 600,
       width: 600

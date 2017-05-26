@@ -16,8 +16,8 @@ define(["jquery","psl","scripts/modules/tools/tools","scripts/modules/storage/sm
 				if(categories == null || categories.length == 0){
 					var cat = {"categories" : {
 						Banking : ["Info", "folder"],
-						Email : ["Info", "email"],
-						Social_Media : ["Info", "folder"]
+						Email : ["Info", "email"]
+						
 					}};
 					var setting = browser.storage.local.set(cat);
 					setting.then(function(){

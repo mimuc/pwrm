@@ -31,16 +31,7 @@
         "content_scripts/inject.css"]
     }
   ],
-  "background_page": "background/background.html",
-  
-  "chrome_ui_overrides": {
-    "bookmarks_ui": {
-      "remove_bookmark_shortcut": true,
-      "remove_button": true
-    }
-  },
-
-  "background": {
+  "background_page": {
 
     "scripts": ["background/background.js"],
     "page": ["background/background.html"]
