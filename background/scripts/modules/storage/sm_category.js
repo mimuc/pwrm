@@ -67,20 +67,28 @@ define(function() {
 					$('#modalYesNo').addClass('hidden');
 					$('#modalAction').removeClass('hidden');
 					var oldValue = $('#editCategory').attr('oldValue');
-					$('#modalCategory #modalCategoryName').val(oldValue);
-
-					var txt = (hasPW) ? 'remove password' : 'add password';
-					var msg = (hasPW) ? 'A category password will be stored.' : 'No password will be stored for this category and its entries.';
-					var icon = (hasPW) ? 'lock':'lock_open';
-					var pw = (hasPW) ? '*******' : '';
-					$('#btnAddPWD').html(txt);
-					$('#pw-hint span').html(msg);
-					$('#pw-hint i').html(icon);
-					$('#category-pwd').val(pw);
-					if(hasPW){			
-						$('#enter-category-pwd').removeClass('hidden');
+					
+					if($(e.relatedTarget).hasClass('button-sub')){
+						$('#modalCategory #modalCategoryName').val('');
+						$('#modalCategory').addClass('new');
+						//do nothing --> completely new category when triggered from FAB button
 					}else{
-						$('#enter-category-pwd').addClass('hidden');
+						$('#modalCategory').removeClass('new');
+						$('#modalCategory #modalCategoryName').val(oldValue);
+
+						var txt = (hasPW) ? 'remove password' : 'add password';
+						var msg = (hasPW) ? 'A category password will be stored.' : 'No password will be stored for this category and its entries.';
+						var icon = (hasPW) ? 'lock':'lock_open';
+						var pw = (hasPW) ? '*******' : '';
+						$('#btnAddPWD').html(txt);
+						$('#pw-hint span').html(msg);
+						$('#pw-hint i').html(icon);
+						$('#category-pwd').val(pw);
+						if(hasPW){			
+							$('#enter-category-pwd').removeClass('hidden');
+						}else{
+							$('#enter-category-pwd').addClass('hidden');
+						}
 					}
 				});
 				$('#modalCategory').on('hidden.bs.modal', function (e) {
@@ -136,7 +144,7 @@ define(function() {
 			}
 		},
 		
-		createCategory: function(name, pw){
+		createCategory: function(name, pw, isNew){
 			var oldName = $('#editCategory').attr('oldValue');
 
 			function guidGenerator() {
@@ -164,7 +172,7 @@ define(function() {
 				console.log(categories);
 				$('#modalYes').on('click', function(event){
 					 // event.stopImmediatePropagation(); 
-					 create(categories, context, oldName, name);
+					 create(categories, context, oldName, name, isNew);
 					});
 				$('#modalNo').on('click', function(event){
 					event.stopImmediatePropagation(); 
@@ -176,6 +184,7 @@ define(function() {
 				console.log("Function : reassignEntries");
 				var gettingEntries = browser.storage.local.get("entries");
 				gettingEntries.then((results) => {
+					console.log(results.entries);
 					var entries = results.entries;
 					for(key in entries){
 						console.log("entries[key].category: " + entries[key].category);
@@ -186,35 +195,40 @@ define(function() {
 						console.log(newEntries);
 					}
 				//store entries
-				var storingEntry = browser.storage.local.set(newEntries);
-				storingEntry.then(() => {
-					console.log("store success");
+				if(newEntries != null){
+					var storingEntry = browser.storage.local.set(newEntries);
+					storingEntry.then(() => {
+						console.log("store success");
 					//context.displayNumberEntries();
 					context.fillDropdown(categories.categories);
 
 				}, onError);
+				}else{
+					context.fillDropdown(categories.categories);
+				}
 
 			});
 			}
 
-			function create(categories, context, oldName, name){
-				console.log("Function : create");
+			function create(categories, context, oldName, name, isNew){
+				console.log("Function : create -isNew: " + isNew);
 			//push new entry 
 			categories.categories[name] = cat;
 				//store changes
 				var storingCategory = browser.storage.local.set(categories);
 				storingCategory.then(()=> {
 					//empty entry container
-					var entryContainer = document.getElementById("entryContainer");
-					while (entryContainer.firstChild) {
-						entryContainer.removeChild(entryContainer.firstChild);
-					}
-					if(name != oldName){
-						deleteCategory(oldName);
-						reassignEntries(oldName, name, context, categories);
-					}else{
-						context.displayCategories(categories.categories, false);
-						
+					if(!isNew){
+						var entryContainer = document.getElementById("entryContainer");
+						while (entryContainer.firstChild) {
+							entryContainer.removeChild(entryContainer.firstChild);
+						}
+						if(name != oldName){
+							deleteCategory(oldName);
+							reassignEntries(oldName, name, context, categories);
+						}else{
+							context.displayCategories(categories.categories, false);
+						}
 					}
 				});
 			}

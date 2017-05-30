@@ -83,12 +83,11 @@ function sendMessage(msg) {
 // manually create new category 
 function createCategory(){
   var value = modalCategoryName.value;
-  var pw;
-  if(($('#enter-category-pwd').hasClass('hidden'))){ pw = null;}else{pw = $('#category-pwd').val();}
-  
-  console.log("pw: " + pw);
+  var pw; 
+  if($('#enter-category-pwd').hasClass('hidden')){ pw = null;}else{pw = $('#category-pwd').val();}
+
   require(["scripts/modules/storage/sm_category"], function createCategory(sm_category){
-    sm_category.createCategory(value, pw);
+    sm_category.createCategory(value, pw, $('#modalCategory').hasClass('new'));
   });
 
 }
