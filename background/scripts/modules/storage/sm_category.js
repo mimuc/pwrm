@@ -64,13 +64,16 @@ define(function() {
 				}
 				//configure modal here (event.relatedTarget is created dynamically)
 				$('#modalCategory').on('show.bs.modal', function (e) {
+					
 					$('#modalYesNo').addClass('hidden');
 					$('#modalAction').removeClass('hidden');
 					var oldValue = $('#editCategory').attr('oldValue');
-					
+
 					if($(e.relatedTarget).hasClass('button-sub')){
+						console.log("relatedTarget has button-sub");
 						$('#modalCategory #modalCategoryName').val('');
 						$('#modalCategory').addClass('new');
+						$('#editCategory').attr('oldValue', '');
 						//do nothing --> completely new category when triggered from FAB button
 					}else{
 						$('#modalCategory').removeClass('new');
@@ -184,7 +187,6 @@ define(function() {
 				console.log("Function : reassignEntries");
 				var gettingEntries = browser.storage.local.get("entries");
 				gettingEntries.then((results) => {
-					console.log(results.entries);
 					var entries = results.entries;
 					for(key in entries){
 						console.log("entries[key].category: " + entries[key].category);
@@ -211,7 +213,7 @@ define(function() {
 			}
 
 			function create(categories, context, oldName, name, isNew){
-				console.log("Function : create -isNew: " + isNew);
+				console.log("Function : create -isNew: " + isNew + ' oldName: ' + oldName);
 			//push new entry 
 			categories.categories[name] = cat;
 				//store changes
@@ -223,12 +225,16 @@ define(function() {
 						while (entryContainer.firstChild) {
 							entryContainer.removeChild(entryContainer.firstChild);
 						}
-						if(name != oldName){
-							deleteCategory(oldName);
-							reassignEntries(oldName, name, context, categories);
-						}else{
-							context.displayCategories(categories.categories, false);
+						if(oldName!=null){
+							if(name != oldName){
+								console.log("name != oldName");
+								deleteCategory(oldName);
+								reassignEntries(oldName, name, context, categories);
+							}
 						}
+					}else{
+						console.log("no update. was new category");
+						context.displayCategories(categories.categories, false);
 					}
 				});
 			}
