@@ -62,7 +62,7 @@ define(["jquery","psl","scripts/modules/tools/tools","scripts/modules/storage/sm
 						}
 					}
 				}
-			}, onError);
+			});
 		},
 
 		storeEntry: function(mUrl, mCredential) {

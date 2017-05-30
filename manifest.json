@@ -14,8 +14,10 @@
     "activeTab",
     "storage",
     "history",
+    "notification",
     "webRequest",
-    "<all_urls>"
+    "<all_urls>",
+    "tabs"
   ],
 
   "content_scripts":[

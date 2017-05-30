@@ -8,9 +8,10 @@ addPWD.addEventListener('click', showPWDInput);
 addBtn.addEventListener('click', addEntry);
 addCategory.addEventListener('click', createCategory);
 
+browser.runtime.onMessage.addListener(handleMessage);
 
 /* call init on page load */
-document.addEventListener("DOMContentLoaded", init);
+document.addEventListener("DOMContentLoaded", setup);
 
 
 function showPWDInput(){
@@ -97,7 +98,7 @@ function assignCategory(entryKey, categoryKey){
 }
 
 /* display previously-saved stored entrys on startup */
-function init(){
+function setup(){
   clearInputs(); 
 
   // add radio button listener (modal entry)
@@ -114,19 +115,19 @@ function init(){
   // reconfigure radiogroups
   $('#optionsRadios1').prop('checked',true); 
   //init storage logic
-  require(["scripts/modules/storage/storagemanager"], function init(sm){sm.initialize();});
+  require(["scripts/modules/storage/storagemanager"], function init(sm){
+    sm.initialize();
+  });
 }
 
 /* add new entry when clicked on button */
 /* TODO: needs some form checks */
 function addEntry(){
-  require(["scripts/modules/storage/storagemanager"], function (sm){sm.addEntry();});
+  require(["scripts/modules/storage/storagemanager"], function (sm){
+    sm.addEntry();
+  });
 }
 
-/* generic error handler */
-function onError(error) {
-  console.log(error);
-}
 
 
 
@@ -148,11 +149,14 @@ function updateentry(delentry,newname,newurl) {
 }
 
 //receives and answers messages from content_scripts [if needed]
-function handleMessage(request, sender, sendResponse) {
- console.log("Message received in background: " +request);
+function handleMessage(message) {
+console.log(message.task);
+ if(message.task == "open_manager"){
+  // alert(message.task);
+ }
+
 }
 
-browser.runtime.onMessage.addListener(handleMessage);
 
 //programmatically preselect options in dropdown
 function setSelectedIndex(select, index){
