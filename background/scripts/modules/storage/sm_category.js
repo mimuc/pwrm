@@ -1,7 +1,10 @@
 /* manage to display categories retrieved from storage */
-define(function() {
+define(['scripts/modules/tools/showPW'],function(showPW) {
+
 	return {
 		createCategoryElement: function(categoryName, notes, iconName, pwd){
+					var _this = this;
+			
 			var container = document.querySelector('#categoryContainer');
 			require(['jquery','scripts/modules/storage/storagemanager'], function($, sm) {
 				
@@ -41,7 +44,7 @@ define(function() {
 						var ic = $(this).find('.lock-icon').text();
 						var _hasPW = (ic == 'lock') ? true : false;
 						console.log("hasPW: " + _hasPW);
-						displayCategoryHeader(catName, _hasPW); //update hasPW before displaying header
+						_this.displayCategoryHeader(catName, _hasPW); //update hasPW before displaying header
 						// TODO hier
 
 						sm.loadEntries(categoryName, false);
@@ -54,18 +57,7 @@ define(function() {
 				});
 			});
 
-			function displayCategoryHeader(name, hasPW){
-				var entryContainer = $('#entryContainer');
-
-				if(hasPW){
-					entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden">*******</span><span type="cat" cat="'+name+'" class="showPW">show</span><a id="editCategory" class="link" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div></div><hr>');
-				}else{
-					entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lock_open</i> No password stored. <a id="editCategory" class="link" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div><hr>');
-				}
-				//configure modal here (event.relatedTarget is created dynamically)
-				//TODO: is not setup until a category is clicked one time
-				this.setupModalCategory(hasPW);
-			}
+			_this.displayNumberEntries();
 
 			
 
@@ -86,16 +78,29 @@ define(function() {
 				*/
 				return name;
 			}
-			this.displayNumberEntries();
+			
 		},
-		setupModalCategory : function(hasPW){
+		displayCategoryHeader : function(name, hasPW){
+			var entryContainer = $('#entryContainer');
+
+			if(hasPW){
+				entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden">*******</span><span type="cat" cat="'+name+'" class="showPW">show</span><a id="editCategory" class="link" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div></div><hr>');
+			}else{
+				entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lock_open</i> No password stored. <a id="editCategory" class="link" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div><hr>');
+			}
+				//configure modal here (event.relatedTarget is created dynamically)
+				this.setupModalCategory(hasPW);
+				this.setupShowButton();
+			},
+
+			setupModalCategory : function(hasPW){
 				$('#modalCategory').on('hidden.bs.modal', function (e) {
 					console.log("hide modal");
 					$('#modalYesNo').toggleClass('hidden');
 					$('#modalAction').toggleClass('hidden');
 				});
 				$('#modalCategory').on('show.bs.modal', function (e) {
-					
+
 					$('#modalYesNo').addClass('hidden');
 					$('#modalAction').removeClass('hidden');
 					var oldValue = $('#editCategory').attr('oldValue');
@@ -127,10 +132,24 @@ define(function() {
 				});
 			},
 
-		displayCategories: function(categories, loadUniqueEntries) {
-			console.log("Function : displayCategories");
-			this.setupModalCategory(false);
-			for(c in categories){				
+			setupShowButton : function(){
+				$('.showPW').on('click', function(){
+					showPW.trigger($(this));
+					if($(this).html() == 'show'){
+						$('#modalMPW').on('shown.bs.modal', function (e) {
+							$('#modalInputMPW').val('');
+							$('#modalInputMPW').focus();
+						});
+						$('#modalMPW').modal('show');
+					}
+				});
+			},
+
+			displayCategories: function(categories, loadUniqueEntries) {
+				console.log("Function : displayCategories");
+				this.setupModalCategory(false);
+				this.setupShowButton();
+				for(c in categories){				
 				// console.log(c + " password: " + categories[c]);
 				this.createCategoryElement(c,categories[c][0],categories[c][1], categories[c][2]);
 			}
@@ -259,7 +278,9 @@ define(function() {
 						for(key in entries){
 							if(entries[key].category == cKey) number++;
 						}
-						document.querySelector('#numberAccounts_'+cKey).innerHTML = "Number Accounts: " + number;
+						if($('#numberAccounts_'+cKey) != null){
+							$('#numberAccounts_'+cKey).html("Number Accounts: " + number);
+						}
 					}
 				});
 			});
