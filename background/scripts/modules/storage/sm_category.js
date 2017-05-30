@@ -63,6 +63,37 @@ define(function() {
 					entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lock_open</i> No password stored. <a id="editCategory" class="link" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div><hr>');
 				}
 				//configure modal here (event.relatedTarget is created dynamically)
+				//TODO: is not setup until a category is clicked one time
+				this.setupModalCategory(hasPW);
+			}
+
+			
+
+			function getIcon(name){
+				console.log("Function : getIcon");
+				/*
+				var iconString = "folder";
+				switch(name){
+					case "euro_symbol":
+					iconString = "euro_symbol";
+					break;
+					case "email":
+					iconString = "email";
+					break;
+				}
+
+				return iconString
+				*/
+				return name;
+			}
+			this.displayNumberEntries();
+		},
+		setupModalCategory : function(hasPW){
+				$('#modalCategory').on('hidden.bs.modal', function (e) {
+					console.log("hide modal");
+					$('#modalYesNo').toggleClass('hidden');
+					$('#modalAction').toggleClass('hidden');
+				});
 				$('#modalCategory').on('show.bs.modal', function (e) {
 					
 					$('#modalYesNo').addClass('hidden');
@@ -94,36 +125,11 @@ define(function() {
 						}
 					}
 				});
-				$('#modalCategory').on('hidden.bs.modal', function (e) {
-					console.log("hide modal");
-					$('#modalYesNo').toggleClass('hidden');
-					$('#modalAction').toggleClass('hidden');
-				});
-
-			}
-
-			function getIcon(name){
-				console.log("Function : getIcon");
-				/*
-				var iconString = "folder";
-				switch(name){
-					case "euro_symbol":
-					iconString = "euro_symbol";
-					break;
-					case "email":
-					iconString = "email";
-					break;
-				}
-
-				return iconString
-				*/
-				return name;
-			}
-			this.displayNumberEntries();
-		},
+			},
 
 		displayCategories: function(categories, loadUniqueEntries) {
 			console.log("Function : displayCategories");
+			this.setupModalCategory(false);
 			for(c in categories){				
 				// console.log(c + " password: " + categories[c]);
 				this.createCategoryElement(c,categories[c][0],categories[c][1], categories[c][2]);
