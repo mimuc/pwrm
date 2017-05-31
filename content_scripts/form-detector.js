@@ -212,11 +212,13 @@ function showHintbox(i, credentials, categories, icon){
   var c = credentials.category;
   if(c!=null && categories[c][2]!=null){
    i.classList.add('locked');
-   hintbox = '<div class="hintbox"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">arrow_drop_down</i></div></div><div class="hintbox_content mp-hidden"><p>You used the password from category <strong>'+ credentials.category  +'</strong></p><div id="pwhint_stored"><i class="material-icons hastext">lock</i>Password: ****** <span class="showPW">show</span></div><hr><a>open manager</a></div></div>';
+   hintbox = '<div class="hintbox"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content mp-hidden"><p>You used the password from category <strong>'+ credentials.category  +'</strong></p><div id="pwhint_stored"><i class="material-icons hastext">lock</i>Password: ****** <span class="showPW">show</span></div><hr><a>open manager</a></div></div>';
  }else{
    i.classList.add('unlocked');
-   hintbox = '<div class="hintbox"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">arrow_drop_down</i></div></div><div class="hintbox_content mp-hidden"><p>You used the password from category <strong>'+ credentials.category  +'</strong></p><div id="pwhint_notstored"><i class="material-icons hastext">lock_open</i> No password stored</div><hr><a>open manager</a></div></div>';
+   hintbox = '<div class="hintbox"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content mp-hidden"><p>You used the password from category <strong>'+ credentials.category  +'</strong></p><div id="pwhint_notstored"><i class="material-icons hastext">lock_open</i> No password stored</div><hr><a>open manager</a></div></div>';
  }
+
+
 
  if($('#hbpwrm').length){ 
 
@@ -229,20 +231,23 @@ function showHintbox(i, credentials, categories, icon){
   
   i.parentNode.insertBefore(hintbox_div, i.nextSibling);
 
-  $('#hbpwrm').click(function(){
+  $('#hbpwrm .hintbox_head .left,#hbpwrm .hintbox_head .middle ').click(function(){
     $('.hintbox_head').toggleClass('focused');
     $('.hintbox_content').toggleClass('open');
     $('#ic_arrow').toggleClass('upsideDown');
   });
 
+  $('#ic_arrow').click(function(){
+    $('.hintbox').hide();
+  });
   i.classList.add('mpinput');
   $('input.mpinput').click(function(e){
     console.log("clicked");
-   var parentOffset = $(this).offset(); 
-   var relX = (e.pageX - parentOffset.left)/($(this).width());
+    var parentOffset = $(this).offset(); 
+    var relX = (e.pageX - parentOffset.left)/($(this).width());
    // console.log('relX: ' + relX +', relY: '+ relY);
    if(relX > 0.9){
-    $('.hintbox').show();
+    $('.hintbox').toggle();
     // $('input.mpinput').css( 'cursor', 'pointer' );
   }
 }); 
@@ -250,8 +255,8 @@ function showHintbox(i, credentials, categories, icon){
   $('.hintbox a').click(function(){
     console.log("open manager");
     chrome.runtime.sendMessage({task: "open_manager"}, function (response) {
-    console.log(response.farewell);
-});
+      console.log(response.farewell);
+    });
   });
 
   $('.showPW').click(function(){

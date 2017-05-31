@@ -119,14 +119,21 @@ define(["jquery","psl","scripts/modules/tools/tools","scripts/modules/storage/sm
 			}
 			
 			var randID = tools.guidGenerator();
-			var inputURL = document.querySelector('.url');
+			var iurl = document.querySelector('.url');
+
+			//extract location.origin from URL
+			var pathArray = iurl.value.split( '/' );
+			var protocol = pathArray[0];
+			var host = pathArray[2];
+			var entryURL = protocol + '//' + host;
+
 			var inputUsername = document.querySelector('.username');
-			
+			/*
 			var entryURL = inputURL.value;
 			console.log(entryURL.substring(entryURL.length-1));
 			if(entryURL.substring(entryURL.length-1)=='/'){
 				entryURL = entryURL.slice(0, -1);
-			}
+			}*/
 			
 			var entryUsername = inputUsername.value;
 

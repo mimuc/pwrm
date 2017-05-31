@@ -148,6 +148,10 @@ function updateentry(delentry,newname,newurl) {
   */
 }
 
+function onError(e){
+  console.log(e);
+}
+
 //receives and answers messages from content_scripts [if needed]
 function handleMessage(message) {
 console.log(message.task);
