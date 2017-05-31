@@ -3,7 +3,7 @@ define(['scripts/modules/tools/showPW'],function(showPW) {
 
 	return {
 		createCategoryElement: function(categoryName, notes, iconName, pwd){
-					var _this = this;
+			var _this = this;
 			
 			var container = document.querySelector('#categoryContainer');
 			require(['jquery','scripts/modules/storage/storagemanager'], function($, sm) {
@@ -33,22 +33,30 @@ define(['scripts/modules/tools/showPW'],function(showPW) {
 
 					$(this).click(function(event) {
 						event.stopImmediatePropagation(); //prevents firing twice per click
-						$('.panel-card').addClass('low-color');
-						$('.panel-card').removeClass('category-focused');
-						$('#panel_'+categoryName).removeClass('low-color');
+						if(!$('#panel_'+categoryName).hasClass('category-focused')){
+							$('.panel-card').addClass('low-color');
+							$('.panel-card').removeClass('category-focused');
+							$('#panel_'+categoryName).removeClass('low-color');
 
-						$('#panel_'+categoryName).addClass('category-focused');
-						$('#entryContainer').empty();
-
-						// console.log($(this).attr('haspw'));
-						var ic = $(this).find('.lock-icon').text();
-						var _hasPW = (ic == 'lock') ? true : false;
-						console.log("hasPW: " + _hasPW);
+							$('#panel_'+categoryName).toggleClass('category-focused');
+							$('#entryContainer').empty();
+							// console.log($(this).attr('haspw'));
+							var ic = $(this).find('.lock-icon').text();
+							var _hasPW = (ic == 'lock') ? true : false;
+							console.log("hasPW: " + _hasPW);
 						_this.displayCategoryHeader(catName, _hasPW); //update hasPW before displaying header
 						// TODO hier
 
 						sm.loadEntries(categoryName, false);
-					});
+					}else{
+						console.log("deselected");
+						$('#panel_'+categoryName).toggleClass('category-focused');
+						$('.panel-card').addClass('low-color');
+						$('#entryContainer').empty();
+					}
+
+					
+				});
 
 					$('#cat-icon').attr('id',categoryName+'-icon')
 					.html(getIcon(iconName));					

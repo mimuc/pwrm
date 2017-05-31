@@ -102,6 +102,12 @@ function setup(){
 
   clearInputs(); 
 
+  $(document).click(function(){
+    console.log("clicked");
+    $('#categoryContainer .panel-heading').removeClass('category-focused');
+    $('#entryContainer').empty();
+  });
+
   // add event listeners to buttons and inputs
   addPWD.addEventListener('click', showPWDInput);
   addBtn.addEventListener('click', addEntry);
@@ -140,7 +146,7 @@ function addEntry(){
 function quickAddEntry(murl, musername, mcat, mpw){
   console.log(murl);
   require(["scripts/modules/storage/storagemanager"], function (sm){
-      sm.quickAddEntry(murl, musername, mcat, mpw);
+    sm.quickAddEntry(murl, musername, mcat, mpw);
   });
 }
 
