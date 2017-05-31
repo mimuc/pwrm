@@ -201,6 +201,8 @@ define(['scripts/modules/tools/showPW'],function(showPW) {
 				$('#modalYes').on('click', function(event){
 					 // event.stopImmediatePropagation(); 
 					 create(categories, context, oldName, name, isNew);
+					 var icon = (pw==null) ? 'lock_open' : 'lock';
+					 $('#panel_'+name+' .lock-icon').html(icon);
 					});
 				$('#modalNo').on('click', function(event){
 					event.stopImmediatePropagation(); 
