@@ -193,8 +193,9 @@ for (index = 0; index < inputs.length; ++index) {
 
  function highlightUsername(i, credentials){
   console.log("Function : highlightUsername");
-  i.style.color = "black";
-  i.style.border = "3px dotted #303F9F";
+  // i.style.color = "black";
+  // i.style.border = "3px dotted #303F9F";
+  i.classList.add('highlightInput');
 
   //autofill username test
   i.value = credentials.username;
