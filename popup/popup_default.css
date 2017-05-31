@@ -9,20 +9,35 @@ html {overflow: -moz-scrollbars-none;}
 html, body {
 	padding:0;
 	margin:0;
-	min-width:250px;
-	max-width: 250px;
-	min-height: 200px;
+	min-width:350px;
+	max-width: 350px;
+	min-height: 140px;
 	font-family: 'Roboto', 'Helvetica', sans-serif !important;
 	overflow: hidden;
 }
 
-.popup{
+a:hover{
 	cursor: pointer;
+	text-decoration: none;
 }
+
 .link{
+	cursor: pointer;
 	padding:5px;
 }
 
+.mid{
+	height:0px;
+	background-color: white;
+}
+.mid .forms{
+	display:none;
+	margin-top:50px;
+	padding:0 15px;
+}
+.btn-wrapper{
+	padding-top:20px;
+}
 
 .button-floating, .button-floating-shadow{
 	width: 46px !important;
@@ -32,16 +47,45 @@ html, body {
 }
 
 #fab_wrapper{
+	transition: all 0.4s cubic-bezier(.25,.8,.25,1);
 	position: absolute;
-	top: 50px !important;
+	top: 50px;
 	right: 4% !important;
 }
 
 .head{
 	background-color: var(--primary-color);
-	padding: 10px 15px;
+	padding: 15px 15px;
 	color: white;
-	height: 80px;
+	height: 100px;
+}
+.grid{
+	display: inline;
+	margin-left:5px;
+}
+
+.grid.left{
+	float: left;
+	width:10%; 
+}
+.grid.middle{
+	width:80%; 
+	margin-left:10px;
+	display:inline-block;
+}
+.grid.right{
+	width:10%; 
+	float:right;
+	margin-right: 20px
+}
+.placeholder-img{
+	margin-top: 5px;
+	border-radius: 50%;
+	margin-right: 10px;
+	width: 30px;
+	height: 30px;
+	background-color: white;
+	border: 0.5px solid #aeaeae;
 }
 
 
@@ -80,17 +124,33 @@ html, body {
 
 .mp-hidden {
 	height:0px !important;
-	-webkit-transition:height, 0.2s cubic-bezier(.25,.8,.25,1);
-	-moz-transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
-	-ms-transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
-	-o-transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
-	transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
+	-webkit-transition:height, 0.4s cubic-bezier(.25,.8,.25,1);
+	-moz-transition: height,  0.4s cubic-bezier(.25,.8,.25,1);
+	-ms-transition: height,  0.4s cubic-bezier(.25,.8,.25,1);
+	-o-transition: height,  0.4s cubic-bezier(.25,.8,.25,1);
+	transition: height,  0.4s cubic-bezier(.25,.8,.25,1);
 }
 .mp-hidden.open {
-	height:150px !important;
-	-webkit-transition:height,  0.2s cubic-bezier(.25,.8,.25,1);
-	-moz-transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
-	-ms-transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
-	-o-transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
-	transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
+	height:300px !important;
+	-webkit-transition:height,  0.4s cubic-bezier(.25,.8,.25,1);
+	-moz-transition: height,  0.4s cubic-bezier(.25,.8,.25,1);
+	-ms-transition: height,  0.4s cubic-bezier(.25,.8,.25,1);
+	-o-transition: height,  0.4s cubic-bezier(.25,.8,.25,1);
+	transition: height,  0.4s cubic-bezier(.25,.8,.25,1);
+}
+
+.slide{
+	top: 320px !important;
+	-webkit-transition:top,  0.4s cubic-bezier(.25,.8,.25,1);
+	-moz-transition: top,  0.4s cubic-bezier(.25,.8,.25,1);
+	-ms-transition: top,  0.4s cubic-bezier(.25,.8,.25,1);
+	-o-transition: top,  0.4s cubic-bezier(.25,.8,.25,1);
+	transition: top,  0.4s cubic-bezier(.25,.8,.25,1);
+
+}
+
+  .button-floating.fab_checked::before {
+    content: "check";
+    font-family: 'material-icons';
+
 }

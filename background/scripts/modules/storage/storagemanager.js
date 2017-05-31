@@ -65,7 +65,7 @@ define(["jquery","psl","scripts/modules/tools/tools","scripts/modules/storage/sm
 			});
 		},
 
-		storeEntry: function(mUrl, mCredential) {
+		storeEntry: function(mUrl, mCredential, toggleModal) {
 			console.log("Function : storeEntry");
 			//first get current storage
 			var gettingEntries = browser.storage.local.get("entries");
@@ -95,7 +95,7 @@ define(["jquery","psl","scripts/modules/tools/tools","scripts/modules/storage/sm
 					
 				}, onError);
 				//close modal
-				$('#modal-newEntry').modal('toggle');
+				if(toggleModal) $('#modal-newEntry').modal('toggle');
 			}
 
 		});		
@@ -142,14 +142,49 @@ define(["jquery","psl","scripts/modules/tools/tools","scripts/modules/storage/sm
 				var objTest = Object.keys(result);
 				if(useUniquePWD){
 					credential = {username: entryUsername, id: randID, password: password};
-					this.storeEntry(entryURL, credential);
+					this.storeEntry(entryURL, credential, true);
 				}else{
 					if(objTest.length < 1 && entryURL !== '' && entryUsername !== '') {
 						entryURL.value = ''; entryUsername.value = ''; entryCategory.value ='';
 						var credential;
 						credential = {category: entryCategory, username: entryUsername, id: randID};
 					}
-					this.storeEntry(entryURL, credential);
+					this.storeEntry(entryURL, credential, true);
+				}
+			}, onError);
+			
+			
+		},
+		quickAddEntry: function(murl, musername, mcat, mpw) {
+			console.log("Function : addEntry (quick)");
+			/* initialise variables */
+			//check radio buttons
+			var useUniquePWD = (mpw != null);
+			
+			var entryCategory = mcat;			
+			var randID = tools.guidGenerator();
+
+			//extract location.origin from URL
+			var pathArray = murl.split( '/' );
+			var protocol = pathArray[0];
+			var host = pathArray[2];
+			var entryURL = protocol + '//' + host;
+
+			var entryUsername = musername;
+
+			var gettingItem = browser.storage.local.get(entryURL);
+			gettingItem.then((result) => {
+				var objTest = Object.keys(result);
+				if(useUniquePWD){
+					credential = {username: entryUsername, id: randID, password: mpw};
+					this.storeEntry(entryURL, credential, false);
+				}else{
+					if(objTest.length < 1 && entryURL !== '' && entryUsername !== '') {
+						entryURL.value = ''; entryUsername.value = ''; entryCategory.value ='';
+						var credential;
+						credential = {category: entryCategory, username: entryUsername, id: randID};
+					}
+					this.storeEntry(entryURL, credential, false);
 				}
 			}, onError);
 			

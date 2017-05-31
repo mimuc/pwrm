@@ -3,15 +3,16 @@ var addPWD = document.querySelector('#btnAddPWD');
 var addCategory = document.querySelector('#addCategory');
 var modalCategory = document.querySelector('#modalCategory');
 
-// add event listeners to buttons and inputs
-addPWD.addEventListener('click', showPWDInput);
-addBtn.addEventListener('click', addEntry);
-addCategory.addEventListener('click', createCategory);
-
 browser.runtime.onMessage.addListener(handleMessage);
 
 /* call init on page load */
-document.addEventListener("DOMContentLoaded", setup);
+$(document).ready(function() {
+  setup();
+});
+
+function test(){
+  console.log("test");
+}
 
 
 function showPWDInput(){
@@ -24,7 +25,6 @@ function showPWDInput(){
   $('#pw-hint i').html(icon);
   $('#category-pwd').val('');
   $('#enter-category-pwd').toggleClass('hidden');
-
 }
 //searches for entries and displays results matching the typed letters
 function searchAsync(value){
@@ -99,7 +99,14 @@ function assignCategory(entryKey, categoryKey){
 
 /* display previously-saved stored entrys on startup */
 function setup(){
+
   clearInputs(); 
+
+  // add event listeners to buttons and inputs
+  addPWD.addEventListener('click', showPWDInput);
+  addBtn.addEventListener('click', addEntry);
+  addCategory.addEventListener('click', createCategory);
+
 
   // add radio button listener (modal entry)
   $("#radio-form :input").change(function() {
@@ -128,6 +135,15 @@ function addEntry(){
   });
 }
 
+/* add new entry when clicked on button */
+/* TODO: needs some form checks */
+function quickAddEntry(murl, musername, mcat, mpw){
+  console.log(murl);
+  require(["scripts/modules/storage/storagemanager"], function (sm){
+      sm.quickAddEntry(murl, musername, mcat, mpw);
+  });
+}
+
 
 
 
@@ -147,21 +163,19 @@ function updateentry(delentry,newname,newurl) {
   }, onError);
   */
 }
-
 function onError(e){
   console.log(e);
 }
-
 //receives and answers messages from content_scripts [if needed]
-function handleMessage(message) {
-console.log(message.task);
- if(message.task == "open_manager"){
-  // alert(message.task);
- }
+function handleMessage(message, sender, sendResponse) {
+  console.log(message.task);
+  if(message.task == 'store'){
+    console.log(message.url);
+    quickAddEntry(message.url, message.username, message.cat, message.pw);
+    sendResponse("Saving entry");
+  }
 
 }
-
-
 //programmatically preselect options in dropdown
 function setSelectedIndex(select, index){
   select.options[index-1].selected = true;

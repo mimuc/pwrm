@@ -82,8 +82,8 @@
     transition-duration: .3s;
 }
 .button-floating-clicked .button-floating {
-    -webkit-transform: rotate(225deg);
-    transform: rotate(225deg);
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
 }
 
 .button-sub, .button-floating-shadow {

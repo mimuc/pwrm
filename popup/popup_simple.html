@@ -2,25 +2,73 @@
 
 <html>
 <head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="popup_default.css"/>
-  <link rel="stylesheet" href="../background/css/fab.css"/>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="../background/css/fab.css"/>
+	<link rel="stylesheet" href="popup_default.css"/>
+	<link rel="stylesheet" href="../background/css/bootstrap.css"/>
 </head>
 
 <body>
- <div class="container">
-   <div class="head">
-   <p id="thisURL">halo</p>
-   </div>
-   <div class="footer">
-     <p class="link popup">Open Manager</p>
-   </div>
+	<div class="">
+		<div class="head">
+			<div class="grid left">
+				<img class="placeholder-img" src="">
+			</div>
+			<div class="grid middle">
+				<span id="thisURL"></span>
+				<p id="hint"></p>
+			</div>
+			<div id="fab_wrapper">
+				<div id="fab_content">
+					<div class="water-drop"></div>
+					<div class="button button-floating"></div>
+					<div class="button-floating-shadow"></div>
+				</div>
+			</div>		
+		</div>
+		<div class="mid mp-hidden container">
+			<div class="forms">
+				<form>      
+					<div class="form-group">
+						<input id="enterName" class="form-control new-entry username" type="text" placeholder="username" />
+					</div>
+				</form>
+				<form id="radio-form">
+					<div class="radio">
+						<label class="active">
+							<input type="radio" name="optionsRadios" id="optionsRadios1" value="option-category" checked="true">
+							Assign to a password category
+						</label>
+					</div>
+					<div class="radio">
+						<label>
+							<input type="radio" name="optionsRadios" id="optionsRadios2" value="option-pwd">
+							Use a unique password
+						</label>
+					</div>
+				</form>
+				<form>
+					<div class="form-group radio-option option-category" value="option-category">
+						<label for="categoryDropdown">Choose Password Category</label>
+						<select class="form-control" id="categoryDropdown"><!-- fill <options> on init() --></select>
+					</div>
+					<div class="form-group radio-option option-pwd hidden" value="option-pwd">
+						<label for="enterPWD">Enter a Unique Password</label>
+						<input id="enterPWD" class="form-control new-entry pwd" type="text" placeholder="" />
+					</div>
+				</form>
+			
+			</div>
+		</div>
+		<div class="footer">
+			<p class="link manager">Open Manager</p>
+		</div>
 
- </div>
- <script src="../background/scripts/jquery/jquery.js"></script>
- <script src="../background/scripts/fab.js"></script>
- <script src="../background/scripts/bootstrap/bootstrap.js"></script>
- <script src="popup_default.js"></script>   
+	</div>
+	<script src="../background/scripts/jquery/jquery.js"></script>
+	<script src="../background/scripts/fab.js"></script>
+	<script src="../background/scripts/bootstrap/bootstrap.js"></script>
+	<script src="popup_default.js"></script>   
 </body>
 
 </html> 
