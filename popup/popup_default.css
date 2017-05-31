@@ -19,6 +19,10 @@ html, body {
 .popup{
 	cursor: pointer;
 }
+.link{
+	padding:5px;
+}
+
 
 .button-floating, .button-floating-shadow{
 	width: 46px !important;

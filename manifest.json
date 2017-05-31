@@ -26,7 +26,8 @@
       "js": [
         "content_scripts/jquery.js",
         "content_scripts/psl.min.js",
-        "content_scripts/form-detector.js", 
+        "content_scripts/showPW.js", 
+        "content_scripts/form-detector.js",
         "content_scripts/categorizer.js"],
       "css" : [
         "content_scripts/material-icons/material-icons.css",
