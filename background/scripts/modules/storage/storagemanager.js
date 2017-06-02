@@ -50,8 +50,12 @@ define(["jquery","psl","scripts/modules/tools/tools","scripts/modules/storage/sm
 					storingEntry = browser.storage.local.set({"entries" : {}});
 				}
 
+				if(showOnlyUnique){
+					$('#uniqueEntryContainer').empty();
+				}
 				for(key in res){	
 					if(showOnlyUnique){
+						console.log("only display unique-pw entries");
 						if(categoryName == null && res[key].category == null){
 							sm_display.displayEntry(key, res[key], false); //hasCategory==false
 						}

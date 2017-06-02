@@ -9,14 +9,14 @@
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/header.css">
   <link rel="stylesheet" href="css/fab.css">
- 
+
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script data-main="app" src="scripts/requirejs/require.js"></script>
   <title>Password Reuse Manager</title>
 
 </head>
 <body>
-<datalist id="historyList"></datalist>
+  <datalist id="historyList"></datalist>
 
   <div id="fab_wrapper">
     <div id="fab_content">
@@ -49,12 +49,15 @@
    </div>
    <div id="categoryContainer"></div>
  </div>
-
- <div id="entryContainer"></div>
+ <div class="card-wrapper">
+   <div id="entryContainer"></div>
+ </div>
  <div class="page-header">
    <h1>Unique Passwords <small></small></h1>
  </div>
+ <div class="card-wrapper">
  <div id="uniqueEntryContainer"></div>
+ </div>
  <!-- Modal Category -->
  <div class="modal modal-mp fade" id="modalCategory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
@@ -99,7 +102,7 @@
      <div class="modal-body">
        <form>
         <div class="form-group">
-          
+
           <input type="text" class="form-control" id="modalInputMPW" placeholder="Enter Masterpassword">
         </div>
         <div class="modal-hint">
@@ -107,7 +110,7 @@
         </div>
       </form>
     </div>
-</div>
+  </div>
 </div>
 </div>
 

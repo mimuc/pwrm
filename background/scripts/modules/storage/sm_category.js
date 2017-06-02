@@ -32,31 +32,35 @@ define(['scripts/modules/tools/showPW'],function(showPW) {
 					
 
 					$(this).click(function(event) {
+						var entryContainer = $('#entryContainer');
+						var panelCard = $('.panel-card');
 						event.stopImmediatePropagation(); //prevents firing twice per click
 						if(!$('#panel_'+categoryName).hasClass('category-focused')){
-							$('.panel-card').addClass('low-color');
-							$('.panel-card').removeClass('category-focused');
+							panelCard.addClass('low-color');
+							panelCard.removeClass('category-focused');
 							$('#panel_'+categoryName).removeClass('low-color');
 
 							$('#panel_'+categoryName).toggleClass('category-focused');
-							$('#entryContainer').empty();
+							entryContainer.empty();
 							// console.log($(this).attr('haspw'));
 							var ic = $(this).find('.lock-icon').text();
 							var _hasPW = (ic == 'lock') ? true : false;
-							console.log("hasPW: " + _hasPW);
-						_this.displayCategoryHeader(catName, _hasPW); //update hasPW before displaying header
-						// TODO hier
+							// console.log("hasPW: " + _hasPW);
+							_this.displayCategoryHeader(catName, _hasPW); //update hasPW before displaying header
+							sm.loadEntries(categoryName, false);
+						}else{
+							console.log("deselected");
+							$('#panel_'+categoryName).toggleClass('category-focused');
+							panelCard.addClass('low-color');
+							var entryContainer = $('#entryContainer');
+							var cardWrapper = entryContainer.parent();
+							
+							entryContainer.fadeOut(300);
 
-						sm.loadEntries(categoryName, false);
-					}else{
-						console.log("deselected");
-						$('#panel_'+categoryName).toggleClass('category-focused');
-						$('.panel-card').addClass('low-color');
-						$('#entryContainer').empty();
-					}
-
-					
-				});
+							entryContainer.empty();
+							entryContainer.hide();
+						}					
+					});
 
 					$('#cat-icon').attr('id',categoryName+'-icon')
 					.html(getIcon(iconName));					
@@ -90,6 +94,11 @@ define(['scripts/modules/tools/showPW'],function(showPW) {
 		},
 		displayCategoryHeader : function(name, hasPW){
 			var entryContainer = $('#entryContainer');
+			var cardWrapper = entryContainer.parent();
+		
+			cardWrapper.fadeIn(300);
+			entryContainer.fadeIn(400);
+			
 
 			if(hasPW){
 				entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden">*******</span><span type="cat" cat="'+name+'" class="showPW">show</span><a id="editCategory" class="link" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div></div><hr>');

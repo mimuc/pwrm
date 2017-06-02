@@ -102,11 +102,11 @@ function setup(){
 
   clearInputs(); 
 
-  $(document).click(function(){
-    console.log("clicked");
-    $('#categoryContainer .panel-heading').removeClass('category-focused');
-    $('#entryContainer').empty();
-  });
+  // $(document).click(function(){
+  //   console.log("clicked");
+  //   $('#categoryContainer .panel-heading').removeClass('category-focused');
+  //   $('#entryContainer').empty();
+  // });
 
   // add event listeners to buttons and inputs
   addPWD.addEventListener('click', showPWDInput);

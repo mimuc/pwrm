@@ -15,6 +15,7 @@ define(['scripts/modules/tools/showPW', 'psl','jquery','scripts/modules/storage/
 				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-6">01.01.17</div><div class="entry-actions"><div class="col-lg-2"></div><div class="col-lg-2"><a><i id="'+ url +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.id+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
 			}else{
 				entryContainer = document.querySelector('#uniqueEntryContainer');
+				entryContainer.style.display = '';
 				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-3">01.01.17</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2"><span type="unique" url="'+url+'" class="showPW">show</span></div><div class="col-lg-2"><a><i id="'+ url +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.id+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
 			}
 
@@ -23,7 +24,9 @@ define(['scripts/modules/tools/showPW', 'psl','jquery','scripts/modules/storage/
 			entryWrapper.setAttribute('class', 'entry-row row');
 			entryContainer.appendChild(entryWrapper);
 
-			
+			var ew = $('#entryWrapper_'+credential.id);
+			ew.fadeIn();
+			// ew.animate({marginTop:"-=100px"},300);
 
 
 			$('#entryWrapper_'+credential.id).hover(function() {
@@ -43,7 +46,7 @@ define(['scripts/modules/tools/showPW', 'psl','jquery','scripts/modules/storage/
 						if(mpHttpRequest.status === 404){
 							mpCallback(null);
 						}else if (mpHttpRequest.readyState == 4 && mpHttpRequest.status == 200)
-							mpCallback(mpHttpRequest.responseText);
+						mpCallback(mpHttpRequest.responseText);
 					}
 					mpHttpRequest.open( "GET", mpURL, true );            
 					mpHttpRequest.send( null );
@@ -99,9 +102,9 @@ define(['scripts/modules/tools/showPW', 'psl','jquery','scripts/modules/storage/
 
     			$('#entryWrapper_'+credential.id+' .placeholder-img').attr('src', favIcon);
     			
-		});
+    		});
 
-	
+
 			function deleteThisEntry(url){
 				console.log("Function : deleteThisEntry");
 				var gettingEntries = browser.storage.local.get("entries");
