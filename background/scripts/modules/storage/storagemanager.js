@@ -70,7 +70,8 @@ define(["jquery","psl","scripts/modules/tools/tools","scripts/modules/storage/sm
 		},
 
 		storeEntry: function(mUrl, mCredential, toggleModal) {
-			console.log("Function : storeEntry");
+			console.log("Function : storeEntry");			
+
 			//first get current storage
 			var gettingEntries = browser.storage.local.get("entries");
 			gettingEntries.then((results) => {
@@ -144,16 +145,26 @@ define(["jquery","psl","scripts/modules/tools/tools","scripts/modules/storage/sm
 			var gettingItem = browser.storage.local.get(entryURL);
 			gettingItem.then((result) => {
 				var objTest = Object.keys(result);
+				//dirty! 
+				var mUrl;
+				if(entryURL.indexOf('google')>0){
+					mUrl = "https://accounts.google.com";
+					console.log(entryURL.indexOf('google'));
+				}
+				else{
+					mUrl = entryURL;
+				}
+
 				if(useUniquePWD){
 					credential = {username: entryUsername, id: randID, password: password};
-					this.storeEntry(entryURL, credential, true);
+					this.storeEntry(mUrl, credential, true);
 				}else{
-					if(objTest.length < 1 && entryURL !== '' && entryUsername !== '') {
-						entryURL.value = ''; entryUsername.value = ''; entryCategory.value ='';
+					if(objTest.length < 1 && mUrl !== '' && entryUsername !== '') {
+						mUrl.value = ''; entryUsername.value = ''; entryCategory.value ='';
 						var credential;
 						credential = {category: entryCategory, username: entryUsername, id: randID};
 					}
-					this.storeEntry(entryURL, credential, true);
+					this.storeEntry(mUrl, credential, true);
 				}
 			}, onError);
 			
