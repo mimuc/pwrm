@@ -13,19 +13,31 @@ define(function(){
 		},
 
 		getEntries: function(callback){
-		// todo
+		var gettingEntries = browser.storage.local.get("entries");
+		gettingEntries.then((results) => {
+			callback(results);
+		});
 		},
 
 		getCategories: function(callback){
-		// todo
+			var gettingCategories = browser.storage.local.get("categories");
+			gettingCategories.then((results) => {
+				callback(results);
+			});
 		},
 
 		setEntries: function(value, callback){
-		// todo
+			var storingEntry = browser.storage.local.set(value);
+			storingEntry.then(() => {
+				callback();
+			});
 		},
 
 		setCategories: function(value, callback){
-		// todo
+			var storingCategory = browser.storage.local.set(value);
+			storingCategory.then(()=> {
+				callback();
+			});
 		}
 }
 });

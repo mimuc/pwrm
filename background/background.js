@@ -86,7 +86,9 @@ function handleMessage(message, sender, sendResponse) {
 	console.log(message);
 	if(message.task == 'store'){
 		console.log(message.url);
-		quickAddEntry(message.url, message.username, message.cat, message.pw);
+		require(['MVC_Controller_Managerpage'], function(controller){
+			controller.quickAddEntry(message.url, message.username, message.cat, message.pw);
+		});
 		sendResponse("Saving entry");
 	}else if(message.task == 'showPW'){
 		requestPassword(message.url, message.entryType, message.hash, sendResponse);
