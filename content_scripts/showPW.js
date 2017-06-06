@@ -14,45 +14,48 @@ function setupInputMPW(elem){
 	if(elem.attr('type') == 'unique'){
 		entry = elem.attr('url');
 		unique = true;
+
 	}else{
 		entry = elem.attr('cat');
 	}
 
 	$('#inputMPW').on('keyup', function() {
-		console.log($(this).val());
-
-		if ($(this).val().length > 0){
-			doubleCheckMPW($(this).val(),
-				function(){
-					getPW();
-				});
+		var val = $(this).val();
+		if (val.length > 0){
+			doubleCheckMPW(
+				CryptoJS.MD5(val),
+				function(){getPW(val)});
 		}
 	});
 
 	function doubleCheckMPW(a, doNext){
-	var callback = function(res){
-		if(a==res.mpw){doNext();
+		console.log("Function : doubleCheckMPW");
+		var callback = function(res){
+			if(a.toString()==res.toString()){doNext();
+			}
 		}
+		getMPW(callback);
 	}
-	getMPW(callback);
-}
 
-function getMPW(callback){
-	browser.storage.local.get("mpw").then(function(res){callback(res);});
-}
+	function getMPW(callback){
+		browser.storage.local.get("mpw").then(function(res){callback(res.mpw);});
+	}
 
-function getPW(){
-	console.log("Function : getPW");
+	function getPW(passphrase){
+		console.log("Function : getPW");
 
-	if(unique){
+		if(unique){
+			console.log("get unique pw");
 					// get unique pw
 					browser.storage.local.get("entries").then(function(res){
 						var e = res.entries;
 						for(key in e){
 							//pw entry found
 							if(key == entry){
-								console.log(e[key].password);
-								elem.parent().find('.pwd-hidden').html(e[key].password);
+								crypt.decrypt_aes(e[key].password, passphrase, function(result){
+									elem.parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));
+								});
+								
 								$('#inputMPW').val('');
 								$('#inputMPW').hide();
 								$('#pwhint_stored').show();
@@ -72,8 +75,10 @@ function getPW(){
 						for(key in e){
 
 							if(key == entry){
-								console.log(e[key][2]);
-								elem.parent().find('.pwd-hidden').html(e[key][2]);
+								crypt.decrypt_aes(e[key][2], passphrase, function(result){
+									elem.parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));
+								});
+
 								$('#inputMPW').val('');
 								$('#inputMPW').hide();
 								$('#pwhint_stored').show();
@@ -89,6 +94,6 @@ function getPW(){
 			}
 
 
-}
+		}
 
 

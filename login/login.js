@@ -81,22 +81,22 @@ function openManager(){
 	});
 	});
 }
+
+
 //first time mpw was entered -> encrypt and doublecheck hashes
 $('.onboarding a.btn-mp').click(function(){
 	var mpw = $('#inputCreateMPW').val();
-	console.log(mpw);
 	//store mpw
-
-	browser.storage.local.set({"mpw" : mpw});
+	console.log(CryptoJS.MD5(mpw).toString());
+	browser.storage.local.set({"mpw" : CryptoJS.MD5(mpw).toString()});
 	$('.onboarding').fadeOut().addClass('hidden');
 	$('.onboarding_2').removeClass('hidden').fadeIn();
 });
 
 $('.onboarding_2 a.btn-mp').click(function(){
-	var mpwr = $('#inputConfirmMPW').val();
-	console.log("das zweite " + mpwr);
-	
-	doubleCheckMPW($('#inputConfirmMPW').val(),
+	var mpwr = CryptoJS.MD5($('#inputConfirmMPW').val()).toString();
+	console.log(mpwr);
+	doubleCheckMPW(mpwr,
 		function(){
 			$('.onboarding_2').fadeOut().addClass('hidden');
 			$('.onboarding_3').removeClass('hidden').fadeIn();
@@ -106,10 +106,11 @@ $('.onboarding_2 a.btn-mp').click(function(){
 		});
 });
 
+
 function doubleCheckMPW(a, doNext, showError){
 	var callback = function(res){
 		if(a==res.mpw){doNext();
-		}else{showError();}
+		}else{}
 	}
 	getMPW(callback);
 }

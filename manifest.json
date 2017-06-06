@@ -36,15 +36,15 @@
   ],
   "background_page": {
 
-    "scripts": ["background/background.js"],
+    "scripts": ["background/scripts/MVC_Controller_Managerpage.js"],
     "page": ["background/background.html"]
   },
 
   "browser_action": {
     "default_icon": "icons/icon-48.png",
     "default_title": "PWRM",
-    // "default_popup": "popup/popup_default.html"
-    "default_popup": "popup/popup_simple.html"
+    // "default_popup": "popup/popup.html"
+    "default_popup": "popup/popup.html"
   },
 
 
