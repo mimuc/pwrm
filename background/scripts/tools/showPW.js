@@ -1,4 +1,4 @@
-define(['jquery','scripts/tools/crypt'] ,function($, crypt){
+define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,function($, crypt, aes){
 	return{
 		// distinguish between background page and content_script request 
 		// background page (managerpage) calls only provide the first argument
@@ -18,7 +18,7 @@ define(['jquery','scripts/tools/crypt'] ,function($, crypt){
 					var val = $(this).val();
 					if (val.length > 0){
 						doubleCheckMPW(
-							CryptoJS.MD5(val),
+							CryptoJS.SHA512(val),
 							function(){getPW(val)});
 					}
 				});
@@ -28,7 +28,7 @@ define(['jquery','scripts/tools/crypt'] ,function($, crypt){
 				entry = mUrl;
 
 				doubleCheckMPW(
-					CryptoJS.MD5(mHash),
+					CryptoJS.SHA512(mHash),
 					function(){getPW(mHash)}
 				);
 			}
@@ -37,6 +37,8 @@ define(['jquery','scripts/tools/crypt'] ,function($, crypt){
 			});
 			
 			function doubleCheckMPW(a, doNext){
+				console.log("Function : doubleCheckMPW");
+				console.log(a.toString());
 				var callback = function(res){
 					if(a.toString() == res.toString()){
 						doNext();

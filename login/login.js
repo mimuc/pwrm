@@ -3,7 +3,7 @@ $(document).ready(function() {
 	//if no masterpw was set in local storage: init onboarding
 	var gettingMPW = browser.storage.local.get("mpw");
 	gettingMPW.then((results) => {
-		var mpwHash = CryptoJS.MD5(results["mpw"]);
+		var mpwHash = CryptoJS.SHA512(results["mpw"]);
 		if(results["mpw"] == null){
 			initOnboarding();
 		}else{
@@ -13,7 +13,7 @@ $(document).ready(function() {
 	
 	$('#inputMPW').on('keyup', function() {
 		if (this.value.length > 0){
-			doubleCheckMPW(CryptoJS.MD5($('#inputMPW').val()),
+			doubleCheckMPW(CryptoJS.SHA512($('#inputMPW').val()),
 				function(){
 					openManager();
 				});
@@ -87,14 +87,14 @@ function openManager(){
 $('.onboarding a.btn-mp').click(function(){
 	var mpw = $('#inputCreateMPW').val();
 	//store mpw
-	console.log(CryptoJS.MD5(mpw).toString());
-	browser.storage.local.set({"mpw" : CryptoJS.MD5(mpw).toString()});
+	console.log(CryptoJS.SHA512(mpw).toString());
+	browser.storage.local.set({"mpw" : CryptoJS.SHA512(mpw).toString()});
 	$('.onboarding').fadeOut().addClass('hidden');
 	$('.onboarding_2').removeClass('hidden').fadeIn();
 });
 
 $('.onboarding_2 a.btn-mp').click(function(){
-	var mpwr = CryptoJS.MD5($('#inputConfirmMPW').val()).toString();
+	var mpwr = CryptoJS.SHA512($('#inputConfirmMPW').val()).toString();
 	console.log(mpwr);
 	doubleCheckMPW(mpwr,
 		function(){
@@ -136,7 +136,7 @@ function initLogin(){
 
 $('#btnUnlock').on('click', function(){
 	doubleCheckMPW(
-		CryptoJS.MD5($('#inputMPW').val()),
+		CryptoJS.SHA512($('#inputMPW').val()),
 		function(){
 			openManager();
 		},

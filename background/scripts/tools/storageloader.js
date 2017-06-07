@@ -8,7 +8,7 @@ define(function(){
 		},
 
 		setMPWHash: function(value){
-			var val = {"mpw" : CryptoJS.MD5(value)}
+			var val = {"mpw" : CryptoJS.SHA512(value)}
 			browser.storage.local.set(val);
 		},
 

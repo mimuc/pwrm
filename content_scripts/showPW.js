@@ -23,7 +23,7 @@ function setupInputMPW(elem){
 		var val = $(this).val();
 		if (val.length > 0){
 			doubleCheckMPW(
-				CryptoJS.MD5(val),
+				CryptoJS.SHA512(val),
 				function(){getPW(val)});
 		}
 	});

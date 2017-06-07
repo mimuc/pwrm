@@ -13,7 +13,7 @@ define(['scripts/cryptojs/rollups/aes','scripts/tools/storageloader'],function(a
 			console.log("crypt- pw_enc: "+ enc);
 			sl.getMPWHash(function(result){
 				var mpwHash = result.mpw;
-				var h_passphrase = CryptoJS.MD5(passphrase).toString();
+				var h_passphrase = CryptoJS.SHA512(passphrase).toString();
 				// check passphrase against MPWHash in storage
 				if (mpwHash == h_passphrase){
 					var decrypted = CryptoJS.AES.decrypt(enc, h_passphrase); 
@@ -21,7 +21,7 @@ define(['scripts/cryptojs/rollups/aes','scripts/tools/storageloader'],function(a
 				callback(decrypted);
 		});
 
-		}
+		}	
 
 	}
 });

@@ -158,7 +158,7 @@ function triggerStore(){
     entryCategory = inputCategoryDropdown[0].value;
 
   }else{ //option-pwd
-    password =  document.querySelector('#enterPWD').value;
+    password =  CryptoJS.SHA512(document.querySelector('#enterPWD').value);
     useUniquePWD = true;
   }
 
