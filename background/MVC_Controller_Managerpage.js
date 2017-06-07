@@ -14,7 +14,6 @@ define(['MVC_View_Managerpage', 'scripts/tools/showPW', 'psl'],
     };
     var displayEntry = exports.displayEntry = function(mUrl, credential, hasCategory){
       console.log("Controller : displayEntry");
-
       var turl = mUrl.split("/")[2]; // Get the hostname
       var parsed = psl.parse(turl); // Parse the domain
       var urlName = parsed.domain;

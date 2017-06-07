@@ -176,6 +176,7 @@ function triggerStore(){
       cat: entryCategory,
       pw: password
     }, function (response) {
+      console.log("response: ");
       console.log(response);
     });
   });

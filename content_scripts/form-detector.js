@@ -280,9 +280,9 @@ if($('#hbpwrm').length){
         var val = $('#inputMPW').val();
         if (val.length > 0){
           var e = $('#inputMPW').attr('type');
-          chrome.runtime.sendMessage({task: "showPW", url: URL, entryType: "unique", hash: val}, function (response) {
-            console.log(response);
-          });
+          chrome.runtime.sendMessage(
+            {task: "showPW", url: URL, entryType: "unique", hash: CryptoJS.SHA512(val)}
+          );
 
         }
       });
@@ -296,6 +296,8 @@ if($('#hbpwrm').length){
 function removeHintbox(){
   $('#hbpwrm').remove();
 }
+
+
 
 
 
@@ -331,9 +333,23 @@ function handleError(error) {
 chrome.runtime.onMessage.addListener(handleMessage);
 
 function handleMessage(request, sender, sendResponse){
+  console.log(request);
   if(request == "task_detect"){
     //start detector
     init();
+  }else if(request.action == 'requestPW'){
+    //TODO
+    console.log(request.content);
+    sendResponse("yo");
+    // TODO display pw in span
+    $('#pwhint_stored').show();
+    $('#inputMPW').hide();
+    $('.showPW').html('hide');
+    $('.pwd-hidden').html(request.content);
+    $('.showPW').click(function(){
+        $('.showPW').html('show');
+        $('.pwd-hidden').html('*******');
+    });
   }
 }
 

@@ -26,6 +26,7 @@
       "js": [
         "content_scripts/jquery.js",
         "content_scripts/psl.min.js",
+        "content_scripts/sha512.js",
         "content_scripts/showPW.js", 
         "content_scripts/form-detector.js",
         "content_scripts/categorizer.js"],
