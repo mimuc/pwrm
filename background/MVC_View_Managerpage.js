@@ -1,13 +1,9 @@
-define(['scripts/tools/showPW','scripts/tools/crypt', 'psl','jquery', 'scripts/tools/storageloader', 'MVC_Controller_Managerpage'],
-	function(showPW, crypt, psl, $, SL, controller) {
+define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/storageloader', 'MVC_Controller_Managerpage'],
+	function(showPW, crypt, $, SL, controller) {
 	var exports = {};
 
-	var displayEntry = exports.displayEntry = function(url, credential, hasCategory) {
+	var displayEntry = exports.displayEntry = function(url, urlName, credential, hasCategory) {
 			var entryContainer, content;
-
-			var turl = url.split("/")[2]; // Get the hostname
-			var parsed = psl.parse(turl); // Parse the domain
-			var urlName = parsed.domain;
 
 			if(credential.category != null){
 				entryContainer = document.querySelector('#entryContainer');
@@ -27,7 +23,6 @@ define(['scripts/tools/showPW','scripts/tools/crypt', 'psl','jquery', 'scripts/t
 			ew.fadeIn();
 			// ew.animate({marginTop:"-=100px"},300);
 
-
 			$('#entryWrapper_'+credential.id).hover(function() {
 				/* Stuff to do when the mouse enters the element */
 				$('#entryWrapper_'+credential.id+' .entry-actions').show();
@@ -35,10 +30,8 @@ define(['scripts/tools/showPW','scripts/tools/crypt', 'psl','jquery', 'scripts/t
 				$('#entryWrapper_'+credential.id+' .entry-actions').hide();
 			});
 			
-			var requestURL = "https://icons.better-idea.org/allicons.json?url="+urlName;
+			var requestURL = "https://icons.better-idea.org/allicons.json?url="+url;
 			var wrapper = $('#entryWrapper_'+credential.id);
-
-			
 
 			wrapper.append(content);
 
@@ -376,6 +369,21 @@ define(['scripts/tools/showPW','scripts/tools/crypt', 'psl','jquery', 'scripts/t
 
 		});
 	};
+	var showPWInput = exports.showPWInput = function(){
+		var storePW = ($('#btnAddPWD').text() === 'add password') ? true : false;
+		var txt = (storePW) ? 'remove password' : 'add password';
+		var msg = (storePW) ? 'A category password will be stored.' : 'No password will be stored for this category and its entries.';
+		var icon = (storePW) ? 'lock':'lock_open';
+		$('#btnAddPWD').html(txt);
+		$('#pw-hint span').html(msg);
+		$('#pw-hint i').html(icon);
+		$('#category-pwd').val('');
+		$('#enter-category-pwd').toggleClass('hidden');
+	};
+	var clearInputs = exports.clearInputs = function(){
+
+		$('input').val('');
+	}
 
 	// private functions
 	var setupModalCategory = function(hasPW){
@@ -493,6 +501,7 @@ define(['scripts/tools/showPW','scripts/tools/crypt', 'psl','jquery', 'scripts/t
 
 		});
 	};
+
 	
 	return exports;
 });

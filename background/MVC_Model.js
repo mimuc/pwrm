@@ -124,7 +124,6 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 		if(entryURL.substring(entryURL.length-1)=='/'){
 			entryURL = entryURL.slice(0, -1);
 		}*/
-		
 		var entryUsername = inputUsername.value;
 
 		var gettingItem = browser.storage.local.get(entryURL);
@@ -139,7 +138,6 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 			else{
 				mUrl = entryURL;
 			}
-
 			if(useUniquePWD){
 				credential = {username: entryUsername, id: randID, password: pwdHash};
 				this.storeEntry(mUrl, credential, true);
@@ -192,6 +190,11 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 			console.log("Model : initCategories");
 			browser.storage.local.set({"categories" : {}});
 	};
+	var onError = function(e){
+		
+		console.log(e);
+	};
 		
 	return exports;
+	
 });

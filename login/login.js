@@ -3,8 +3,8 @@ $(document).ready(function() {
 	//if no masterpw was set in local storage: init onboarding
 	var gettingMPW = browser.storage.local.get("mpw");
 	gettingMPW.then((results) => {
-		var mpwHash = results["mpw"];
-		if(mpwHash == null){
+		var mpwHash = CryptoJS.MD5(results["mpw"]);
+		if(results["mpw"] == null){
 			initOnboarding();
 		}else{
 			initLogin();
@@ -13,7 +13,7 @@ $(document).ready(function() {
 	
 	$('#inputMPW').on('keyup', function() {
 		if (this.value.length > 0){
-			doubleCheckMPW($('#inputMPW').val(),
+			doubleCheckMPW(CryptoJS.MD5($('#inputMPW').val()),
 				function(){
 					openManager();
 				});
@@ -108,6 +108,8 @@ $('.onboarding_2 a.btn-mp').click(function(){
 
 
 function doubleCheckMPW(a, doNext, showError){
+	console.log("Function : doubleCheckMPW");
+	console.log(a);
 	var callback = function(res){
 		if(a==res.mpw){doNext();
 		}else{}
@@ -134,7 +136,7 @@ function initLogin(){
 
 $('#btnUnlock').on('click', function(){
 	doubleCheckMPW(
-		$('#inputMPW').val(),
+		CryptoJS.MD5($('#inputMPW').val()),
 		function(){
 			openManager();
 		},

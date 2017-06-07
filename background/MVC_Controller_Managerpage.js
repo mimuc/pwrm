@@ -1,7 +1,7 @@
 // DON'T DEFINE MVC_MODEL HERE => circular dependency
 // solution: reuqire on demand
-define(['MVC_View_Managerpage', 'scripts/tools/showPW'],
-  function(MVC_View_Managerpage, showPW){
+define(['MVC_View_Managerpage', 'scripts/tools/showPW', 'psl'],
+  function(MVC_View_Managerpage, showPW, psl){
     var exports = {};
 
     var changeCategoryIcon = exports.changeCategoryIcon = function(catName, iconName){
@@ -14,7 +14,13 @@ define(['MVC_View_Managerpage', 'scripts/tools/showPW'],
     };
     var displayEntry = exports.displayEntry = function(mUrl, credential, hasCategory){
       console.log("Controller : displayEntry");
-      MVC_View_Managerpage.displayEntry(mUrl, credential, hasCategory);
+
+      var turl = mUrl.split("/")[2]; // Get the hostname
+      var parsed = psl.parse(turl); // Parse the domain
+      var urlName = parsed.domain;
+      urlName = urlName.split(".")[0];
+
+      MVC_View_Managerpage.displayEntry(mUrl, urlName, credential, hasCategory);
     };
     var fillDropdown = exports.fillDropdown = function(categories){
       console.log("Controller : fillDropdown");
@@ -60,6 +66,7 @@ define(['MVC_View_Managerpage', 'scripts/tools/showPW'],
         sendResponse(result);
       });
     };
+    
 
   return exports;
 });

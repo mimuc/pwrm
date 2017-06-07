@@ -1,11 +1,12 @@
 define(['jquery','scripts/tools/crypt'] ,function($, crypt){
 	return{
-		// distinguish between background page and content_script request
-		// TODO
+		// distinguish between background page and content_script request 
+		// background page (managerpage) calls only provide the first argument
 		trigger : function(elem, mType, mUrl, mHash, mCallback){
 			var ret; var entry; var unique = false;
 			//call origin: background
 			if(mType == null && mUrl == null){
+
 				if(elem.attr('type') == 'unique'){
 					entry = elem.attr('url');
 					unique = true;
@@ -21,9 +22,8 @@ define(['jquery','scripts/tools/crypt'] ,function($, crypt){
 							function(){getPW(val)});
 					}
 				});
-
+			// call origin: content script 
 			}else{
-				// call origin: content script 
 				unique = true;
 				entry = mUrl;
 

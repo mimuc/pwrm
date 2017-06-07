@@ -14,16 +14,14 @@ define(['scripts/cryptojs/rollups/aes','scripts/tools/storageloader'],function(a
 			sl.getMPWHash(function(result){
 				var mpwHash = result.mpw;
 				var h_passphrase = CryptoJS.MD5(passphrase).toString();
-				var data = "";
-			// check passphrase against MPWHash in storage
-			if (mpwHash == h_passphrase){
-				var decrypted = CryptoJS.AES.decrypt(enc, mpwHash); 
-			}
-			callback(decrypted);
+				// check passphrase against MPWHash in storage
+				if (mpwHash == h_passphrase){
+					var decrypted = CryptoJS.AES.decrypt(enc, h_passphrase); 
+				}
+				callback(decrypted);
 		});
 
 		}
-
 
 	}
 });
