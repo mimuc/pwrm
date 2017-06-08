@@ -9,8 +9,9 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 			var categories = results["categories"];
 			if(categories == null || categories.length == 0){
 				var cat = {"categories" : {
-					Banking : ["Info", "folder"],
-					Email : ["Info", "email"]
+					Very_Important : ["Info", "folder"],
+					Important : ["Info", "folder"],
+					Crappy : ["Info", "trending_down"]
 					
 				}};
 				var setting = browser.storage.local.set(cat);
