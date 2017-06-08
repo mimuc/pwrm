@@ -317,6 +317,10 @@ h2.row-header{
 .panel-group{
 	background-color: #f5f5f5;
 }
+.lock-icon{
+	margin-top: -11px;
+	font-size: 2em !important;
+}
 
 .pwd-hidden{
 	min-width: 160px;
