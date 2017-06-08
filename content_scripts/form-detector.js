@@ -280,12 +280,11 @@ if($('#hbpwrm').length){
         var val = $('#inputMPW').val();
         if (val.length > 0){
           var e = $('#inputMPW').attr('type');
-          var unique = $('.hintbox').hasClass('unique');
+          var mtype = $('.hintbox').hasClass('unique') ? 'unique' : 'cat';
 
           chrome.runtime.sendMessage(
-            {task: "showPW", url: URL, entryType: unique, hash: val, category : credentials.category}
+            {task: "showPW", url: URL, entryType: mtype, hash: val, category : credentials.category}
           );
-
         }
       });
     }
