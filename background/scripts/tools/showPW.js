@@ -2,7 +2,7 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 	return{
 		// distinguish between background page and content_script request 
 		// background page (managerpage) calls only provide the first argument
-		trigger : function(elem, mType, mUrl, mHash, mCallback){
+		trigger : function(elem, mType, mUrl, mHash, mCategory, mCallback){
 			var ret; var entry; var unique = false;
 			//call origin: background
 			if(mType == null && mUrl == null){
@@ -24,8 +24,9 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 				});
 			// call origin: content script 
 			}else{
-				unique = true;
-				entry = mUrl;
+				console.log("check");
+				unique = (mType=='unique');
+				entry = (unique) ? mUrl : mCategory;
 
 				doubleCheckMPW(
 					CryptoJS.SHA512(mHash),
@@ -38,8 +39,9 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 			
 			function doubleCheckMPW(a, doNext){
 				console.log("Function : doubleCheckMPW");
-				console.log(a.toString());
 				var callback = function(res){
+					console.log(a.toString());
+					console.log(res.toString());
 					if(a.toString() == res.toString()){
 						doNext();
 					}
@@ -92,7 +94,9 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 					console.log("get cat pw");
 					browser.storage.local.get("categories").then(function(res){
 						var e = res.categories
+								console.log("entry = " + entry);
 						for(key in e){
+							console.log("key: " + key);
 							if(key == entry){
 								// e[key][2]
 								crypt.decrypt_aes(e[key][2], passphrase, function(result){

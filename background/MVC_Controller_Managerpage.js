@@ -34,7 +34,10 @@ define(['MVC_View_Managerpage', 'scripts/tools/showPW', 'psl'],
       MVC_View_Managerpage.displayNumberEntries();
     };
     var createCategory = exports.createCategory = function(){
-      var value = modalCategoryName.value;  var pw; var ecpwd = $('#category-pwd');
+      var value = modalCategoryName.value;
+      value = value.replace(' ', '_');
+      console.log(value);
+      var pw; var ecpwd = $('#category-pwd');
       if(ecpwd.hasClass('hidden')){ 
         pw = null;        
       }else{
@@ -57,12 +60,18 @@ define(['MVC_View_Managerpage', 'scripts/tools/showPW', 'psl'],
         MVC_Model.quickAddEntry(murl, musername, mcat, mpw);
       });
     };
-    var requestPassword = exports.requestPassword = function(mUrl, type, mHash, sendResponse){
+    var requestPassword = exports.requestPassword = function(mUrl, type, mHash, mCategory){
       //ATTENTION!
       //must be called from background.js TODO
       console.log("Function : requestPassword");
-      showPW.trigger(null, type, mUrl, mHash, function(result){
-        sendResponse(result);
+      showPW.trigger(null, type, mUrl, mHash, mCategory, function(result){
+        var msg = {action : "requestPW", content: result};
+        // does only work when backgroundpage is opened?!
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {  
+          chrome.tabs.sendMessage(tabs[0].id, msg, function(response) {
+            console.log(response);
+          }); 
+        });
       });
     };
     

@@ -1,8 +1,8 @@
 define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/storageloader', 'MVC_Controller_Managerpage'],
 	function(showPW, crypt, $, SL, controller) {
-	var exports = {};
+		var exports = {};
 
-	var displayEntry = exports.displayEntry = function(url, urlName, credential, hasCategory) {
+		var displayEntry = exports.displayEntry = function(url, urlName, credential, hasCategory) {
 			var entryContainer, content;
 
 			if(credential.category != null){
@@ -83,14 +83,14 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 				$('#entryWrapper_'+credential.id+' .placeholder-img').attr('src', favIcon);
 				
 			});
-	};
-	var createCategoryElement = exports.createCategoryElement = function(categoryName, notes, iconName, pwd){
-		
-		var container = document.querySelector('#categoryContainer');
-		require(['jquery','MVC_Model'], function($, sm) {
-			
-			var hasPW = (pwd!=null);
-			var icon_lock = (hasPW) ? 'lock':'lock_open';
+		};
+		var createCategoryElement = exports.createCategoryElement = function(categoryName, notes, iconName, pwd){
+
+			var container = document.querySelector('#categoryContainer');
+			require(['jquery','MVC_Model'], function($, sm) {
+
+				var hasPW = (pwd!=null);
+				var icon_lock = (hasPW) ? 'lock':'lock_open';
 
 			//load snippet
 			$('#categoryContainer').append('<div id="wrapper_'+categoryName+'"></div>');
@@ -116,7 +116,12 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 					var entryContainer = $('#entryContainer');
 					var panelCard = $('.panel-card');
 					event.stopImmediatePropagation(); //prevents firing twice per click
+
+					
 					if(!$('#panel_'+categoryName).hasClass('category-focused')){
+						// testing
+						// end testing
+
 						panelCard.addClass('low-color');
 						panelCard.removeClass('category-focused');
 						$('#panel_'+categoryName).removeClass('low-color');
@@ -136,10 +141,11 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 						var entryContainer = $('#entryContainer');
 						var cardWrapper = entryContainer.parent();
 						
-						entryContainer.fadeOut(300);
+						// entryContainer.fadeOut(200);
 
-						entryContainer.empty();
-						entryContainer.hide();
+						// entryContainer.empty();
+						// entryContainer.hide();
+						fadeSlideDown(cardWrapper);
 					}					
 				});
 
@@ -150,10 +156,10 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 			});
 		});
 
-		displayNumberEntries();	
+			displayNumberEntries();	
 
-		function getIcon(name){
-			console.log("View : getIcon");
+			function getIcon(name){
+				console.log("View : getIcon");
 			/*
 			var iconString = "folder";
 			switch(name){
@@ -174,8 +180,10 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 		var entryContainer = $('#entryContainer');
 		var cardWrapper = entryContainer.parent();
 
-		cardWrapper.fadeIn(300);
+
+		// cardWrapper.fadeIn(300);
 		entryContainer.fadeIn(400);
+		fadeSlideUp(cardWrapper);
 		
 
 		if(hasPW){
@@ -186,50 +194,50 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 			//configure modal here (event.relatedTarget is created dynamically)
 			setupModalCategory(hasPW);
 			setupShowButton();
-	};
-	var displayCategories = exports.displayCategories = function(loadUniqueEntries) {
-		console.log("View : displayCategories");
-		setupModalCategory(false);
-		setupShowButton();
-		SL.getCategories(function(c){	
-			var categories = c.categories;
-			for(c in categories){				
+		};
+		var displayCategories = exports.displayCategories = function(loadUniqueEntries) {
+			console.log("View : displayCategories");
+			setupModalCategory(false);
+			setupShowButton();
+			SL.getCategories(function(c){	
+				var categories = c.categories;
+				for(c in categories){				
 			// console.log(c + " password: " + categories[c]);
 			createCategoryElement(c,categories[c][0],categories[c][1], categories[c][2]);
-			}
-
-			if(loadUniqueEntries){
-				require(["MVC_Model"], function(sm){
-					sm.loadEntries(null, true);
-				});
-			}	
-		});
-	};
-	var fillDropdown = exports.fillDropdown = function(categories) {
-		console.log("View : fillDropdown");
-		$('#categoryDropdown').empty();
-		for(c in categories){
-			var e = document.createElement('option');
-			e.textContent = c;
-			document.querySelector('#categoryDropdown').append(e);
-			
 		}
-	};
-	var createCategory = exports.createCategory = function(name, pw, isNew){
-		console.log("View : createCategory");
-		crypt.encrypt_aes(pw, function(data){
-			
-			var pw_enc = (pw=='') ? null : data;
-			var oldName = $('#editCategory').attr('oldValue');
-			var randID = guidGenerator();
-			var cat = ["Info","folder", pw_enc ,randID];
 
-			SL.getCategories(function(result){
-				var mCat = result;
+		if(loadUniqueEntries){
+			require(["MVC_Model"], function(sm){
+				sm.loadEntries(null, true);
+			});
+		}	
+	});
+		};
+		var fillDropdown = exports.fillDropdown = function(categories) {
+			console.log("View : fillDropdown");
+			$('#categoryDropdown').empty();
+			for(c in categories){
+				var e = document.createElement('option');
+				e.textContent = c;
+				document.querySelector('#categoryDropdown').append(e);
+
+			}
+		};
+		var createCategory = exports.createCategory = function(name, pw, isNew){
+			console.log("View : createCategory");
+			crypt.encrypt_aes(pw, function(data){
+
+				var pw_enc = (pw=='') ? null : data;
+				var oldName = $('#editCategory').attr('oldValue');
+				var randID = guidGenerator();
+				var cat = ["Info","folder", pw_enc ,randID];
+
+				SL.getCategories(function(result){
+					var mCat = result;
 				//check if same name exists (--> override/change name or pw)
 				// if(categories.categories != null && categories.categories[name] != null){
-				toggleConfirm();
-				$('#modalYes').on('click', function(event){
+					toggleConfirm();
+					$('#modalYes').on('click', function(event){
 					// event.stopImmediatePropagation(); 
 					//push new entry 
 					mCat.categories[name] = cat;
@@ -253,38 +261,38 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 							displayCategories(false);
 						}
 					});
-				
-				var icon = (pw==null) ? 'lock_open' : 'lock';
-				$('#panel_'+name+' .lock-icon').html(icon);
+
+					var icon = (pw==null) ? 'lock_open' : 'lock';
+					$('#panel_'+name+' .lock-icon').html(icon);
+				});
+					$('#modalNo').on('click', function(event){
+						event.stopImmediatePropagation(); 
+						toggleConfirm();
+					});
+				});			
 			});
-			$('#modalNo').on('click', function(event){
-				event.stopImmediatePropagation(); 
-				toggleConfirm();
-			});
-		});			
-		});
-	};
-	var displayNumberEntries = exports.displayNumberEntries = function(){
-		console.log("View : displayNumberEntries");
-		var gettingCategories = browser.storage.local.get("categories");
-		gettingCategories.then((catResults) => {
-			var categories = catResults["categories"];
-			var gettingEntries = browser.storage.local.get("entries");
-			gettingEntries.then((eResults) => {
-				var entries = eResults["entries"];
-				for(cKey in categories){
-					var number = 0;
-					for(key in entries){
-						if(entries[key].category == cKey) number++;
+		};
+		var displayNumberEntries = exports.displayNumberEntries = function(){
+			console.log("View : displayNumberEntries");
+			var gettingCategories = browser.storage.local.get("categories");
+			gettingCategories.then((catResults) => {
+				var categories = catResults["categories"];
+				var gettingEntries = browser.storage.local.get("entries");
+				gettingEntries.then((eResults) => {
+					var entries = eResults["entries"];
+					for(cKey in categories){
+						var number = 0;
+						for(key in entries){
+							if(entries[key].category == cKey) number++;
+						}
+						if($('#numberAccounts_'+cKey) != null){
+							$('#numberAccounts_'+cKey).html("Number Accounts: " + number);
+						}
 					}
-					if($('#numberAccounts_'+cKey) != null){
-						$('#numberAccounts_'+cKey).html("Number Accounts: " + number);
-					}
-				}
+				});
 			});
-		});
-	};
-	var deleteCategory = exports.deleteCategory = function(category){
+		};
+		var deleteCategory = exports.deleteCategory = function(category){
 		//ask if sure
 		//if category is not empty --> move entries to unsorted
 		console.log("View : deleteCategory");
@@ -447,21 +455,21 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 				var storingEntry = browser.storage.local.set({"entries" : oldEntries});
 				storingEntry.then(() => {
 					console.log("element " + url + " deleted. Entries updated.");
-					MVC_View_Managerpage.displayNumberEntries();
+					displayNumberEntries();
 				}, onError);	
 
 			});
 	};
 	var httpGet = function(mpURL, mpCallback) {
-			var mpHttpRequest = new XMLHttpRequest();
-			mpHttpRequest.onreadystatechange = function() { 
-				if(mpHttpRequest.status === 404){
-					mpCallback(null);
-				}else if (mpHttpRequest.readyState == 4 && mpHttpRequest.status == 200)
-				mpCallback(mpHttpRequest.responseText);
-			}
-			mpHttpRequest.open( "GET", mpURL, true );            
-			mpHttpRequest.send( null );
+		var mpHttpRequest = new XMLHttpRequest();
+		mpHttpRequest.onreadystatechange = function() { 
+			if(mpHttpRequest.status === 404){
+				mpCallback(null);
+			}else if (mpHttpRequest.readyState == 4 && mpHttpRequest.status == 200)
+			mpCallback(mpHttpRequest.responseText);
+		}
+		mpHttpRequest.open( "GET", mpURL, true );            
+		mpHttpRequest.send( null );
 	};
 	var toggleConfirm = function(){
 		console.log("View : toggleConfirm");
@@ -502,6 +510,25 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 		});
 	};
 
-	
-	return exports;
+	var fadeSlideUp = function(element){
+		var entryContainer = $('#entryContainer');
+		element.animate({ opacity: 1 }, { duration: 200, queue: false });
+		element.animate({ "margin-top": "-10px" }, { duration: 200, queue: false });
+		entryContainer.animate({ opacity: 1 }, { duration: 200, queue: false });
+	};
+	var fadeSlideDown = function(element){
+		var entryContainer = $('#entryContainer');
+		setTimeout(function() {
+			entryContainer.empty();
+		}, 410);
+		entryContainer.animate({ opacity: 0 }, { duration: 400, queue: false });
+		element.animate({ opacity: 0 }, { duration: 400, queue: false });
+		element.animate({ "margin-top": "10px" }, { duration: 400, queue: false });
+	};
+	var onError = function(e){
+		console.log(e);
+	}
+
+
+return exports;
 });

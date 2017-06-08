@@ -71,6 +71,7 @@
 
 
 .button-floating {
+    font-weight: 300;
     z-index: 40;
     cursor: pointer;
     background-color: var(--highlight-color);

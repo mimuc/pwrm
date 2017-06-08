@@ -223,7 +223,7 @@ function showHintbox(i, credentials, categories, icon){
 }else{
   // unique entry
   i.classList.add('locked');
-  hintbox = '<div class="hintbox"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">Unique Password</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content mp-hidden"><p>You stored a unique password for this website</p><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden"> ****** </span><span type="unique" class="showPW">show</span></div><input placeholder="Enter Masterpassword" type="password" id="inputMPW"><a id="btnInputMPW">ok</a><hr><a id="openManager">open manager</a></div></div>';
+  hintbox = '<div class="hintbox unique"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">Unique Password</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content mp-hidden"><p>You stored a unique password for this website</p><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden"> ****** </span><span type="unique" class="showPW">show</span></div><input placeholder="Enter Masterpassword" type="password" id="inputMPW"><a id="btnInputMPW">ok</a><hr><a id="openManager">open manager</a></div></div>';
 
 }
 
@@ -280,8 +280,10 @@ if($('#hbpwrm').length){
         var val = $('#inputMPW').val();
         if (val.length > 0){
           var e = $('#inputMPW').attr('type');
+          var unique = $('.hintbox').hasClass('unique');
+
           chrome.runtime.sendMessage(
-            {task: "showPW", url: URL, entryType: "unique", hash: CryptoJS.SHA512(val)}
+            {task: "showPW", url: URL, entryType: unique, hash: val, category : credentials.category}
           );
 
         }
@@ -338,17 +340,16 @@ function handleMessage(request, sender, sendResponse){
     //start detector
     init();
   }else if(request.action == 'requestPW'){
-    //TODO
-    console.log(request.content);
-    sendResponse("yo");
-    // TODO display pw in span
+    //  show pw
     $('#pwhint_stored').show();
     $('#inputMPW').hide();
+    $('#inputMPW').val('');
     $('.showPW').html('hide');
     $('.pwd-hidden').html(request.content);
     $('.showPW').click(function(){
         $('.showPW').html('show');
         $('.pwd-hidden').html('*******');
+
     });
   }
 }

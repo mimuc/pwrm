@@ -6,16 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/bootstrap.css">
   <link rel="stylesheet" href="css/mp.css"/>
-  <link rel="stylesheet" href="css/app.css">
+  <!-- <link rel="stylesheet" href="css/app.css"> -->
   <link rel="stylesheet" href="css/header.css">
   <link rel="stylesheet" href="css/fab.css">
+  <link rel="stylesheet" href="css/animation.css">
 
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet"> 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script data-main="app" src="scripts/requirejs/require.js"></script>
   <title>Password Reuse Manager</title>
 
 </head>
 <body>
+
   <datalist id="historyList"></datalist>
 
   <div id="fab_wrapper">
@@ -45,7 +48,7 @@
 <div class="container">
   <div class="row content container" id="content">
    <div class="page-header">
-     <h1>Password Categories <small> organise your re-used passwords</small></h1>
+     <h1><i class="material-icons"></i>_Password Categories <small> organise your re-used passwords</small></h1>
    </div>
    <div id="categoryContainer"></div>
  </div>
@@ -53,7 +56,7 @@
    <div id="entryContainer"></div>
  </div>
  <div class="page-header">
-   <h1>Unique Passwords <small></small></h1>
+   <h1>_Unique Passwords <small></small></h1>
  </div>
  <div class="card-wrapper">
  <div id="uniqueEntryContainer"></div>

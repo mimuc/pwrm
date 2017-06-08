@@ -1,7 +1,9 @@
 var HttpClient;
 var requestURL = "https://icons.better-idea.org/allicons.json?url=";
-var fab_wrapper = $('#fab_wrapper');
+var fab_wrapper; var feedback;
 $(document).ready(function($) {
+  fab_wrapper = $('#fab_wrapper');
+  feedback = $('#feedback');
   $('.manager').on('click', openPopup);
   fillDropdown();
 
@@ -175,10 +177,8 @@ function triggerStore(){
       username: $('#enterName').val(),
       cat: entryCategory,
       pw: password
-    }, function (response) {
-      console.log("response: ");
-      console.log(response);
     });
+
   });
 
   
@@ -193,3 +193,30 @@ function openPopup() {
    width: 600
  });
 }
+
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if (request.msg === "ok") {
+      $('#feedback').addClass('positive');
+      $('#feedback h2').html('store success');
+      $('#feedback').fadeIn(500, function() {
+        setTimeout(function(){
+         $('#feedback h2').fadeOut(500);
+         $('#feedback').fadeOut(1000);
+       }, 1000);
+
+      });
+    }else if(request.msg === "error"){
+      $('#feedback').addClass('negative');
+      $('#feedback h2').html('error');
+      $('#feedback').fadeIn(500, function() {
+        setTimeout(function(){
+         $('#feedback h2').fadeOut(500);
+         $('#feedback').fadeOut(1000);
+       }, 1000);
+
+      });
+    }
+  }
+  );

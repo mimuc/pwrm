@@ -3,13 +3,17 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet"> 
 	<link rel="stylesheet" href="../background/css/fab.css"/>
 	<link rel="stylesheet" href="popup.css"/>
 	<link rel="stylesheet" href="../background/css/bootstrap.css"/>
 </head>
 
 <body>
-	<div class="">
+<div id="feedback" class="text-center">
+	<h2></h2>
+</div>
+	<div>
 		<div class="head">
 			<div class="grid left">
 				<img class="placeholder-img" src="">
@@ -50,7 +54,7 @@
 				<form>
 					<div class="form-group radio-option option-category" value="option-category">
 						<label for="categoryDropdown">Choose Password Category</label>
-						<select class="form-control" id="categoryDropdown"><!-- fill <options> on init() --></select>
+						<select class="form-control select-mp" id="categoryDropdown"><!-- fill <options> on init() --></select>
 					</div>
 					<div class="form-group radio-option option-pwd hidden" value="option-pwd">
 						<label for="enterPWD">Enter a Unique Password</label>

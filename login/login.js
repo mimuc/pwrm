@@ -34,8 +34,22 @@ function initOnboarding(){
 			wordRepetitions: true
 		}
 	};
+	$('#inputCreateMPW').on('keyup', function(event) {
+		if($(this).val().length > 0){
+				$('.progress').show();
+				$('.password-verdict').show();
+				$('.onboarding a.btn-mp').show();
+		}else{
+			$('.progress').hide();
+			$('.password-verdict').hide();
+			$('.onboarding a.btn-mp').hide();
+		}
+	});
 	$('#inputCreateMPW').pwstrength(options);
 	$('.progress').addClass("strength");
+	$('.progress').hide();
+	$('.onboarding a.btn-mp').hide();
+	$('.password-verdict').hide();
 	$('#next .material-icons').on('click', function(){	
 		if(++slide == $('.slide').length-1){
 			$('.slide').animate({"left": "-=600"}, 500);
