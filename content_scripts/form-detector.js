@@ -215,7 +215,7 @@ function showHintbox(i, credentials, categories, icon){
   // category entry
   if(categories[c][2]!=null){
    i.classList.add('locked');
-   hintbox = '<div class="hintbox"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content mp-hidden"><p>You used the password from category <strong>'+ credentials.category  +'</strong></p><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden"> ****** </span><span type="cat" cat="'+ credentials.category +'" class="showPW">show</span></div><input placeholder="Enter Masterpassword" type="password" id="inputMPW"><a id="btnInputMPW">ok</a><hr><a id="openManager">open manager</a></div></div>';
+   hintbox = '<div class="hintbox"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content mp-hidden"><p>You used the password from category <strong>'+ credentials.category  +'</strong></p><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden"> ****** </span><span type="cat" cat="'+ credentials.category +'" class="showPW">show</span></div><input placeholder="Enter Masterpassword" type="password" id="inputMPW"><a class="btn-mp light" id="btnInputMPW">confirm</a><hr><a id="openManager">open manager</a></div></div>';
  }else{
    i.classList.add('unlocked');
    hintbox = '<div class="hintbox"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content mp-hidden"><p>You used the password from category <strong>'+ credentials.category  +'</strong></p><div id="pwhint_notstored"><i class="material-icons hastext">lock_open</i> No password stored</div><hr><a id="openManager">open manager</a></div></div>';
@@ -223,7 +223,7 @@ function showHintbox(i, credentials, categories, icon){
 }else{
   // unique entry
   i.classList.add('locked');
-  hintbox = '<div class="hintbox unique"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">Unique Password</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content mp-hidden"><p>You stored a unique password for this website</p><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden"> ****** </span><span type="unique" class="showPW">show</span></div><input placeholder="Enter Masterpassword" type="password" id="inputMPW"><a id="btnInputMPW">ok</a><hr><a id="openManager">open manager</a></div></div>';
+  hintbox = '<div class="hintbox unique"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">Unique Password</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content mp-hidden"><p>You stored a unique password for this website</p><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden"> ****** </span><span type="unique" class="showPW">show</span></div><input placeholder="Enter Masterpassword" type="password" id="inputMPW"><a class="btn-mp light" id="btnInputMPW">confirm</a><hr><a id="openManager">open manager</a></div></div>';
 
 }
 
@@ -275,6 +275,7 @@ if($('#hbpwrm').length){
     if($(this).html() != 'hide'){
       $('#pwhint_stored').hide();
       $('#inputMPW').show();
+      $('#btnInputMPW').show();
 
       $('#btnInputMPW').on('click', function() {
         var val = $('#inputMPW').val();
@@ -284,7 +285,7 @@ if($('#hbpwrm').length){
 
           chrome.runtime.sendMessage(
             {task: "showPW", url: URL, entryType: mtype, hash: val, category : credentials.category}
-          );
+            );
         }
       });
     }
@@ -342,12 +343,13 @@ function handleMessage(request, sender, sendResponse){
     //  show pw
     $('#pwhint_stored').show();
     $('#inputMPW').hide();
+    $('#btnInputMPW').hide();
     $('#inputMPW').val('');
     $('.showPW').html('hide');
     $('.pwd-hidden').html(request.content);
     $('.showPW').click(function(){
-        $('.showPW').html('show');
-        $('.pwd-hidden').html('*******');
+      $('.showPW').html('show');
+      $('.pwd-hidden').html('*******');
 
     });
   }
