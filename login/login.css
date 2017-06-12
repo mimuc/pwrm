@@ -1,15 +1,17 @@
 :root {
 	--primary-color: #58568f; /* alternatives: #58568f; #a124ae; */
 	--highlight-color: #f0f069;
-	--dark-color: #353641;
+	--dark-color: #212121;
+	--light-color: #f8f8f8;
 }
 /* login.css */
 
 html, body{
-	background-color: var(--primary-color);
+	background-color: var(--light-color);
 	height:100%;
 	padding: 0 !important;
 	margin: 0 !important;
+	color: var(--dark-color);
 }
 
 p{
@@ -17,6 +19,10 @@ p{
 }
 a, a:hover{
 	color:white;
+}
+
+h2{
+	font-size:1.7em;
 }
 
 .disabled{
@@ -34,6 +40,7 @@ a, a:hover{
 	opacity: 0.5;
 	font-size: 6em;
 	cursor: pointer;
+	color: var(--dark-color);
 }
 #next i:hover{
 	opacity: 1;
@@ -70,7 +77,7 @@ a, a:hover{
 }
 
 strong{
-	color: var(--highlight-color);
+	/*color: var(--highlight-color);*/
 }
 
 .login-container{
@@ -102,8 +109,8 @@ body.login{
 	padding-top: 0;
 }
 .bg{
-	background-color: var(--primary-color);
-	color: white;
+	background-color: var(--light-color);
+	color: var(--dark-color);
 }
 
 form.mpw{
