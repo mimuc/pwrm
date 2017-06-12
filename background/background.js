@@ -28,8 +28,48 @@ function searchAsync(value){
 function addListeners(){
 	 // add event listeners to buttons and inputs
 	 addPWD.addEventListener('click', showPWInput);
-	 addBtn.addEventListener('click', function(){controller.addEntry();});
-	 addCategory.addEventListener('click', function(){controller.createCategory();});
+	 addBtn.addEventListener('click', function(){
+	 	// trigger form validation
+	 	var validate = $(this).parent().parent().find('form').validator('validate');
+	 	// check if there are errors
+	 	if($('#optionsRadios1').prop('checked')){
+	 		if($(validate[0]).find('.glyphicon-remove').length > 0){
+	 			console.log("input validate error");
+	 		}else{
+	 			controller.addEntry();
+	 		}
+	 	}else if($('#optionsRadios2').prop('checked')){
+	 		if($(validate[0]).find('.glyphicon-remove').length > 0 ||
+	 			$(validate[2]).find('.glyphicon-remove').length > 0){
+	 			console.log("input validate error");
+	 	}else{
+	 		controller.addEntry();
+	 	}
+	 }
+
+	});
+	 addCategory.addEventListener('click', function(){
+	 	// trigger form validation
+	 	var validate = $(this).parent().parent().parent().find('form').validator('validate');
+	 	// check if there are errors
+	 	console.log(validate);
+
+	 	if($('#enter-category-pwd').hasClass('hidden')){
+	 		if($('#modalCategoryName').parent().find('.glyphicon-remove').length > 0){
+	 			console.log("input validate error");
+	 		}else{
+	 			controller.createCategory();
+	 		}
+	 	}else{
+	 		if($(validate[0]).find('.glyphicon-remove').length > 0){
+	 			console.log("input validate error");
+	 		}else{
+	 			controller.createCategory();
+	 		}
+
+	 	}
+
+	 });
 
 	 $("#radio-form :input").change(function() {
 	 	$('.option-pwd').toggleClass('hidden'); 
@@ -78,7 +118,7 @@ function handleMessage(message, sender, sendResponse) {
 	if(message.task == 'store'){
 		console.log(message.url);
 		chrome.runtime.sendMessage({'msg': 'ok'},function(response){
-			});
+		});
 		require(['MVC_Controller_Managerpage'], function(controller){
 			controller.quickAddEntry(message.url, message.username, message.cat, message.pw);
 		});

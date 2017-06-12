@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="css/fab.css">
   <link rel="stylesheet" href="css/animation.css">
 
-<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet"> 
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet"> 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script data-main="app" src="scripts/requirejs/require.js"></script>
   <title>Password Reuse Manager</title>
@@ -34,7 +34,7 @@
 
  <nav class="navbar navbar-default navbar-fixed-top navbar-mp">
   <div class="container">
-    <form>
+    <form role="form" data-toggle="validator">
       <div class="form-group has-feedback has-feedback-left">
         <input id="search" type="text" class="form-control" placeholder="Search" />
         <i id="search-icon" class="form-control-feedback material-icons">search</i>
@@ -59,7 +59,7 @@
    <h1>_Unique Passwords <small></small></h1>
  </div>
  <div class="card-wrapper">
- <div id="uniqueEntryContainer"></div>
+   <div id="uniqueEntryContainer"></div>
  </div>
  <!-- Modal Category -->
  <div class="modal modal-mp fade" id="modalCategory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -69,19 +69,23 @@
        <h4 class="modal-title" id="myModalLabel">New Category</h4>
      </div>
      <div class="modal-body">
-       <form>
-        <div class="form-group">
+       <form role="form" data-toggle="validator">
+        <div class="form-group has-feedback">
           <label for="category-name">Category Name</label>
-          <input type="text" class="form-control" id="modalCategoryName" placeholder="Category Name">
+          <input type="text" minlength="1" class="form-control" id="modalCategoryName" placeholder="Category Name" required>
+           <span class="glyphicon form-control-feedback" ></span>
+            <div class="help-block with-errors"></div>
         </div>
         <div id="pw-hint">
           <i class="material-icons hastext">lock_open</i><span>No password will be stored for this category and its entries.</span>
         </div>
         <a id="btnAddPWD">add password</a>
 
-        <div id="enter-category-pwd" class="form-group hidden">
+        <div id="enter-category-pwd" class="form-group has-feedback hidden">
           <label for="category-pwd">Enter a Category Password</label>
-          <input type="password" class="form-control" id="category-pwd" placeholder="Password">
+          <input type="password" minlength="1" class="form-control" id="category-pwd" placeholder="Password" required>
+           <span class="glyphicon form-control-feedback" ></span>
+            <div class="help-block with-errors"></div>
         </div>
       </form>
     </div>
@@ -92,7 +96,7 @@
     </div>
     <div id="modalYesNo" class="hidden"><span>Are you sure you want to update this category?</span>
       <button id="modalNo" type="button" class="btn btn-default btn-mp light">Cancel</button>
-      <button id="modalYes" type="button" class="btn btn-primary btn-mp" data-dismiss="modal">Confirm</button>
+      <button id="modalYes" type="submit" class="btn btn-primary btn-mp" data-dismiss="modal">Confirm</button>
     </div>
   </div>
 </div>
@@ -103,10 +107,10 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
      <div class="modal-body">
-       <form>
+       <form role="form" data-toggle="validator">
         <div class="form-group">
 
-          <input type="password" class="form-control" id="modalInputMPW" placeholder="Enter Masterpassword">
+          <input type="password" class="form-control" id="modalInputMPW" placeholder="Enter Masterpassword" required>
         </div>
         <div class="modal-hint">
           <i class="material-icons hastext">help_outline</i><span><a href="#">Forgot your Masterpassword?</a></span>
@@ -124,17 +128,21 @@
         <h4 class="modal-title">Add new entry</h4>
       </div>
       <div class="modal-body">
-        <form>      
-          <div class="form-group">
+        <form role="form" data-toggle="validator">      
+          <div class="form-group has-feedback">
             <label for="enterURL">URL</label>             
-            <input id="enterURL" list="historyList" class="form-control new-entry url" type="text" placeholder="" />
+            <input id="enterURL" list="historyList" class="form-control new-entry url" minlength="1" type="url" placeholder="Account address" required/>
+            <span class="glyphicon form-control-feedback" ></span>
+            <div class="help-block with-errors"></div>
           </div>
-          <div class="form-group">
+          <div class="form-group has-feedback">
             <label for="enterName">Username</label>   
-            <input id="enterName" class="form-control new-entry username" type="text" placeholder="" />
+            <input id="enterName" class="form-control new-entry username" type="text" minLength="1" placeholder="Your username or email" required/>
+            <span class="glyphicon form-control-feedback" ></span>
+            <div class="help-block with-errors"></div>
           </div>
         </form>
-        <form id="radio-form">
+        <form role="form" data-toggle="validator" id="radio-form">
           <div class="radio">
             <label class="active">
               <input type="radio" name="optionsRadios" id="optionsRadios1" value="option-category" checked="true">
@@ -148,21 +156,23 @@
             </label>
           </div>
         </form>
-        <form>
+        <form role="form" data-toggle="validator">
           <div class="form-group radio-option option-category" value="option-category">
             <label for="categoryDropdown">Choose Password Category</label>
             <select class="form-control" id="categoryDropdown"><!-- fill <options> on init() --></select>
           </div>
-          <div class="form-group radio-option option-pwd hidden" value="option-pwd">
+          <div class="form-group has-feedback radio-option option-pwd hidden" value="option-pwd">
             <label for="enterPWD">Enter a Unique Password</label>
-            <input id="enterPWD" class="form-control new-entry pwd" type="password" placeholder="" />
+            <input minlength="1" id="enterPWD" class="form-control new-entry pwd" type="password" placeholder="" required/>
+             <span class="glyphicon form-control-feedback" ></span>
+            <div class="help-block with-errors"></div>
           </div>
         </form>
 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default btn-mp light" data-dismiss="modal">Close</button>
-        <button id="addEntry" type="button" class="btn btn-primary btn-mp">Save entry</button>
+        <button id="addEntry" type="submit" class="btn btn-primary btn-mp">Save entry</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -170,6 +180,7 @@
 
 <script src="scripts/jquery/jquery.js"></script>
 <script src="scripts/bootstrap/bootstrap.js"></script>
+<script src="scripts/tools/validator.js"></script>
 <script src="scripts/tools/autocomplete.js"></script>
 <script src="scripts/ui/fab.js"></script>
 <script src="app.js"></script>

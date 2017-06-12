@@ -309,6 +309,10 @@ h2.row-header{
 	vertical-align: middle;
 }
 
+.has-feedback label ~ .form-control-feedback{
+	top:29px !important;
+}
+
 .cat-subtitle{
 	margin-top: 5px;
 	font-size: 0.8em;
