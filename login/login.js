@@ -116,7 +116,7 @@ $('.onboarding_2 a.btn-mp').click(function(){
 			$('.onboarding_3').removeClass('hidden').fadeIn();
 		},
 		function(){
-			alert("hoidaus");
+			alert("Passwords do not match!");
 		});
 });
 

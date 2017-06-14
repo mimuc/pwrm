@@ -10,9 +10,9 @@
 </head>
 
 <body>
-<div id="feedback" class="text-center">
-	<h2></h2>
-</div>
+	<div id="feedback" class="text-center">
+		<h2></h2>
+	</div>
 	<div>
 		<div class="head">
 			<div class="grid left">
@@ -31,10 +31,12 @@
 		</div>
 		<div class="mid mp-hidden container">
 			<div class="forms">
-			<p id="hint"></p>
-				<form>      
-					<div class="form-group">
-						<input id="enterName" class="form-control new-entry username" type="text" placeholder="username" />
+				<p id="hint"></p>
+				<form role="form" data-toggle="validator">      
+					<div class="form-group has-feedback">
+						<input id="enterName" class="form-control new-entry username" minlength="1" type="text" placeholder="username" required/>
+						<span class="glyphicon form-control-feedback" ></span>
+						<div class="help-block with-errors"></div>
 					</div>
 				</form>
 				<form id="radio-form">
@@ -51,29 +53,29 @@
 						</label>
 					</div>
 				</form>
-				<form>
+				<form role="form" data-toggle="validator">
 					<div class="form-group radio-option option-category" value="option-category">
 						<label for="categoryDropdown">Choose Password Category</label>
 						<select class="form-control select-mp" id="categoryDropdown"><!-- fill <options> on init() --></select>
 					</div>
-					<div class="form-group radio-option option-pwd hidden" value="option-pwd">
+					<div class="form-group has-feedback radio-option option-pwd hidden" value="option-pwd">
 						<label for="enterPWD">Enter a Unique Password</label>
-						<input id="enterPWD" class="form-control new-entry pwd" type="password" placeholder="" />
+						<input id="enterPWD" class="form-control" minLength="1" new-entry pwd" type="password" placeholder="" required/>
 					</div>
 				</form>
-			
+
 			</div>
+
 		</div>
 		<div class="footer">
 			<p class="link manager">Open Manager</p>
 		</div>
+		<script src="../background/scripts/jquery/jquery.js"></script>
+		<script src="../background/scripts/ui/fab.js"></script>
+		<script src="../background/scripts/bootstrap/bootstrap.js"></script><script src="../background/scripts/tools/validator.js"></script>
+		<script type="text/javascript" src="../background/scripts/pwstrength/dist/pwstrength-bootstrap.min.js"></script>
+		<script type="text/javascript" src="../background/scripts/cryptojs/rollups/aes.js"></script>
+		<script src="popup.js"></script>   
+	</body>
 
-	</div>
-	<script src="../background/scripts/jquery/jquery.js"></script>
-	<script src="../background/scripts/ui/fab.js"></script>
-	<script src="../background/scripts/bootstrap/bootstrap.js"></script>
-	<script type="text/javascript" src="../background/scripts/cryptojs/rollups/aes.js"></script>
-	<script src="popup.js"></script>   
-</body>
-
-</html> 
+	</html> 

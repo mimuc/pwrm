@@ -3,20 +3,41 @@ var requestURL = "https://icons.better-idea.org/allicons.json?url=";
 var fab_wrapper; var feedback;
 $(document).ready(function($) {
   // change action icon
-chrome.runtime.sendMessage({task: "removeHint", url: URL});
+// setup pw meter
 
-  fab_wrapper = $('#fab_wrapper');
-  feedback = $('#feedback');
-  $('.manager').on('click', openPopup);
-  fillDropdown();
+var options = {};
+options.rules = {
+  activated: {
+    wordTwoCharacterClasses: true,
+    wordRepetitions: true
+  }
+};
 
-  /* load material iconfont */
-  var mi = document.createElement('style');
-  mi.type = 'text/css';
-  mi.textContent = '@font-face { font-family: material-icons; src: url("'
-  + chrome.extension.getURL('content_scripts/material-icons/MaterialIcons-Regular.woff')
-  + '"); }';
-  document.head.appendChild(mi);
+$('input[type="password"]').on('keyup', function(event) {
+  if($(this).val().length > 0){
+    $('.progress').show();
+    $('.password-verdict').show();
+  }else{
+    $('.progress').hide();
+    $('.password-verdict').hide();
+  }
+});
+$('input[type="password"]').pwstrength(options);
+$('.progress').addClass("strength");
+$('.progress').hide();
+
+fab_wrapper = $('#fab_wrapper');
+feedback = $('#feedback');
+$('.manager').on('click', openPopup);
+fillDropdown();
+
+/* load material iconfont */
+var mi = document.createElement('style');
+mi.type = 'text/css';
+mi.textContent = '@font-face { font-family: material-icons; src: url("'
++ chrome.extension.getURL('content_scripts/material-icons/MaterialIcons-Regular.woff')
++ '"); }';
+document.head.appendChild(mi);
 
   // add radio button listener (modal entry)
   $("#radio-form :input").change(function() {
@@ -61,8 +82,14 @@ window.onload = function() {
     var entryURL = protocol + '//' + host;
     $('#thisURL').html(entryURL);
 
+
+    chrome.runtime.sendMessage({task: "removeHint", url: entryURL});
+
+
     checkAccount(entryURL);
     loadIcon(entryURL);
+    
+
   });
 }
 
@@ -91,7 +118,7 @@ function checkAccount(URL){
     //if there was no account found or there is an account for this page but a different username was saved
     if(accountFound){
       //TODO: how popup "want to add this account?"
-      $('#hint').html("You stored an account for this website.");
+      $('#hint').html("Found account for this website.");
     }else{
       $('#hint').html("Add Entry for this website?");
 
@@ -208,6 +235,9 @@ chrome.runtime.onMessage.addListener(
          $('#feedback h2').fadeOut(500);
          $('#feedback').fadeOut(1000);
        }, 1000);
+        setTimeout(function(){
+          window.close();
+        }, 1000);
 
       });
     }else if(request.msg === "error"){
