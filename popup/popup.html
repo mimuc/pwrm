@@ -32,7 +32,7 @@
 		<div class="mid mp-hidden container">
 			<div class="forms">
 				<p id="hint"></p>
-				<form role="form" data-toggle="validator">      
+				<form id="form-username" role="form" data-toggle="validator">      
 					<div class="form-group has-feedback">
 						<input id="enterName" class="form-control new-entry username" minlength="1" type="text" placeholder="username" required/>
 						<span class="glyphicon form-control-feedback" ></span>
@@ -60,7 +60,7 @@
 					</div>
 					<div class="form-group has-feedback radio-option option-pwd hidden" value="option-pwd">
 						<label for="enterPWD">Enter a Unique Password</label>
-						<input id="enterPWD" class="form-control" minLength="1" new-entry pwd" type="password" placeholder="" required/>
+						<input id="enterPWD" class="form-control new-entry pwd" minLength="1" type="password" placeholder="" required/>
 					</div>
 				</form>
 
@@ -74,7 +74,7 @@
 		<script src="../background/scripts/ui/fab.js"></script>
 		<script src="../background/scripts/bootstrap/bootstrap.js"></script><script src="../background/scripts/tools/validator.js"></script>
 		<script type="text/javascript" src="../background/scripts/pwstrength/dist/pwstrength-bootstrap.min.js"></script>
-		<script type="text/javascript" src="../background/scripts/cryptojs/rollups/aes.js"></script>
+		<script type="text/javascript" src="../background/scripts/cryptojs/rollups/sha512.js"></script>
 		<script src="popup.js"></script>   
 	</body>
 

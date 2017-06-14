@@ -49,14 +49,15 @@ document.head.appendChild(mi);
     //store entry
     if(fab_wrapper.hasClass('slide')){
       triggerStore();
-    }
-    fab_wrapper.toggleClass('slide');
-    $('.button-floating').toggleClass('fab_checked');
-    $('.mid').toggleClass('open');
-    $('.mid .forms').toggle('fast', function() {
+    }else{
+     fab_wrapper.toggleClass('slide');
+     $('.button-floating').toggleClass('fab_checked');
+     $('.mid').toggleClass('open');
+     $('.mid .forms').toggle('fast', function() {
       $('.mid .forms #enterName').focus();
     });
-  });
+   }
+ });
 });
 window.onload = function() {
 
@@ -201,17 +202,50 @@ function triggerStore(){
     var host = pathArray[2];
     entryURL = protocol + '//' + host;
 
-    chrome.runtime.sendMessage(
-      {task: "store",
-      url: entryURL,
-      username: $('#enterName').val(),
-      cat: entryCategory,
-      pw: password
-    });
+    var storeMsg = {task: "store",
+    url: entryURL,
+    username: $('#enterName').val(),
+    cat: entryCategory,
+    pw: password
+  };
+
+    // trigger form validation
+    var validate = $('form').validator('validate');
+    // check if there are errors
+    console.log(validate);
+
+    if($('.option-pwd').hasClass('hidden')){
+      if($('#form-username').find('.glyphicon-remove').length > 0){
+        console.log("input validate error");
+      }else{
+        onStoreMsgSuccess();
+        chrome.runtime.sendMessage(storeMsg);
+      }
+    }else{
+      if($(validate[2]).find('input[type="password"]').val().length == 0){
+        console.log("input validate error: password empty");
+      }else{
+        onStoreMsgSuccess();
+        chrome.runtime.sendMessage(storeMsg);
+      }
+
+    }
+
+
 
   });
 
   
+}
+
+function onStoreMsgSuccess(){
+  console.log("all good");
+  fab_wrapper.toggleClass('slide');
+  $('.button-floating').toggleClass('fab_checked');
+  $('.mid').toggleClass('open');
+  $('.mid .forms').toggle('fast', function() {
+    $('.mid .forms #enterName').focus();
+  });
 }
 
 function openPopup() {

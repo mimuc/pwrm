@@ -119,6 +119,7 @@ function handleMessage(message, sender, sendResponse) {
 	console.log(message);
 	if(message.task == 'store'){
 		console.log(message.url);
+		// TODO check if storing was successful and answer appropriately
 		chrome.runtime.sendMessage({'msg': 'ok'},function(response){
 		});
 		require(['MVC_Controller_Managerpage'], function(controller){
