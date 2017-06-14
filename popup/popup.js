@@ -2,6 +2,9 @@ var HttpClient;
 var requestURL = "https://icons.better-idea.org/allicons.json?url=";
 var fab_wrapper; var feedback;
 $(document).ready(function($) {
+  // change action icon
+chrome.runtime.sendMessage({task: "removeHint", url: URL});
+
   fab_wrapper = $('#fab_wrapper');
   feedback = $('#feedback');
   $('.manager').on('click', openPopup);

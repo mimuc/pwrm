@@ -3,11 +3,12 @@
   "manifest_version": 2,
   "name": "Password Reuse Manager",
   "version": "0.1",
-
-  "description": "Here comes my description",
+  "description": "Here comes my description", 
+    // TODO
   "homepage_url": "https://gitlab.lrz.de/fuasmattn/password-reuse-manager",
   "icons": {
     "48": "icons/icon-48.png"
+    // TODO
   },
 
   "permissions": [
@@ -17,7 +18,8 @@
     "notification",
     "webRequest",
     "<all_urls>",
-    "tabs"
+    "tabs",
+    "background"
   ],
 
   "content_scripts":[
@@ -44,7 +46,6 @@
   "browser_action": {
     "default_icon": "icons/icon-48.png",
     "default_title": "PWRM",
-    // "default_popup": "popup/popup.html"
     "default_popup": "popup/popup.html"
   },
 
@@ -52,7 +53,8 @@
 
   "web_accessible_resources": [
     "content_scripts/hintbox_snippet.html",
-    "content_scripts/material-icons/*"
+    "content_scripts/material-icons/*",
+    "content_scripts/icons/*"
   ]
 
 }

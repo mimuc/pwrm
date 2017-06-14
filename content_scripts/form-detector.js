@@ -12,9 +12,10 @@ document.head.appendChild(mi);
 window.addEventListener("DOMContentLoaded", init());
 
 //window.addEventListener("DOMSubtreeModified", findForms());
-var submitBtn = document.querySelector('[type=submit]');
+// var submitBtn = document.querySelector('[type=submit]');
+// console.log(submitBtn);
 //check if is submit TODO
-//submitBtn.addEventListener('click', checkAccount);
+// submitBtn.addEventListener('click', checkAccount);
 
 var inputUsername;
 var inputs;
@@ -99,6 +100,14 @@ function findForms(){
   //first check if there are 2 password inputs to determine whether it's a login or a signup
   //false positive on (like facebook) login-signup double page 
   console.log("Number forms on this page: " +forms.length);
+
+  $('form').submit(function(ev) {
+    ev.preventDefault(); // stop the form from submitting
+    // checkAccount();
+    // TODO
+    // console.log("submit detected");
+    this.submit(); 
+});
 
   for (i = 0; i < forms.length; ++i) {
     var pwInputs = forms[i].querySelectorAll('input[type="password"]:not([type="hidden"]):not([type="submit"])');
@@ -305,6 +314,7 @@ function removeHintbox(){
 
 //submit button clicked. Check if there is an entry with this username for this website
 function checkAccount(){
+  console.log("Function : checkAccount");
   var username = inputUsername.value;
   var requestPromise = browser.storage.local.get();
   requestPromise.then(function(data){
@@ -318,8 +328,9 @@ function checkAccount(){
     }
     //if there was no account found or there is an account for this page but a different username was saved
     if(!accountFound || (accountFound && existingUsername != username)){
-      //TODO: how popup "want to add this account?"
-     // notifyBackgroundPage();
+      //TODO: "want to add this account?"
+     
+     chrome.runtime.sendMessage({task: "addHint", url: URL});
    }
  });
 

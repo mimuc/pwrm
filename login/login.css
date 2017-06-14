@@ -124,8 +124,20 @@ form.mpw{
 }
 
 .progress.strength{
-	margin-top: 10px;
+	/*margin-top: 10px;*/
 	background-color: #c4c4f14d;
+}
+
+.form-control[type="password"]{
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.progress{
+	height: 10px !important;
+	border-radius:0 !important;
+	border-bottom-left-radius: 2px !important;
+	border-bottom-right-radius: 2px !important;
 }
 
 .password-verdict::before{

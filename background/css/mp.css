@@ -17,6 +17,21 @@ a, a:hover{
 	color: var(--primary-color);
 }
 
+.form-control[type="password"]{
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.progress{
+	height: 10px !important;
+	border-radius:0 !important;
+	border-bottom-left-radius: 2px !important;
+	border-bottom-right-radius: 2px !important;
+}
+.password-verdict::before{
+	content: 'Password strength: ';
+}
+
 .entry-actions{
 	display: none;
 	transition: all 0.5s cubic-bezier(.25,.8,.25,1);

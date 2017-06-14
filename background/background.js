@@ -26,6 +26,8 @@ function searchAsync(value){
 
 
 function addListeners(){
+
+	setupPWMeter();
 	 // add event listeners to buttons and inputs
 	 addPWD.addEventListener('click', showPWInput);
 	 addBtn.addEventListener('click', function(){
@@ -128,6 +130,13 @@ function handleMessage(message, sender, sendResponse) {
 		// sendResponse(msg);
 
 		controller.requestPassword(message.url, message.entryType, message.hash, message.category); //passing sendresponse not working
+	}else if(message.task == 'addHint'){
+		changeBrowserAction(false);
+	}else if(message.task =="removeHint"){
+		changeBrowserAction(true);
+	}else if(message.task == "open_manager"){
+		// TODO
+		console.log("TODO: open manager");
 	}
 }
 //programmatically preselect options in dropdown
@@ -142,3 +151,37 @@ function showPWInput(){
 });
 
 
+function changeBrowserAction(add){
+	console.log("Background : changeBrowserAction");
+	console.log(add);
+	var icon1 = chrome.extension.getURL("icons/icon-48.png");
+	var icon2 = chrome.extension.getURL("icons/icon-48_add.png");
+
+	if(add)
+		chrome.browserAction.setIcon({path: icon1});
+	else
+		chrome.browserAction.setIcon({path: icon2});
+}
+
+function setupPWMeter(){
+	var options = {};
+	options.rules = {
+		activated: {
+			wordTwoCharacterClasses: true,
+			wordRepetitions: true
+		}
+	};
+
+	$('input[type="password"]:not(#modalInputMPW)').on('keyup', function(event) {
+		if($(this).val().length > 0){
+				$('.progress').show();
+				$('.password-verdict').show();
+		}else{
+			$('.progress').hide();
+			$('.password-verdict').hide();
+		}
+	});
+	$('input[type="password"]').pwstrength(options);
+	$('.progress').addClass("strength");
+	$('.progress').hide();
+}
