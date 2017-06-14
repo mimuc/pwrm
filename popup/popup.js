@@ -223,7 +223,7 @@ function triggerStore(){
       }
     }else{
       if($(validate[2]).find('input[type="password"]').val().length == 0){
-        console.log("input validate error: password empty");
+        console.log("input validate error: password <empty></empty>");
       }else{
         onStoreMsgSuccess();
         chrome.runtime.sendMessage(storeMsg);

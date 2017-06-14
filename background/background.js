@@ -12,6 +12,7 @@ require(['MVC_Controller_Managerpage', 'MVC_View_Managerpage'],
 
 		/* call init on page load */
 		$(document).ready(function() {
+			$('#section-categories').show();
 			setup();
 			addListeners();
 		});
@@ -24,9 +25,18 @@ function searchAsync(value){
 	console.log("searchAsync: " + value);
 }
 
+function showSection(clicked, section){
+	var activeSection = $(section);
+	$('.mp-section:not('+section+')').hide();
+	activeSection.show();
+	$('.sidebar-row').removeClass('active');
+	clicked.addClass('active');
+}
 
 function addListeners(){
-
+	$('#sidebar-categories').on('click', function(){showSection($(this), '#section-categories');});
+	$('#sidebar-unique').on('click', function(){showSection($(this), '#section-unique');});
+	$('#sidebar-modifications').on('click', function(){showSection($(this), '#section-modifications');});
 	setupPWMeter();
 	 // add event listeners to buttons and inputs
 	 addPWD.addEventListener('click', showPWInput);

@@ -1,0 +1,70 @@
+/*sidebar
+Martin Prinz 14.06.2017*/
+
+:root {
+	--primary-color: #58568f; /* alternatives: #58568f; #a124ae; */
+	--highlight-color: #f0f069;
+	--dark-color: #212121;
+	--neutral-color: #d5d5d5;
+}
+
+#sidebar{
+	/*background-color:green;*/
+	height: 100%;
+	width: 300px;
+	max-width: 300px;
+	position: absolute;
+	padding-top: 80px;
+	
+}
+
+.sidebar-row.active{
+	color: #212121;
+	background-color: var(--highlight-color);
+}
+
+.sidebar-head{
+	background-color: #EDEDED;
+	height:50px;
+}
+
+.sidebar-row{
+	color: #595959;
+	padding:0px 15px;
+	-webkit-transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-in-out;
+	transition: all 0.2s ease-in-out;
+}
+.sidebar-row:hover{
+	color: #212121;
+	background-color: #f0f0c3;
+	cursor: pointer;
+}
+
+.sidebar-row > *{
+	display:inline-block;
+	height: 67px;
+	line-height: 67px;
+}
+.sidebar-row > p{
+	margin-bottom: 0 !important;
+	padding: 0;
+	padding-left: 16px;
+	padding-right: 56px;
+	text-decoration: none;
+	clear: both;
+	font-weight: 300;
+	font-size: 18px;
+
+}
+.sidebar-row > .material-icons{
+	font-size: 24px;
+	margin-right: 16px;
+	line-height: 60px;
+
+	vertical-align: middle;
+
+}
+
+}
+
