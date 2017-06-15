@@ -96,7 +96,7 @@ window.onload = function() {
 
 function openPopup() {
  console.log("openPopup");
- chrome.windows.create({
+ browser.windows.create({
    "url": "/login/login.html",
    type: "panel",
    height: 600,
@@ -250,7 +250,7 @@ function onStoreMsgSuccess(){
 
 function openPopup() {
  console.log("openPopup");
- chrome.windows.create({
+ browser.windows.create({
    "url": "/login/login.html",
    type: "panel",
    height: 600,

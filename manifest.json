@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "Password Reuse Manager",
-  "version": "0.1",
+  "version": "1",
   "description": "Here comes my description", 
     // TODO
   "homepage_url": "https://gitlab.lrz.de/fuasmattn/password-reuse-manager",
@@ -15,7 +15,6 @@
     "activeTab",
     "storage",
     "history",
-    "notification",
     "webRequest",
     "<all_urls>",
     "tabs",
@@ -38,7 +37,6 @@
     }
   ],
   "background_page": {
-
     "scripts": ["background/scripts/MVC_Controller_Managerpage.js"],
     "page": ["background/background.html"]
   },

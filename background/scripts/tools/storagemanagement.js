@@ -44,12 +44,22 @@ define(function(){
 		},
 
 		findEntryByURL: function(mUrl, callback){
-			var gettingEntries = browser.storage.local.get("entries");
-			gettingEntries.then((results) => {
+			this.getEntries(function(results){
 				console.log(results);
 				var entries = results["entries"];
 				for(key in entries){
 					if(entries[key].url == mUrl){
+						callback(entries[key]);
+					}
+				}
+			});
+		},
+		findEntryByUsername: function(name, callback){
+			this.getEntries(function(results){
+				console.log(results);
+				var entries = results["entries"];
+				for(key in entries){
+					if(entries[key].username == name){
 						callback(entries[key]);
 					}
 				}

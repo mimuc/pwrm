@@ -2,6 +2,7 @@
 $(document).ready(function() {
 	//if no masterpw was set in local storage: init onboarding
 	var gettingMPW = browser.storage.local.get("mpw");
+		// , function(results){
 	gettingMPW.then((results) => {
 		var mpwHash = CryptoJS.SHA512(results["mpw"]);
 		if(results["mpw"] == null){
@@ -72,7 +73,7 @@ function openManager(){
 					console.log("length: 1");
 					var removing = browser.windows.remove(cRes.id);
 					var creatingWindow = browser.windows.create({
-						"url": browser.extension.getURL("background/background.html"),
+						"url": chrome.extension.getURL("background/background.html"),
 						"state": "maximized"
 					});
 				}else{
@@ -81,8 +82,8 @@ function openManager(){
 
 					//close self and open in any other opened window as a tab
 					var removing = browser.windows.remove(cRes.id);
-					var createTab = browser.tabs.create({
-						"url": browser.extension.getURL("background/background.html"),
+					var createTab = chrome.tabs.create({
+						"url": chrome.extension.getURL("background/background.html"),
 						"windowId": aRes[i].id,
 					});
 					createTab.then(function(){
@@ -132,7 +133,8 @@ function doubleCheckMPW(a, doNext, showError){
 }
 
 function getMPW(callback){
-	browser.storage.local.get("mpw").then(function(res){callback(res);});
+	browser.storage.local.get("mpw").then(function(res){callback(res);
+	});
 }
 
 // show login ui elements

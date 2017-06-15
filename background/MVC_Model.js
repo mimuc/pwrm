@@ -49,7 +49,6 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 
 					}else{
 						if(res[key].category == categoryName){
-							console.log("display category entries");
 							MVC_Controller_Managerpage.displayEntry(key,res[key], true);
 						}
 					}
