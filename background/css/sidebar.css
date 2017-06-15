@@ -20,11 +20,11 @@ Martin Prinz 14.06.2017*/
 
 .sidebar-row.active{
 	color: #212121;
-	background-color: var(--highlight-color);
+	background-color: #EDEDED;
 }
 .sidebar-row.active:hover{
 		color: #212121;
-	background-color: var(--highlight-color);
+	background-color: #EDEDED;
 }
 
 .sidebar-head{
@@ -42,7 +42,7 @@ Martin Prinz 14.06.2017*/
 }
 .sidebar-row:hover{
 	color: #212121;
-	background-color: #f0f0c3;
+	background-color: #F3F3F3;
 	cursor: pointer;
 }
 
