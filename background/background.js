@@ -32,7 +32,7 @@ function searchAsync(value){
 function showSection(clicked, section){
 	var activeSection = $(section);
 	$('.mp-section:not('+section+')').hide();
-	activeSection.show();
+	activeSection.fadeIn();
 	$('.sidebar-row').removeClass('active');
 	if(clicked) clicked.addClass('active');
 }
@@ -60,7 +60,7 @@ function addListeners(){
 				
 				$(this).parent().parent().parent().find('.pwd-hidden').html('*******');
 				$(this).html('show');
-				
+
 			// do nothing
 		}
 	});

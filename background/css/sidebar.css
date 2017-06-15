@@ -11,8 +11,8 @@ Martin Prinz 14.06.2017*/
 #sidebar{
 	/*background-color:green;*/
 	height: 100%;
-	width: 300px;
-	max-width: 300px;
+	width: 310px;
+	max-width: 310px;
 	position: fixed;
 	padding-top: 80px;
 	
@@ -22,14 +22,19 @@ Martin Prinz 14.06.2017*/
 	color: #212121;
 	background-color: var(--highlight-color);
 }
+.sidebar-row.active:hover{
+		color: #212121;
+	background-color: var(--highlight-color);
+}
 
 .sidebar-head{
-	background-color: #EDEDED;
+	/*background-color: #EDEDED;*/
 	height:50px;
 }
 
 .sidebar-row{
 	color: #595959;
+	margin-left:10px;
 	padding:0px 15px;
 	-webkit-transition: all 0.2s ease-in-out;
 	-o-transition: all 0.2s ease-in-out;
@@ -43,8 +48,11 @@ Martin Prinz 14.06.2017*/
 
 .sidebar-row > *{
 	display:inline-block;
-	height: 67px;
-	line-height: 67px;
+	/*	height: 67px;
+	line-height: 67px;*/
+	height: 60px;
+	line-height: 60px;
+
 }
 .sidebar-row > p{
 	margin-bottom: 0 !important;
@@ -58,8 +66,7 @@ Martin Prinz 14.06.2017*/
 .sidebar-row > .material-icons{
 	font-size: 24px;
 	margin-right: 16px;
-	line-height: 60px;
-
+	line-height: 53px;
 	vertical-align: middle;
 
 }
