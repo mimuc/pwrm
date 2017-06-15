@@ -177,17 +177,22 @@ for (index = 0; index < inputs.length; ++index) {
    requestPromise.then(function(data){
     var cat = data.categories;
     var entries = data.entries;
-
-    if(entries[URL] != null){
+    var foundEntry = null;
+    for(key in entries){
+      // !! multiple possible
+      if(entries[key].url == URL) foundEntry = entries[key];
+    }
+    if(foundEntry != null){
+      console.log(foundEntry);
       console.log("Found an entry for this URL in local storage.");
-      console.log("username is: " + entries[URL].username);
-      if(entries[URL].category == null){
+      console.log("username is: " + foundEntry.username);
+      if(foundEntry.category == null){
         //use unique icon
-        findLogin(form, entries[URL], cat, 'lock');
+        findLogin(form, foundEntry, cat, 'lock');
       }else{
         /* there is a matching URL / account in the storage */
         /* second parameter is the matching between entry.categoryName and categories --> icon */
-        findLogin(form, entries[URL], cat, cat[entries[URL].category][1]);
+        findLogin(form, foundEntry, cat, cat[foundEntry.category][1]);
       }
     }else{
       console.log("No saved entry found for this URL.");
@@ -196,7 +201,7 @@ for (index = 0; index < inputs.length; ++index) {
 
   }, 
   function(data){
-    consoloe.log("error: " + entries);
+    console.log("error: " + entries);
   });
  }
 

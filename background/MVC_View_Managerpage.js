@@ -1,37 +1,37 @@
-define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/storageloader', 'MVC_Controller_Managerpage'],
+define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/storagemanagement', 'MVC_Controller_Managerpage'],
 	function(showPW, crypt, $, SL, controller) {
 		var exports = {};
 
-		var displayEntry = exports.displayEntry = function(url, urlName, credential, hasCategory) {
+		var displayEntry = exports.displayEntry = function(randID, urlName, credential, hasCategory) {
 			var entryContainer, content;
 
 			if(credential.category != null){
 				entryContainer = document.querySelector('#entryContainer');
-				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-6">01.01.17</div><div class="entry-actions"><div class="col-lg-2"></div><div class="col-lg-2"><a><i id="'+ url +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.id+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
+				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ credential.url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-6">01.01.17</div><div class="entry-actions"><div class="col-lg-2"></div><div class="col-lg-2"><a><i id="'+ credential.url +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+randID+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
 			}else{
 				entryContainer = document.querySelector('#uniqueEntryContainer');
 				entryContainer.style.display = '';
-				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-3">01.01.17</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2"><span type="unique" url="'+url+'" class="showPW">show</span></div><div class="col-lg-2"><a><i id="'+ url +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.id+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
+				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ credential.url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-3">01.01.17</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2"><span type="unique" url="'+credential.url+'" class="showPW">show</span></div><div class="col-lg-2"><a><i id="'+ credential.url +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+randID+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
 			}
 
 			var entryWrapper = document.createElement('div');
-			entryWrapper.setAttribute('id', 'entryWrapper_'+credential.id);
+			entryWrapper.setAttribute('id', 'entryWrapper_'+randID);
 			entryWrapper.setAttribute('class', 'entry-row row');
 			entryContainer.appendChild(entryWrapper);
 
-			var ew = $('#entryWrapper_'+credential.id);
+			var ew = $('#entryWrapper_'+randID);
 			ew.fadeIn();
 			// ew.animate({marginTop:"-=100px"},300);
 
-			$('#entryWrapper_'+credential.id).hover(function() {
+			$('#entryWrapper_'+randID).hover(function() {
 				/* Stuff to do when the mouse enters the element */
-				$('#entryWrapper_'+credential.id+' .entry-actions').show();
+				$('#entryWrapper_'+randID+' .entry-actions').show();
 			}, function() {
-				$('#entryWrapper_'+credential.id+' .entry-actions').hide();
+				$('#entryWrapper_'+randID+' .entry-actions').hide();
 			});
 			
-			var requestURL = "https://icons.better-idea.org/allicons.json?url="+url;
-			var wrapper = $('#entryWrapper_'+credential.id);
+			var requestURL = "https://icons.better-idea.org/allicons.json?url="+credential.url;
+			var wrapper = $('#entryWrapper_'+randID);
 
 			wrapper.append(content);
 
@@ -46,8 +46,8 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 				}
 			});
 			//wrapper.append('<div class="row entry"><div class="col-lg-12"><h4>'+url+'</h4><hr><div class="row"><div class="col-lg-8"><p>'+credential.username+'</p></div><div class="col-lg-2 entry-icons"><i id="'+url+'" class="material-icons">delete</i></div><div class="col-lg-2 entry-icons"><i id="open_'+credential.id+'" class="material-icons">open_in_new</i></div></div>');
-			var deleteBtn = document.getElementById(url);
-			var openBtn = document.getElementById("open_"+credential.id);
+			var deleteBtn = document.getElementById(credential.url);
+			var openBtn = document.getElementById("open_"+randID);
 
 			openBtn.addEventListener('click', function(e){
 				var creating = browser.tabs.create({
@@ -61,7 +61,7 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 				//TODO adapt to new storage design
 				deleteThisEntry(evtTgt.getAttribute('id'));
 				//remove from DOM
-				document.querySelector('#entryWrapper_'+credential.id).remove();	
+				document.querySelector('#entryWrapper_'+randID).remove();	
 			});
 
 
@@ -80,14 +80,14 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 					favIcon = "http://placehold.it/50/ffffff?text="+urlName.substring(0,1);
 				}
 
-				$('#entryWrapper_'+credential.id+' .placeholder-img').attr('src', favIcon);
+				$('#entryWrapper_'+randID+' .placeholder-img').attr('src', favIcon);
 				
 			});
 		};
 		var createCategoryElement = exports.createCategoryElement = function(categoryName, notes, iconName, pwd){
 
 			var container = document.querySelector('#categoryContainer');
-			require(['jquery','MVC_Model'], function($, sm) {
+			require(['jquery', 'MVC_Controller_Managerpage'], function($, controller) {
 
 				var hasPW = (pwd!=null);
 				var icon_lock = (hasPW) ? 'lock':'lock_open';
@@ -133,7 +133,7 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 						var _hasPW = (ic == 'lock') ? true : false;
 						// console.log("hasPW: " + _hasPW);
 						displayCategoryHeader(catName, _hasPW); //update hasPW before displaying header
-						sm.loadEntries(categoryName, false);
+						controller.loadEntries(categoryName, false);
 					}else{
 						console.log("deselected");
 						$('#panel_'+categoryName).toggleClass('category-focused');
@@ -274,24 +274,19 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 		};
 		var displayNumberEntries = exports.displayNumberEntries = function(){
 			console.log("View : displayNumberEntries");
-			var gettingCategories = browser.storage.local.get("categories");
-			gettingCategories.then((catResults) => {
+			SL.getCategories(function(catResults){
 				var categories = catResults["categories"];
-				var gettingEntries = browser.storage.local.get("entries");
-				gettingEntries.then((eResults) => {
-					var entries = eResults["entries"];
-					for(cKey in categories){
-						var number = 0;
-						for(key in entries){
-							if(entries[key].category == cKey) number++;
-						}
+				SL.countEntries(categories, function(cKeys){
+					console.log(cKeys);
+					// cKeys[catname] = number;
+					for(cKey in cKeys){
 						if($('#numberAccounts_'+cKey) != null){
-							$('#numberAccounts_'+cKey).html("Number Accounts: " + number);
+							$('#numberAccounts_'+cKey).html("Number Accounts: " + cKeys[cKey]);
 						}
 					}
 				});
 			});
-		};
+		}
 		var deleteCategory = exports.deleteCategory = function(category){
 		//ask if sure
 		//if category is not empty --> move entries to unsorted
@@ -530,5 +525,5 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 	}
 
 
-return exports;
+	return exports;
 });

@@ -110,9 +110,9 @@ h1{
 .panel-default > .panel-heading.panel-card{
 	/*	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);*/
 	box-shadow: 0 1px 1px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.1);
-	/*transition: all 0.5s cubic-bezier(.25,.8,.25,1);*/
-	/*background-color: #303f9f;*/
-	background-color: #FAFAFA;
+	transition: box-shadow 0.5s cubic-bezier(.25,.8,.25,1);
+	background-color: white;
+	/*background-color: #FAFAFA;*/
 	color: #212121;
 	/*border: 1px solid black !important;*/
 	cursor: pointer;
@@ -134,7 +134,8 @@ h1{
 
 .low-color{
 	/*opacity: 0.1;*/
-	background-color: #FAFAFA !important;
+	/*background-color: #FAFAFA !important;*/
+	background-color: white !important;
 	/*border: 1px solid black !important;*/
 
 	
@@ -298,9 +299,9 @@ h2.row-header{
 }
 
 #entryContainer, #uniqueEntryContainer{
-	background-color: white;
+	/*background-color: white;*/
 	padding: 15px;
-	box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+	/*box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);*/
 }
 #entryContainer{
 	display:none;

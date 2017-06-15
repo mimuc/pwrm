@@ -1,4 +1,4 @@
-define(['scripts/cryptojs/rollups/aes','scripts/tools/storageloader'],function(aes, sl){
+define(['scripts/cryptojs/rollups/aes','scripts/tools/storagemanagement'],function(aes, sl){
 	console.log("Crypt called");
 	return{
 		encrypt_aes:  function(msg, callback){

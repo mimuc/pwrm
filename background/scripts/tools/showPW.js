@@ -3,6 +3,7 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 		// distinguish between background page and content_script request 
 		// background page (managerpage) calls only provide the first argument
 		trigger : function(elem, mType, mUrl, mHash, mCategory, mCallback){
+			console.log("showPW : trigger");
 			var ret; var entry; var unique = false;
 			//call origin: background
 			if(mType == null && mUrl == null){
@@ -12,6 +13,7 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 					unique = true;
 				}else{
 					entry = elem.attr('cat');
+					entry = entry.replace(" ", "_");
 				}
 
 				$('#modalInputMPW').on('keyup', function() {
@@ -24,7 +26,6 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 				});
 			// call origin: content script 
 			}else{
-				console.log("check");
 				unique = (mType=='unique');
 				entry = (unique) ? mUrl : mCategory;
 
@@ -40,8 +41,8 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 			function doubleCheckMPW(a, doNext){
 				console.log("Function : doubleCheckMPW");
 				var callback = function(res){
-					console.log(a.toString());
-					console.log(res.toString());
+					// console.log(a.toString());
+					// console.log(res.toString());
 					if(a.toString() == res.toString()){
 						doNext();
 					}
@@ -66,7 +67,6 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 							//pw entry found
 							if(key == entry){
 								crypt.decrypt_aes(e[key].password, passphrase, function(result){
-									console.log(result);
 									if(mType == null){
 										elem.parent().parent().parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));
 										$('#modalMPW').modal('hide');
@@ -90,17 +90,15 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 
 					});
 				}else{
-					//get cat pw
-					console.log("get cat pw");
+					//get category pw
 					browser.storage.local.get("categories").then(function(res){
 						var e = res.categories
-								console.log("entry = " + entry);
+						// console.log("for category: " + entry);
 						for(key in e){
-							console.log("key: " + key);
 							if(key == entry){
 								// e[key][2]
 								crypt.decrypt_aes(e[key][2], passphrase, function(result){
-									console.log(result);
+									// console.log(result);
 									if(mType == null){
 										elem.parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));
 										$('#modalMPW').modal('hide');

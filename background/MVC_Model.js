@@ -1,4 +1,4 @@
-define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC_Controller_Managerpage","scripts/tools/crypt", "scripts/tools/storageloader"], 
+define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC_Controller_Managerpage","scripts/tools/crypt", "scripts/tools/storagemanagement"], 
 	function($,psl,tools,aes,MVC_Controller_Managerpage,crypt, SL) {
 	var exports = {};
 	
@@ -28,13 +28,13 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 		});
 	};
 	var loadEntries = exports.loadEntries = function(categoryName, showOnlyUnique){
-			var gettingEntries = browser.storage.local.get("entries");
-			gettingEntries.then((results) => {
+		console.log("Model : loadEntries");
+			SL.getEntries(function(results){
 				var res = results["entries"];
+				console.log(results);
 				//create empty entries-storage if empty
-				//TODO
 				if(res == null){
-					storingEntry = browser.storage.local.set({"entries" : {}});
+					browser.storage.local.set({"entries" : {}});
 				}
 
 				if(showOnlyUnique){
@@ -49,47 +49,52 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 
 					}else{
 						if(res[key].category == categoryName){
+							console.log("display category entries");
 							MVC_Controller_Managerpage.displayEntry(key,res[key], true);
 						}
 					}
 				}
 			});
 	};
-	var storeEntry = exports.storeEntry = function(mUrl, mCredential, toggleModal) {
+	var storeEntry = exports.storeEntry = function(randID, mCredential, toggleModal) {
 			console.log("Model : storeEntry");	
 			crypt.encrypt_aes(mCredential.password, function(data){	
 				mCredential.password = data;
 				console.log(mCredential);
 				//first get current storage
-				SL.getEntries(function(results){
-					var entries = results;
+				// SL.getEntries(function(results){
+					// var entries = results;
 					//check if there is an entry with the same url
-					if(entries.entries != null && entries.entries[mUrl] != null){
-						alert("You have already stored an entry for "+ mUrl +". It's assigned to category " + entries.entries[mUrl].category);
+					// if(entries.entries != null && entries.entries[mUrl] != null){
+					// 	// TODO allow multiple entries with same url
+					// 	alert("You have already stored an entry for "+ mUrl +". It's assigned to category " + entries.entries[mUrl].category);
 						
-					}else{
+					// }else{
 						//push new entry
-						entries.entries[mUrl] = mCredential;
+						// entries.entries[randID] = mCredential;
 						//store changes
-						SL.setEntries(entries, function(){
+						SL.saveEntry(randID, mCredential, function(res){
+						// SL.setEntries(entries, function(){
 							console.log("store success");
+							console.log("res");
 							//update display entries immediately that do not have a category
 							//or if the chosen category is focused
 							var focusedCategory = document.querySelector('.category-focused');
 							if(focusedCategory!=null) var focusedCategoryName = focusedCategory.getAttribute('id').split('_')[1];
 							if(mCredential.category == null ){
-								MVC_Controller_Managerpage.displayEntry(mUrl, mCredential, false);
+								MVC_Controller_Managerpage.displayEntry(randID, mCredential, false);
 							}else if(focusedCategoryName != null && mCredential.category == focusedCategoryName){
-								MVC_Controller_Managerpage.displayEntry(mUrl, mCredential, true);
+								MVC_Controller_Managerpage.displayEntry(randID, mCredential, true);
 							}
 							MVC_Controller_Managerpage.displayNumberEntries();
 							
-						}, onError);
+						});
+						// }, onError);
 						//close modal
 						if(toggleModal) $('#modal-newEntry').modal('toggle');
-					}
+					// }
 
-			});		
+			// });		
 			});
 	};
 	var addEntry = exports.addEntry = function() {
@@ -127,9 +132,9 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 		}*/
 		var entryUsername = inputUsername.value;
 
-		var gettingItem = browser.storage.local.get(entryURL);
-		gettingItem.then((result) => {
-			var objTest = Object.keys(result);
+		// var gettingItem = browser.storage.local.get(entryURL);
+		// gettingItem.then((result) => {
+		// 	var objTest = Object.keys(result);
 			//dirty! 
 			var mUrl;
 			if(entryURL.indexOf('google')>0){
@@ -140,17 +145,16 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 				mUrl = entryURL;
 			}
 			if(useUniquePWD){
-				credential = {username: entryUsername, id: randID, password: pwdHash};
-				this.storeEntry(mUrl, credential, true);
+				var credential = {username: entryUsername, url: mUrl, password: pwdHash};
+				this.storeEntry(randID, credential, true);
 			}else{
-				if(objTest.length < 1 && mUrl !== '' && entryUsername !== '') {
+				// if(objTest.length < 1 && mUrl !== '' && entryUsername !== '') {
 					mUrl.value = ''; entryUsername.value = ''; entryCategory.value ='';
-					var credential;
-					credential = {category: entryCategory, username: entryUsername, id: randID};
-				}
-				this.storeEntry(mUrl, credential, true);
+					var credential = {category: entryCategory, username: entryUsername, url: mUrl};
+				// }
+				this.storeEntry(randID, credential, true);
 			}
-		}, onError);	
+		// }, onError);	
 	};
 	var quickAddEntry = exports.quickAddEntry = function(murl, musername, mcat, mpw) {
 		console.log("Model : addEntry (quick)");
@@ -169,21 +173,20 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 
 		var entryUsername = musername;
 
-		var gettingItem = browser.storage.local.get(entryURL);
-		gettingItem.then((result) => {
-			var objTest = Object.keys(result);
+		// var gettingItem = browser.storage.local.get(entryURL);
+		// gettingItem.then((result) => {
+		// 	var objTest = Object.keys(result);
 			if(useUniquePWD){
-				credential = {username: entryUsername, id: randID, password: mpw};
-				this.storeEntry(entryURL, credential, false);
+				var credential = {username: entryUsername, url: entryURL, password: mpw};
+				this.storeEntry(randID, credential, false);
 			}else{
-				if(objTest.length < 1 && entryURL !== '' && entryUsername !== '') {
+				// if(objTest.length < 1 && entryURL !== '' && entryUsername !== '') {
 					entryURL.value = ''; entryUsername.value = ''; entryCategory.value ='';
-					var credential;
-					credential = {category: entryCategory, username: entryUsername, id: randID};
-				}
-				this.storeEntry(entryURL, credential, false);
+					var credential = {category: entryCategory, username: entryUsername, url: entryURL};
+				// }
+				this.storeEntry(randID, credential, false);
 			}
-		}, onError);
+		// }, onError);
 	};
 
 	//private functions

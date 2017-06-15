@@ -51,11 +51,9 @@ Martin Prinz 14.06.2017*/
 	padding: 0;
 	padding-left: 16px;
 	padding-right: 56px;
-	text-decoration: none;
 	clear: both;
-	font-weight: 300;
+	font-weight: 400;
 	font-size: 18px;
-
 }
 .sidebar-row > .material-icons{
 	font-size: 24px;
