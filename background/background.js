@@ -1,6 +1,6 @@
 
-require(['MVC_Controller_Managerpage', 'MVC_View_Managerpage'],
-	function(controller, view){
+require(['MVC_Controller_Managerpage', 'MVC_View_Managerpage', 'scripts/tools/showPW'],
+	function(controller, view, showPW){
 
 		var addBtn = document.querySelector('#addEntry');
 		var addPWD = document.querySelector('#btnAddPWD');
@@ -42,6 +42,30 @@ function addListeners(){
 	$('#sidebar-unique').on('click', function(){showSection($(this), '#section-unique');});
 	$('#sidebar-modifications').on('click', function(){showSection($(this), '#section-modifications');});
 	setupPWMeter();
+
+	$(document).on('click', '.showPW', function(e){
+		console.log(e.target.innerHTML);
+		console.log("clicked on showPW");
+			// e.stopImmediatePropagation();
+			if(e.target.innerHTML == 'show'){
+				
+				showPW.trigger(($(this)));
+				$('#modalMPW').on('shown.bs.modal', function (e) {
+					$('#modalInputMPW').val('');
+					$('#modalInputMPW').focus();
+				});
+				$('#modalMPW').modal('show');
+
+			}else if(e.target.innerHTML == 'hide'){
+				
+				$(this).parent().parent().parent().find('.pwd-hidden').html('*******');
+				$(this).html('show');
+				
+			// do nothing
+		}
+	});
+
+
 	 // add event listeners to buttons and inputs
 	 addPWD.addEventListener('click', showPWInput);
 	 addBtn.addEventListener('click', function(){
@@ -100,7 +124,6 @@ function addListeners(){
 
 	function setup(){
 		clearInputs(); 
-
  	//init storage logic
  	require(["MVC_Model"], function init(MVC_Model){
  		MVC_Model.initialize();
@@ -188,8 +211,8 @@ function setupPWMeter(){
 
 	$('input[type="password"]:not(#modalInputMPW)').on('keyup', function(event) {
 		if($(this).val().length > 0){
-				$('.progress').show();
-				$('.password-verdict').show();
+			$('.progress').show();
+			$('.password-verdict').show();
 		}else{
 			$('.progress').hide();
 			$('.password-verdict').hide();

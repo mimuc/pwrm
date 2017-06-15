@@ -65,16 +65,14 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 						var e = res.entries;
 						for(key in e){
 							//pw entry found
-							if(key == entry){
+							if(e[key].url == entry){
+
 								crypt.decrypt_aes(e[key].password, passphrase, function(result){
 									if(mType == null){
 										elem.parent().parent().parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));
 										$('#modalMPW').modal('hide');
 										elem.html('hide');
-										elem.one('click', function(){
-											$(this).parent().parent().parent().find('.pwd-hidden').html('*******');
-											$(this).html('show');
-										});
+										
 									}else{
 
 										mCallback(result.toString(CryptoJS.enc.Utf8));
@@ -103,10 +101,7 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 										elem.parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));
 										$('#modalMPW').modal('hide');
 										elem.html('hide');
-										elem.one('click', function(){
-											$(this).parent().find('.pwd-hidden').html('*******');
-											$(this).html('show');
-										});
+										
 									}else{
 										mCallback(result.toString(CryptoJS.enc.Utf8));
 									}
