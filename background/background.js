@@ -12,6 +12,7 @@ require(['MVC_Controller_Managerpage', 'MVC_View_Managerpage'],
 
 		/* call init on page load */
 		$(document).ready(function() {
+			console.log("Browser used: " + navigator.userAgent);
 			$('#section-categories').show();
 			setup();
 			addListeners();
@@ -23,6 +24,9 @@ require(['MVC_Controller_Managerpage', 'MVC_View_Managerpage'],
 //searches for entries and displays results matching the typed letters
 function searchAsync(value){
 	console.log("searchAsync: " + value);
+	showSection(null, '#section-searchresults');
+	$('#section-searchresults h1').html("Results for: '" + value + "'");
+	controller.search(value);
 }
 
 function showSection(clicked, section){
@@ -30,7 +34,7 @@ function showSection(clicked, section){
 	$('.mp-section:not('+section+')').hide();
 	activeSection.show();
 	$('.sidebar-row').removeClass('active');
-	clicked.addClass('active');
+	if(clicked) clicked.addClass('active');
 }
 
 function addListeners(){
@@ -96,7 +100,6 @@ function addListeners(){
 
 	function setup(){
 		clearInputs(); 
-		console.log("called setup");
 
  	//init storage logic
  	require(["MVC_Model"], function init(MVC_Model){

@@ -1,5 +1,5 @@
 define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC_Controller_Managerpage","scripts/tools/crypt", "scripts/tools/storagemanagement"], 
-	function($,psl,tools,aes,MVC_Controller_Managerpage,crypt, SL) {
+	function($,psl,tools,aes,controller,crypt, SL) {
 	var exports = {};
 	
 	var initialize = exports.initialize = function() {
@@ -16,14 +16,14 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 				}};
 				var setting = browser.storage.local.set(cat);
 				setting.then(function(){
-					MVC_Controller_Managerpage.fillDropdown(cat.categories);
-					MVC_Controller_Managerpage.displayCategories(cat.categories, true); //calls loadEntries on callback
+					controller.fillDropdown(cat.categories);
+					controller.displayCategories(cat.categories, true); //calls loadEntries on callback
 				});	
 
 			}else{
 			//display options in dropdown #categoryDropdown
-			MVC_Controller_Managerpage.fillDropdown(categories);
-			MVC_Controller_Managerpage.displayCategories(categories, true); //calls loadEntries on callback
+			controller.fillDropdown(categories);
+			controller.displayCategories(categories, true); //calls loadEntries on callback
 			}
 		});
 	};
@@ -44,12 +44,12 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 					if(showOnlyUnique){
 						console.log("only display unique-pw entries");
 						if(categoryName == null && res[key].category == null){
-							MVC_Controller_Managerpage.displayEntry(key, res[key], false); //hasCategory==false
+							controller.displayEntry(key, res[key], false); //hasCategory==false
 						}
 
 					}else{
 						if(res[key].category == categoryName){
-							MVC_Controller_Managerpage.displayEntry(key,res[key], true);
+							controller.displayEntry(key,res[key], true);
 						}
 					}
 				}
@@ -81,11 +81,11 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 							var focusedCategory = document.querySelector('.category-focused');
 							if(focusedCategory!=null) var focusedCategoryName = focusedCategory.getAttribute('id').split('_')[1];
 							if(mCredential.category == null ){
-								MVC_Controller_Managerpage.displayEntry(randID, mCredential, false);
+								controller.displayEntry(randID, mCredential, false);
 							}else if(focusedCategoryName != null && mCredential.category == focusedCategoryName){
-								MVC_Controller_Managerpage.displayEntry(randID, mCredential, true);
+								controller.displayEntry(randID, mCredential, true);
 							}
-							MVC_Controller_Managerpage.displayNumberEntries();
+							controller.displayNumberEntries();
 							
 						});
 						// }, onError);
@@ -186,6 +186,11 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 				this.storeEntry(randID, credential, false);
 			}
 		// }, onError);
+	};
+	var search = exports.search = function(value){
+		SL.findEntries(value, function(results){
+			controller.displaySearchResults(results);
+		});
 	};
 
 	//private functions

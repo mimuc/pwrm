@@ -43,6 +43,23 @@ define(function(){
 			});
 		},
 
+		findEntries : function(value, callback){
+			this.getEntries(function(results){
+				console.log(results);
+				var foundEntries = [];
+				var entries = results["entries"];
+				for(key in entries){
+					var murl = entries[key].url;
+					var mname = entries[key].username;
+					// check if any entry contains the searched value as username/url
+					if(murl.indexOf(value) !== -1 || mname.indexOf(value) !== -1){
+						foundEntries.push(entries[key]);
+					}
+				}
+				callback(foundEntries);
+			});
+		},
+
 		findEntryByURL: function(mUrl, callback){
 			this.getEntries(function(results){
 				console.log(results);

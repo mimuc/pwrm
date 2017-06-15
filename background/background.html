@@ -36,7 +36,7 @@
 
  <nav class="navbar navbar-default navbar-fixed-top navbar-mp">
   <div class="container">
-    <form role="form" data-toggle="validator">
+    <form>
       <div class="form-group has-feedback has-feedback-left">
         <input id="search" type="text" class="form-control" placeholder="Search" />
         <i id="search-icon" class="form-control-feedback material-icons">search</i>
@@ -48,17 +48,17 @@
 <aside id='sidebar'>
   <div class="sidebar-head"></div>
   <div class="sidebar-row active" id="sidebar-categories">
-  <i class="material-icons">book</i>
-  <p>Categories</p>
+    <i class="material-icons">book</i>
+    <p>Categories</p>
   </div>
   <div class="sidebar-row" id="sidebar-unique">
     <i class="material-icons">list</i>
-  <p>Unique Passwords</p>
+    <p>Unique Passwords</p>
   </div>
   <hr>
   <div class="sidebar-row" id="sidebar-modifications">
     <i class="material-icons">cached</i>
-  <p>PW Modifications</p>
+    <p>PW Modifications</p>
   </div>
 </aside>
 
@@ -89,24 +89,31 @@
      </div>
    </div>
  </div>
-  <div class="mp-section" id='section-modifications'>
+ <div class="mp-section" id='section-modifications'>
    <div class="content row">
      <div class="page-header">
        <h1>Password Modifications</h1>
-        <p class="section-hint">TODO</p>
+       <p class="section-hint">TODO</p>
      </div>
      <div class="card-wrapper">
        <div id="modificationEntryContainer"></div>
      </div>
    </div>
  </div>
-   <div class="mp-section" id='section-searchresults'>
+ <div class="mp-section" id='section-searchresults'>
    <div class="content row">
      <div class="page-header">
        <h1>Results for: <small></small></h1>
      </div>
      <div class="card-wrapper">
-       <div id="searchEntryContainer"></div>
+       <div id="searchEntryContainer">
+         <div id="searchResults-category">
+        
+         </div>
+         <div id="searchResults-unique">
+         <
+         </div>
+       </div>
      </div>
    </div>
  </div>

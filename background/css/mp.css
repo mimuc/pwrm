@@ -22,6 +22,23 @@ a, a:hover{
 	display:none;
 }
 
+.search-result-header{
+	color: #595959;
+	font-weight: 300;
+	font-size: 29px;
+	height: 67px;
+	line-height: 67px;
+}
+.search-result-header .material-icons{
+	font-size: 31px;
+	line-height: 69px;
+	vertical-align: middle;
+	margin-right: 16px;
+}
+.search-result-header:not(first){
+	margin-top: 40px;
+}
+
 .form-control[type="password"]{
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;

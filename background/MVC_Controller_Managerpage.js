@@ -1,16 +1,24 @@
 // DON'T DEFINE MVC_MODEL HERE => circular dependency
 // solution: reuqire on demand
 define(['MVC_View_Managerpage', 'scripts/tools/showPW', 'psl'],
-  function(MVC_View_Managerpage, showPW, psl){
+  function(view, showPW, psl){
     var exports = {};
 
     var changeCategoryIcon = exports.changeCategoryIcon = function(catName, iconName){
       console.log("Controller : changeCategoryIcon");
-      MVC_View_Managerpage.changeCategoryIcon(catName, iconName);
+      view.changeCategoryIcon(catName, iconName);
     };
     var deleteCategory = exports.deleteCategory = function(name){
       console.log("Controller : deleteCategory");
-      MVC_View_Managerpage.deleteCategory(name);
+      view.deleteCategory(name);
+    };
+    var search = exports.search = function(value){
+       require(['MVC_Model'], function(MVC_Model){
+        MVC_Model.search(value);
+      });
+    };
+    var displaySearchResults = exports.displaySearchResults = function(results){
+      view.displaySearchResults(results);
     };
     var displayEntry = exports.displayEntry = function(randID, credential, hasCategory){
       console.log("Controller : displayEntry");
@@ -20,19 +28,19 @@ define(['MVC_View_Managerpage', 'scripts/tools/showPW', 'psl'],
       var urlName = parsed.domain;
       urlName = urlName.split(".")[0];
 
-      MVC_View_Managerpage.displayEntry(randID, urlName, credential, hasCategory);
+      view.displayEntry(randID, urlName, credential, hasCategory);
     };
     var fillDropdown = exports.fillDropdown = function(categories){
       console.log("Controller : fillDropdown");
-      MVC_View_Managerpage.fillDropdown(categories);
+      view.fillDropdown(categories);
     };
     var displayCategories = exports.displayCategories = function(categories, loadEntries){
       console.log("Controller : displayCategories");
-      MVC_View_Managerpage.displayCategories(categories, loadEntries);
+      view.displayCategories(categories, loadEntries);
     };
     var displayNumberEntries = exports.displayNumberEntries = function(){
       console.log("Controller : displayNumberEntries");
-      MVC_View_Managerpage.displayNumberEntries();
+      view.displayNumberEntries();
     };
     var createCategory = exports.createCategory = function(){
       var value = modalCategoryName.value;
@@ -45,7 +53,7 @@ define(['MVC_View_Managerpage', 'scripts/tools/showPW', 'psl'],
         pw = ecpwd.val();
       }
 
-      MVC_View_Managerpage.createCategory(value, pw, $('#modalCategory').hasClass('new'));
+      view.createCategory(value, pw, $('#modalCategory').hasClass('new'));
     };
     var addEntry = exports.addEntry = function(){
       console.log("Controller : addEntry");
