@@ -1,6 +1,6 @@
 
-require(['MVC_Controller_Managerpage', 'MVC_View_Managerpage', 'scripts/tools/showPW'],
-	function(controller, view, showPW){
+require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Managerpage', 'scripts/tools/showPW'],
+	function(Logger, controller, view, showPW){
 
 		var addBtn = document.querySelector('#addEntry');
 		var addPWD = document.querySelector('#btnAddPWD');
@@ -16,6 +16,7 @@ require(['MVC_Controller_Managerpage', 'MVC_View_Managerpage', 'scripts/tools/sh
 			$('#section-categories').show();
 			setup();
 			addListeners();
+			Logger.log("Manager Opened");
 		});
 
 

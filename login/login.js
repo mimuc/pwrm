@@ -24,6 +24,9 @@ $(document).ready(function() {
 
 // show onboarding ui elements
 function initOnboarding(){
+	// set webexID for Logging
+	browser.storage.local.set({"webexID" : "123456789"});
+	
 	var slide = 0;
 	console.log("Function : initOnboarding");
 	$('.onboarding').removeClass("hidden");
