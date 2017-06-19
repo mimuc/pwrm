@@ -1,9 +1,9 @@
 define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC_Controller_Managerpage","scripts/tools/crypt", "scripts/tools/storagemanagement"], 
 	function($,psl,tools,aes,controller,crypt, SL) {
-	var exports = {};
-	
-	var initialize = exports.initialize = function() {
-		console.log("Model : initialize");
+		var exports = {};
+
+		var initialize = exports.initialize = function() {
+			console.log("Model : initialize");
 		//create distinct categories elements depending on existing entries
 		SL.getCategories(function(results){
 			var categories = results["categories"];
@@ -24,14 +24,14 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 			//display options in dropdown #categoryDropdown
 			controller.fillDropdown(categories);
 			controller.displayCategories(categories, true); //calls loadEntries on callback
-			}
-		});
+		}
+	});
 	};
 	var loadEntries = exports.loadEntries = function(categoryName, showOnlyUnique){
 		console.log("Model : loadEntries");
-			SL.getEntries(function(results){
-				var res = results["entries"];
-				console.log(results);
+		SL.getEntries(function(results){
+			var res = results["entries"];
+			console.log(results);
 				//create empty entries-storage if empty
 				if(res == null){
 					browser.storage.local.set({"entries" : {}});
@@ -56,10 +56,10 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 			});
 	};
 	var storeEntry = exports.storeEntry = function(randID, mCredential, toggleModal) {
-			console.log("Model : storeEntry");	
-			crypt.encrypt_aes(mCredential.password, function(data){	
-				mCredential.password = data;
-				console.log(mCredential);
+		console.log("Model : storeEntry");	
+		crypt.encrypt_aes(mCredential.password, function(data){	
+			mCredential.password = data;
+			console.log(mCredential);
 				//first get current storage
 				// SL.getEntries(function(results){
 					// var entries = results;
@@ -67,7 +67,7 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 					// if(entries.entries != null && entries.entries[mUrl] != null){
 					// 	// TODO allow multiple entries with same url
 					// 	alert("You have already stored an entry for "+ mUrl +". It's assigned to category " + entries.entries[mUrl].category);
-						
+
 					// }else{
 						//push new entry
 						// entries.entries[randID] = mCredential;
@@ -94,7 +94,7 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 					// }
 
 			// });		
-			});
+		});
 	};
 	var addEntry = exports.addEntry = function() {
 		console.log("Model : addEntry");
@@ -175,10 +175,10 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 		// var gettingItem = browser.storage.local.get(entryURL);
 		// gettingItem.then((result) => {
 		// 	var objTest = Object.keys(result);
-			if(useUniquePWD){
-				var credential = {username: entryUsername, url: entryURL, password: mpw};
-				this.storeEntry(randID, credential, false);
-			}else{
+		if(useUniquePWD){
+			var credential = {username: entryUsername, url: entryURL, password: mpw};
+			this.storeEntry(randID, credential, false);
+		}else{
 				// if(objTest.length < 1 && entryURL !== '' && entryUsername !== '') {
 					entryURL.value = ''; entryUsername.value = ''; entryCategory.value ='';
 					var credential = {category: entryCategory, username: entryUsername, url: entryURL};
@@ -192,17 +192,23 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 			controller.displaySearchResults(results);
 		});
 	};
+	var decrypt = exports.decrypt = function(content, callback){
+		crypt.auto_decrypt_aes(content, function(dec){
+			console.log(dec);
+			callback(dec);
+		});
+	}
 
 	//private functions
 	var initCategories = function(){
-			console.log("Model : initCategories");
-			browser.storage.local.set({"categories" : {}});
+		console.log("Model : initCategories");
+		browser.storage.local.set({"categories" : {}});
 	};
 	var onError = function(e){
 		
 		console.log(e);
 	};
-		
+
 	return exports;
 	
 });

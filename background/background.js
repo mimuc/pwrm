@@ -166,19 +166,21 @@ function handleMessage(message, sender, sendResponse) {
 	}else if(message.task == 'showPW'){
 		// var msg = {action : "requestPW", content: "hallo"};
 		// sendResponse(msg);
-
 		controller.requestPassword(message.url, message.entryType, message.hash, message.category); //passing sendresponse not working
 	}else if(message.task == 'addHint'){
 		changeBrowserAction(false);
 	}else if(message.task =="removeHint"){
 		changeBrowserAction(true);
+	}else if(message.task == "decrypt"){
+		controller.decrypt(message.content);
 	}else if(message.task == "open_manager"){
 		// TODO
 		console.log("TODO: open manager");
 	}else if(message.task == "getCategories"){
 		SM.getCategories(function(results){
 			console.log(results);
-			sendMessage({action : "fillList", items : results["categories"]});
+			sendMessage({action : "fillList", items : results});
+			sendResponse({action : "fillList", items : results});
 		});
 
 	}

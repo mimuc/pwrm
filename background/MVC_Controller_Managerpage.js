@@ -75,6 +75,18 @@ define(['MVC_View_Managerpage', 'scripts/tools/showPW', 'psl'],
       MVC_Model.quickAddEntry(murl, musername, mcat, mpw);
     });
   };
+  var decrypt = exports.decrypt = function(content){
+    require(['MVC_Model'], function(MVC_Model){
+      MVC_Model.decrypt(content, function(result){
+         var msg = {action : "fillPW", content: result};
+          // does only work when backgroundpage is opened?!
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {  
+          chrome.tabs.sendMessage(tabs[0].id, msg, function(response) {
+          }); 
+        });
+      });
+    });
+  };
   var requestPassword = exports.requestPassword = function(mUrl, type, mHash, mCategory){
       //ATTENTION!
       //must be called from background.js TODO

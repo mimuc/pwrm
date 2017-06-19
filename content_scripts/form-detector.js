@@ -92,7 +92,7 @@ for (index = 0; index < inputs.length; ++index) {
     if(i.getAttribute("type").toUpperCase() === attr_name.toUpperCase() ||
       new RegExp(regex_name).test(i.outerHTML)){
       var inputUsername = i;
-      highlightUsername(i, credentials);
+    highlightUsername(i, credentials);
   } 
 }
 
@@ -270,7 +270,7 @@ function showSignupHintbox(i){
 
     $('.hintbox.signup').css({
       "min-width": i.offsetWidth+1+"px"
-   });
+    });
 
 
     $('#ic_arrow').click(function(){
@@ -279,9 +279,9 @@ function showSignupHintbox(i){
     i.classList.add('mpinput');
     i.classList.add('signup');
     $('input.mpinput.signup').click(function(e){
-      console.log("clicked");
-      var parentOffset = $(this).offset(); 
-      var relX = (e.pageX - parentOffset.left)/($(this).width());
+     $('.hintbox.signup .grid.middle').html('Reusing a Password?');
+     var parentOffset = $(this).offset(); 
+     var relX = (e.pageX - parentOffset.left)/($(this).width());
      // console.log('relX: ' + relX +', relY: '+ relY);
      // if(relX > 0.9){
       // request create list (get categories from bg)
@@ -352,17 +352,34 @@ function handleMessage(request, sender, sendResponse){
     });
   }else if(request.action == 'fillList'){
     $('#categoryList').empty();
-    var listItems = request.items;
+    var listItems = request.items["categories"];
+    setupSignupHintbox(listItems);
+  }else if(request.action == "fillPW"){
+    console.log("answer from bg: " + request.content);
+    var signupPW = $('.hintbox.signup').parent().parent().parent().find('input');
+    signupPW.attr('placeholder', ' ');
+    signupPW.attr('aria-label', ' '); 
+    signupPW.val(request.content);
+  }
+}
+function setupSignupHintbox(listItems){
     console.log(listItems);
     $('.hintbox.signup').toggle();
     $('.hintbox_head.signup').toggleClass('focused');
     $('.hintbox_content.signup').toggleClass('open');
     $('#ic_arrow').toggleClass('upsideDown');
     for(key in listItems){
-      $('#categoryList').append('<li id="'+ key +'"><i class="material-icons">'+ listItems[key][1] +'</i><span>'+ key +'</span></li>')
+      var lock = (listItems[key][2] == null) ? 'lock_open' : 'lock';
+
+      $('#categoryList').append('<li id="'+ key +'" hash="'+ listItems[key][2] +'"><i class="material-icons">'+ listItems[key][1] +'</i><span>'+ key.replace('_', ' ') +'</span><i class="lock material-icons">'+ lock +'</i></li>')
     }
     $('#categoryList > li').on('click', function(){
       var chosen = $(this).attr('id'); 
+      var hash = $(this).attr('hash');
+      // autofill PW
+      if(hash!=null && hash != 'undefined'){  
+        chrome.runtime.sendMessage({task : 'decrypt', content: hash});
+      }
       // collapse hintbox
       $('.hintbox_head.signup').toggleClass('focused');
       $('.hintbox_content.signup').toggleClass('open');
@@ -370,9 +387,8 @@ function handleMessage(request, sender, sendResponse){
       // change hintbox_head
       var icon = $(this).find('.material-icons').html();
       $('.hintbox_head.signup .grid.left .material-icons').html(icon);
-      $('.hintbox.signup .grid.middle').html(chosen);
+      $('.hintbox.signup .grid.middle').html(chosen.replace('_', ' '));
     });
-  }
 }
 
 function isHidden(element) {

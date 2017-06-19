@@ -89,7 +89,9 @@
 	cursor: pointer;
 }
 
-
+.lock.material-icons{
+	float:right;
+}
 
 .hintbox_head:hover{
 	cursor: pointer;

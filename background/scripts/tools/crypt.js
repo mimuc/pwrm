@@ -21,6 +21,14 @@ define(['scripts/cryptojs/rollups/aes','scripts/tools/storagemanagement'],functi
 				callback(decrypted);
 		});
 
+		},
+		auto_decrypt_aes:  function(enc, callback){
+			sl.getMPWHash(function(result){
+				var mpwHash = result.mpw;
+				var decrypted = CryptoJS.AES.decrypt(enc, mpwHash); 
+				callback(decrypted.toString(CryptoJS.enc.Utf8));
+		});
+
 		}	
 
 	}
