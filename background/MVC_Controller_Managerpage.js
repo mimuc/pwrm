@@ -34,6 +34,7 @@ define(['MVC_View_Managerpage', 'scripts/tools/showPW', 'psl'],
       console.log("Controller : fillDropdown");
       view.fillDropdown(categories);
     };
+    
     var displayCategories = exports.displayCategories = function(categories, loadEntries){
       console.log("Controller : displayCategories");
       view.displayCategories(categories, loadEntries);

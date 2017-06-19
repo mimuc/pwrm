@@ -1,6 +1,6 @@
 
-require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Managerpage', 'scripts/tools/showPW'],
-	function(Logger, controller, view, showPW){
+require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Managerpage', 'scripts/tools/showPW', 'scripts/tools/storagemanagement'],
+	function(Logger, controller, view, showPW, SM){
 
 		var addBtn = document.querySelector('#addEntry');
 		var addPWD = document.querySelector('#btnAddPWD');
@@ -175,6 +175,12 @@ function handleMessage(message, sender, sendResponse) {
 	}else if(message.task == "open_manager"){
 		// TODO
 		console.log("TODO: open manager");
+	}else if(message.task == "getCategories"){
+		SM.getCategories(function(results){
+			console.log(results);
+			sendMessage({action : "fillList", items : results["categories"]});
+		});
+
 	}
 }
 //programmatically preselect options in dropdown

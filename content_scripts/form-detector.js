@@ -11,31 +11,15 @@ document.head.appendChild(mi);
 /* trigger storage lookup for matching accounts */
 window.addEventListener("DOMContentLoaded", init());
 
-//window.addEventListener("DOMSubtreeModified", findForms());
-// var submitBtn = document.querySelector('[type=submit]');
-// console.log(submitBtn);
-//check if is submit TODO
-// submitBtn.addEventListener('click', checkAccount);
-
-var inputUsername;
-var inputs;
+var inputUsername, inputs;
 var hasLogin = false; 
 var hasSignup = false;
-
 
 //var URL = document.URL;
 // use location.origin to extract base url
 var URL = location.origin;
 console.log(typeof location);
-console.log("test");
-/*
-var murl = document.URL;
-murl = murl.split("/")[2]; // Get the hostname
-var parsed = psl.parse(murl); // Parse the domain
 
-var URL = parsed.domain;
-console.log("parsed domain: " + URL);
-*/
 //check against type-attribute 
 var attr_name = "email";
 var attr_pw = "password";
@@ -48,99 +32,53 @@ function init(){
   console.log("Function : init");
   //workaround to wait for DOM Elements being loaded async after DOMContentLoaded
   setTimeout(function() { findForms(); }, 1000);
-  //findForms();
-  //alternative: DOM Mutation Observer
-  //setTimeout(function() { setupObserver(); }, 2000);
 }
-/*
-function setupObserver(){
-  console.log("Function : setupObserver");
-  MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-  var observer = new MutationObserver(function(mutations) {
-   mutations.forEach(function(mutation) {
-    if(!isHidden(mutation.target)){
-    console.log("inputs shown");
-    console.log(mutation.oldValue);
-  }
-  
-  });    
- });
-  var config = { attributes: true,attributeOldValue: true, attributeFilter: ['type']};
-   //observe all inputs and wait for changes
-   var observableInputs = filterHiddenInputs(document.querySelectorAll('input'));
-   for(oi=0;oi<observableInputs.length;oi++){
-    observer.observe(observableInputs[oi], config);
-   }
-
-}
-*/
-function isHidden(element) {
-  return (element.type =='hidden' ||element.offsetParent === null)
-}
-//consider only inputs that are visible in DOM
-function filterHiddenInputs(inputs){
-  //http://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
-  var filteredInputs = [];
-
-  for(ii = 0;ii<inputs.length;ii++){
-    if(!isHidden(inputs[ii])){
-      filteredInputs.push(inputs[ii]);
-    }
-  }
-  //console.log(filteredInputs);
-  return filteredInputs;
-
-}
-
 
 function findForms(){
   console.log("Function : findForms");
   var forms = document.getElementsByTagName('form');
   console.log(forms);
   //first check if there are 2 password inputs to determine whether it's a login or a signup
-  //false positive on (like facebook) login-signup double page 
+  //false positives on (like facebook) login-signup double page 
   console.log("Number forms on this page: " +forms.length);
 
+  // trigger action when form is submitted
   $('form').submit(function(ev) {
     ev.preventDefault(); // stop the form from submitting
     // checkAccount();
     // TODO
     // console.log("submit detected");
     this.submit(); 
-});
+  });
 
   for (i = 0; i < forms.length; ++i) {
     var pwInputs = forms[i].querySelectorAll('input[type="password"]:not([type="hidden"]):not([type="submit"])');
     var allInputs = forms[i].querySelectorAll('input:not([type="hidden"]):not([type="submit"])');
-    
-    //console.log(pwInputs);
-    //console.log("filtering pwinputs ...");
     var visiblePWInputs = filterHiddenInputs(pwInputs);
-    //console.log(allInputs);
-    //console.log("filtering allinputs ...");
     var visibleAllInputs = filterHiddenInputs(allInputs);
 
-    console.log("Form "+ i +" has "+ visiblePWInputs.length +" (visible) PW Input and "+ visibleAllInputs.length +" other Input Elements.");
-    //form is supposed to be a signup form if:
-    //there are 2 PW inputs
-    //there is 1 PW input and more than 1 other input element in the same form
-
+    // console.log("Form "+ i +" has "+ visiblePWInputs.length +" (visible) PW Input and "+ visibleAllInputs.length +" other Input Elements.");
     
+    if(visiblePWInputs.length < 2 && visibleAllInputs.length == 2){
+      console.log("Form " + i + " is a Login Form.");
+      lookupStorage(forms[i]); //calls findInput(..) in case of existing entry for this url
+    }else 
+
     if(visiblePWInputs.length == 2 || (visiblePWInputs.length == 1 && visibleAllInputs.length > 2)){
       console.log("Form " + i + " is a Signup Form.");
-    }else if(visiblePWInputs.length < 2){
-     console.log("Form " + i + " is a Login Form.");
-        lookupStorage(forms[i]); //calls findLogin(..) in case of existing entry for this url
-      }else if(visiblePWInputs.length > 2){
-       console.log("Form " + i + " might be a Reset Form.");
-     }
+      findInput(forms[i], null, null, null);
+    }else 
+
+    if(visiblePWInputs.length > 2){
+      console.log("Form " + i + " might be a Reset Form.");
+    }
 
    } //end of for-loop
  }
 
 
- function findLogin(form, credentials, categories, categoryIcon){
-  console.log("Function : findLogin");
+ function findInput(form, credentials, categories, categoryIcon){
+  console.log("Function : findInput (credentials: " + credentials +")");
   var inputUsername;
   inputs = form.getElementsByTagName('input');
 //TODO: add boxes and auto-fill username etc depending on user preferences
@@ -150,19 +88,24 @@ for (index = 0; index < inputs.length; ++index) {
   if(i.type != "submit" && i.type != "hidden"){
   //find username / mail input
   //test by type attribute, if false test as string with regular expression
-  if(i.getAttribute("type").toUpperCase() === attr_name.toUpperCase() ||
-    new RegExp(regex_name).test(i.outerHTML)){
-    var inputUsername = i;
-  highlightUsername(i, credentials);
-} 
+  if(credentials != null){
+    if(i.getAttribute("type").toUpperCase() === attr_name.toUpperCase() ||
+      new RegExp(regex_name).test(i.outerHTML)){
+      var inputUsername = i;
+      highlightUsername(i, credentials);
+  } 
+}
 
 }
   //find password input
   if(i.getAttribute("type").toUpperCase() === attr_pw.toUpperCase() ||
     new RegExp(regex_pw).test(i.outerHTML)){
-
-   showHintbox(i, credentials, categories, categoryIcon);
-}
+    if(credentials != null){
+      showHintbox(i, credentials, categories, categoryIcon);
+    }else{
+      showSignupHintbox(i);
+    }
+  }
 }
 
 
@@ -188,11 +131,11 @@ for (index = 0; index < inputs.length; ++index) {
       console.log("username is: " + foundEntry.username);
       if(foundEntry.category == null){
         //use unique icon
-        findLogin(form, foundEntry, cat, 'lock');
+        findInput(form, foundEntry, cat, 'lock');
       }else{
         /* there is a matching URL / account in the storage */
         /* second parameter is the matching between entry.categoryName and categories --> icon */
-        findLogin(form, foundEntry, cat, cat[foundEntry.category][1]);
+        findInput(form, foundEntry, cat, cat[foundEntry.category][1]);
       }
     }else{
       console.log("No saved entry found for this URL.");
@@ -229,19 +172,17 @@ function showHintbox(i, credentials, categories, icon){
   // category entry
   if(categories[c][2]!=null){
    i.classList.add('locked');
-   hintbox = '<div class="hintbox"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content mp-hidden"><p>You used the password from category <strong>'+ credentials.category  +'</strong></p><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden"> ****** </span><span type="cat" cat="'+ credentials.category +'" class="showPW">show</span></div><input placeholder="Enter Masterpassword" type="password" id="inputMPW"><a class="btn-mp light" id="btnInputMPW">confirm</a><hr><a id="openManager">open manager</a></div></div>';
+   hintbox = '<div class="hintbox login"><div class="hintbox_head login"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content login mp-hidden"><p>You used the password from category <strong>'+ credentials.category  +'</strong></p><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden"> ****** </span><span type="cat" cat="'+ credentials.category +'" class="showPW">show</span></div><input placeholder="Enter Masterpassword" type="password" id="inputMPW"><a class="btn-mp light" id="btnInputMPW">confirm</a><hr><a id="openManager">open manager</a></div></div>';
  }else{
    i.classList.add('unlocked');
-   hintbox = '<div class="hintbox"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content mp-hidden"><p>You used the password from category <strong>'+ credentials.category  +'</strong></p><div id="pwhint_notstored"><i class="material-icons hastext">lock_open</i> No password stored</div><hr><a id="openManager">open manager</a></div></div>';
+   hintbox = '<div class="hintbox login"><div class="hintbox_head login"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content login mp-hidden"><p>You used the password from category <strong>'+ credentials.category  +'</strong></p><div id="pwhint_notstored"><i class="material-icons hastext">lock_open</i> No password stored</div><hr><a id="openManager">open manager</a></div></div>';
  }
 }else{
   // unique entry
   i.classList.add('locked');
-  hintbox = '<div class="hintbox unique"><div class="hintbox_head"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">Unique Password</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content mp-hidden"><p>You stored a unique password for this website</p><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden"> ****** </span><span type="unique" class="showPW">show</span></div><input placeholder="Enter Masterpassword" type="password" id="inputMPW"><a class="btn-mp light" id="btnInputMPW">confirm</a><hr><a id="openManager">open manager</a></div></div>';
+  hintbox = '<div class="hintbox login unique"><div class="hintbox_head login"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">Unique Password</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content login mp-hidden"><p>You stored a unique password for this website</p><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden"> ****** </span><span type="unique" class="showPW">show</span></div><input placeholder="Enter Masterpassword" type="password" id="inputMPW"><a class="btn-mp light" id="btnInputMPW">confirm</a><hr><a id="openManager">open manager</a></div></div>';
 
 }
-
-
 
 if($('#hbpwrm').length){ 
 
@@ -251,29 +192,30 @@ if($('#hbpwrm').length){
   hintbox_div.setAttribute('id', 'hbpwrm');
   hintbox_w.innerHTML = hintbox;
   hintbox_div.appendChild(hintbox_w);
-  
+
   i.parentNode.insertBefore(hintbox_div, i.nextSibling);
 
-  $('#hbpwrm .hintbox_head .left,#hbpwrm .hintbox_head .middle ').click(function(){
-    $('.hintbox_head').toggleClass('focused');
-    $('.hintbox_content').toggleClass('open');
+  $('#hbpwrm .hintbox_head.login .left, #hbpwrm .hintbox_head.login .middle ').click(function(){
+    $('.hintbox_head.login').toggleClass('focused');
+    $('.hintbox_content.login').toggleClass('open');
     $('#ic_arrow').toggleClass('upsideDown');
   });
 
   $('#ic_arrow').click(function(){
-    $('.hintbox').hide();
+    $('.hintbox.login').hide();
   });
   i.classList.add('mpinput');
-  $('input.mpinput').click(function(e){
+  i.classList.add('login');
+  $('input.mpinput.login').click(function(e){
     console.log("clicked");
     var parentOffset = $(this).offset(); 
     var relX = (e.pageX - parentOffset.left)/($(this).width());
-   // console.log('relX: ' + relX +', relY: '+ relY);
-   if(relX > 0.9){
-    $('.hintbox').toggle();
-    // $('input.mpinput').css( 'cursor', 'pointer' );
-  }
-}); 
+     // console.log('relX: ' + relX +', relY: '+ relY);
+     if(relX > 0.9){
+      $('.hintbox.login').toggle();
+      // $('input.mpinput').css( 'cursor', 'pointer' );
+    }
+  }); 
 
   $('.hintbox #openManager').click(function(){
     console.log("open manager");
@@ -284,38 +226,79 @@ if($('#hbpwrm').length){
 
 
   $('.showPW').click(function(){
-    //TODO: open manager page and show entry (pass url/category?)
-    // alert("show pw");
-    if($(this).html() != 'hide'){
-      $('#pwhint_stored').hide();
-      $('#inputMPW').show();
-      $('#btnInputMPW').show();
+      //TODO: open manager page and show entry (pass url/category?)
+      // alert("show pw");
+      if($(this).html() != 'hide'){
+        $('#pwhint_stored').hide();
+        $('#inputMPW').show();
+        $('#btnInputMPW').show();
 
-      $('#btnInputMPW').on('click', function() {
-        var val = $('#inputMPW').val();
-        if (val.length > 0){
-          var e = $('#inputMPW').attr('type');
-          var mtype = $('.hintbox').hasClass('unique') ? 'unique' : 'cat';
+        $('#btnInputMPW').on('click', function() {
+          var val = $('#inputMPW').val();
+          if (val.length > 0){
+            var e = $('#inputMPW').attr('type');
+            var mtype = $('.hintbox.login').hasClass('unique') ? 'unique' : 'cat';
 
-          chrome.runtime.sendMessage(
-            {task: "showPW", url: URL, entryType: mtype, hash: val, category : credentials.category}
-            );
-        }
-      });
-    }
+            chrome.runtime.sendMessage(
+              {task: "showPW", url: URL, entryType: mtype, hash: val, category : credentials.category}
+              );
+          }
+        });
+      }
 
-  });
+    });
 
 }
+}
+
+function showSignupHintbox(i){
+  console.log("Function : showSignupHintbox");
+  console.log(i);
+
+  var hintbox = '<div class="hintbox signup"><div class="hintbox_head signup"><div class="grid left"><i class="material-icons"></i></div><div class="grid middle">Reusing a Password?</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content signup mp-hidden"><ul id="categoryList"></ul></div></div>';
+
+  if($('#hbpwrms').length){ 
+
+  }else{
+    var hintbox_div = document.createElement('div'); 
+    var hintbox_w = document.createElement('div');
+    hintbox_div.setAttribute('id', 'hbpwrms');
+    hintbox_w.innerHTML = hintbox;
+    hintbox_div.appendChild(hintbox_w);
+    
+    i.parentNode.insertBefore(hintbox_div, i.nextSibling);
+
+    $('.hintbox.signup').css({
+      "min-width": i.offsetWidth+1+"px"
+   });
+
+
+    $('#ic_arrow').click(function(){
+      $('.hintbox.signup').hide();
+    });
+    i.classList.add('mpinput');
+    i.classList.add('signup');
+    $('input.mpinput.signup').click(function(e){
+      console.log("clicked");
+      var parentOffset = $(this).offset(); 
+      var relX = (e.pageX - parentOffset.left)/($(this).width());
+     // console.log('relX: ' + relX +', relY: '+ relY);
+     // if(relX > 0.9){
+      // request create list (get categories from bg)
+      chrome.runtime.sendMessage({task: "getCategories"}, function (response) {
+        console.log(response);
+
+      });
+      // $('input.mpinput').css( 'cursor', 'pointer' );
+    // }
+  }); 
+
+  }
 }
 
 function removeHintbox(){
   $('#hbpwrm').remove();
 }
-
-
-
-
 
 //submit button clicked. Check if there is an entry with this username for this website
 function checkAccount(){
@@ -334,11 +317,10 @@ function checkAccount(){
     //if there was no account found or there is an account for this page but a different username was saved
     if(!accountFound || (accountFound && existingUsername != username)){
       //TODO: "want to add this account?"
-     
-     chrome.runtime.sendMessage({task: "addHint", url: URL});
-   }
- });
 
+      chrome.runtime.sendMessage({task: "addHint", url: URL});
+    }
+  });
 }
 
 
@@ -368,6 +350,46 @@ function handleMessage(request, sender, sendResponse){
       $('.pwd-hidden').html('*******');
 
     });
+  }else if(request.action == 'fillList'){
+    $('#categoryList').empty();
+    var listItems = request.items;
+    console.log(listItems);
+    $('.hintbox.signup').toggle();
+    $('.hintbox_head.signup').toggleClass('focused');
+    $('.hintbox_content.signup').toggleClass('open');
+    $('#ic_arrow').toggleClass('upsideDown');
+    for(key in listItems){
+      $('#categoryList').append('<li id="'+ key +'"><i class="material-icons">'+ listItems[key][1] +'</i><span>'+ key +'</span></li>')
+    }
+    $('#categoryList > li').on('click', function(){
+      var chosen = $(this).attr('id'); 
+      // collapse hintbox
+      $('.hintbox_head.signup').toggleClass('focused');
+      $('.hintbox_content.signup').toggleClass('open');
+      $('#ic_arrow').toggleClass('upsideDown');
+      // change hintbox_head
+      var icon = $(this).find('.material-icons').html();
+      $('.hintbox_head.signup .grid.left .material-icons').html(icon);
+      $('.hintbox.signup .grid.middle').html(chosen);
+    });
   }
 }
 
+function isHidden(element) {
+
+  return (element.type =='hidden' ||element.offsetParent === null)
+}
+//consider only inputs that are visible in DOM
+function filterHiddenInputs(inputs){
+  //http://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
+  var filteredInputs = [];
+
+  for(ii = 0;ii<inputs.length;ii++){
+    if(!isHidden(inputs[ii])){
+      filteredInputs.push(inputs[ii]);
+    }
+  }
+  //console.log(filteredInputs);
+  return filteredInputs;
+
+}
