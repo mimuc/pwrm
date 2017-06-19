@@ -58,7 +58,7 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 	var storeEntry = exports.storeEntry = function(randID, mCredential, toggleModal) {
 		console.log("Model : storeEntry");	
 		crypt.encrypt_aes(mCredential.password, function(data){	
-			mCredential.password = data;
+			if(mCredential.password != null) mCredential.password = data;
 			console.log(mCredential);
 				//first get current storage
 				// SL.getEntries(function(results){

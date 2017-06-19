@@ -7,11 +7,11 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 		var entryContainer, content;
 		if(credential.category != null){
 			entryContainer = document.querySelector('#entryContainer');
-			content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ credential.url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-6">01.01.17</div><div class="entry-actions"><div class="col-lg-2"></div><div class="col-lg-2"><a><i id="'+ randID +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.url+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
+			content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ credential.url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-6">01.01.17</div><div class="entry-actions"><div class="col-lg-2"></div><div class="col-lg-2"><a><i id="'+ randID +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+randID+'" target="_blank" href="'+credential.url+'"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
 		}else{
 			entryContainer = document.querySelector('#uniqueEntryContainer');
 			entryContainer.style.display = '';
-			content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ credential.url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-3">01.01.17</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2"><span type="unique" url="'+credential.url+'" class="showPW">show</span></div><div class="col-lg-2"><a><i id="'+ randID +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.url+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
+			content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ credential.url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-3">01.01.17</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2"><span type="unique" url="'+credential.url+'" class="showPW">show</span></div><div class="col-lg-2"><a><i id="'+ randID +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+randID+'" target="_blank" href="'+credential.url+'"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
 		}
 
 		var entryWrapper = document.createElement('div');
@@ -38,13 +38,13 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 	
 		//wrapper.append('<div class="row entry"><div class="col-lg-12"><h4>'+url+'</h4><hr><div class="row"><div class="col-lg-8"><p>'+credential.username+'</p></div><div class="col-lg-2 entry-icons"><i id="'+url+'" class="material-icons">delete</i></div><div class="col-lg-2 entry-icons"><i id="open_'+credential.id+'" class="material-icons">open_in_new</i></div></div>');
 		var deleteBtn = document.getElementById(randID);
-		var openBtn = document.getElementById("open_"+credential.url);
+		var openBtn = document.getElementById("open_"+randID);
 
-		openBtn.addEventListener('click', function(e){
-			var creating = browser.tabs.create({
-				url: credential.url
-			});
-		});
+		// openBtn.addEventListener('click', function(e){
+		// 	var creating = browser.tabs.create({
+		// 		url: credential.url
+		// 	});
+		// });
 		//id (== url) is saved in button
 		
 		deleteBtn.addEventListener('click',function(e){
