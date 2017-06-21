@@ -121,12 +121,13 @@ define(function(){
 						var rand = (""+Date.now()).substring(5);
 						webexID = 'PWM-'+rand;
 						browser.storage.local.set({'identifier' : webexID});
+						Logger.log({event: "Manager Installed", content: {'PWM-ID' : webexID}});
 					}else{
 						webexID = id['identifier'];
 					}
 				// display extensionIdentifier (fieldstudy mapping)
 				$('#webexID').html(webexID);
-				Logger.log({event: "Manager Installed", content: {'PWM-ID' : webexID}});
+				
 				Logger.log({event: "Manager Opened", content: navigator.userAgent});
 			});
 			});
