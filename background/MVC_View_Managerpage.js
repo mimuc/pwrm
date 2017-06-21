@@ -166,7 +166,6 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 		};
 		var createCategoryElement = exports.createCategoryElement = function(categoryName, notes, iconName, pwd, index){
 			var delay = 500 + index * 100;
-			console.log("delay: " + delay);
 			var container = document.querySelector('#categoryContainer');
 			require(['jquery', 'MVC_Controller_Managerpage'], function($, controller) {
 

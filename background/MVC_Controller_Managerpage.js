@@ -1,14 +1,16 @@
 // DON'T DEFINE MVC_MODEL HERE => circular dependency
 // solution: reuqire on demand
-define(['MVC_View_Managerpage', 'scripts/tools/showPW', 'psl'],
-  function(view, showPW, psl){
+define(['scripts/modules/Logger', 'MVC_View_Managerpage', 'scripts/tools/showPW', 'psl'],
+  function(Logger, view, showPW, psl){
     var exports = {};
 
     var changeCategoryIcon = exports.changeCategoryIcon = function(catName, iconName){
+      Logger.log({event: "CategoryIcon Changed", content: {catName, iconName}});
       console.log("Controller : changeCategoryIcon");
       view.changeCategoryIcon(catName, iconName);
     };
     var deleteCategory = exports.deleteCategory = function(name){
+      Logger.log({event: "Category Deleted", content : name});
       console.log("Controller : deleteCategory");
       view.deleteCategory(name);
     };
@@ -46,7 +48,7 @@ define(['MVC_View_Managerpage', 'scripts/tools/showPW', 'psl'],
     var createCategory = exports.createCategory = function(){
       var value = modalCategoryName.value;
       value = value.replace(' ', '_');
-      console.log(value);
+      Logger.log({event: "Category Created", content: value});
       var pw; var ecpwd = $('#category-pwd');
       if(ecpwd.hasClass('hidden')){ 
         pw = null;        
@@ -69,7 +71,7 @@ define(['MVC_View_Managerpage', 'scripts/tools/showPW', 'psl'],
     });
    };
    var quickAddEntry = exports.quickAddEntry = function(murl, musername, mcat, mpw){
-    /* TODO: needs form checks */
+    Logger.log({event : "QuickAddEntry", content: {murl, musername, mcat}});
     console.log("Controller : quickAddEntry");
     require(['MVC_Model'], function(MVC_Model){
       MVC_Model.quickAddEntry(murl, musername, mcat, mpw);
@@ -90,6 +92,7 @@ define(['MVC_View_Managerpage', 'scripts/tools/showPW', 'psl'],
   var requestPassword = exports.requestPassword = function(mUrl, type, mHash, mCategory){
       //ATTENTION!
       //must be called from background.js TODO
+      Logger.log({event : "Request Password", content : {mUrl, type, mCategory}});
       console.log("Function : requestPassword");
       showPW.trigger(null, type, mUrl, mHash, mCategory, function(result){
         var msg = {action : "requestPW", content: result};

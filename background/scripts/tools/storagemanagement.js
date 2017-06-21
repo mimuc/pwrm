@@ -95,6 +95,7 @@ define(function(){
 
 			});
 		},
+		// TOOD
 		countEntries : function(categories, callback){
 			var gettingEntries = browser.storage.local.get("entries");
 			gettingEntries.then((eResults) => {
@@ -111,6 +112,31 @@ define(function(){
 
 				callback(values);
 			});
+		},
+		createExtensionIdentifier : function(){
+			require(['scripts/modules/Logger'], function(Logger){
+				browser.storage.local.get('identifier').then((id) =>{
+					var webexID;
+					if(!id['identifier']){
+						var rand = (""+Date.now()).substring(5);
+						webexID = 'PWM-'+rand;
+						browser.storage.local.set({'identifier' : webexID});
+					}else{
+						webexID = id['identifier'];
+					}
+				// display extensionIdentifier (fieldstudy mapping)
+				$('#webexID').html(webexID);
+				Logger.log({event: "Manager Installed", content: {'PWM-ID' : webexID}});
+				Logger.log({event: "Manager Opened", content: navigator.userAgent});
+			});
+			});
+		},
+		getExtensionIdentifier : function(callback){
+			browser.storage.local.get('identifier').then((id) =>{
+				callback(id['identifier']);
+
+			});
 		}
+
 	}
 });

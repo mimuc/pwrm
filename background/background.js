@@ -13,11 +13,9 @@ require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Manag
 		/* call init on page load */
 		$(document).ready(function() {
 			$.material.init();
-			console.log("Browser used: " + navigator.userAgent);
 			$('#section-categories').show();
 			setup();
 			addListeners();
-			Logger.log("Manager Opened");
 		});
 
 
@@ -147,7 +145,7 @@ function sendMessage(msg) {
 	});
 }
 function onError(e){
-	
+	Logger.log({event: "Error", content : e});
 	console.log(e);
 }
 function clearInputs(){

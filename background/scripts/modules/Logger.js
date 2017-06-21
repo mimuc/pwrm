@@ -1,10 +1,12 @@
 // Logger
-define(['jquery'], function($){
+define(['jquery', 'scripts/tools/storagemanagement'], function($, SM){
 	var exports = {};
 
 	var log = exports.log = function(value){
-		browser.storage.local.get('webexID').then(function(result){
-		var file = "Log_"+result["webexID"];
+		browser.storage.local.get('identifier').then(function(result){
+		var file = "Log_"+result["identifier"];
+
+
 
 		$.post("http://fuasmattn.de/pwm_logserver/logger.php",
 		{
@@ -17,6 +19,7 @@ define(['jquery'], function($){
 			
 		});
 	};
+
 	
 
 	return exports;

@@ -1,15 +1,15 @@
-define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC_Controller_Managerpage","scripts/tools/crypt", "scripts/tools/storagemanagement"], 
-	function($,psl,tools,aes,controller,crypt, SL) {
+define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC_Controller_Managerpage","scripts/tools/crypt", "scripts/tools/storagemanagement"], 
+	function(Logger, $,psl,tools,aes,controller,crypt, SL) {
 		var exports = {};
 
 		var initialize = exports.initialize = function() {
 			console.log("Model : initialize");
-		//create distinct categories elements depending on existing entries
-		SL.getCategories(function(results){
-			SL.getOnboardingMode(function(mode){
-				var categories = results["categories"];
-				if(categories == null || categories.length == 0){
-					var cat;
+			SL.createExtensionIdentifier(); 
+			SL.getCategories(function(results){
+				SL.getOnboardingMode(function(mode){
+					var categories = results["categories"];
+					if(categories == null || categories.length == 0){
+						var cat;
 				// create first categories depending on what user chose in onboarding
 				console.log(mode['mode']);
 				switch(mode['mode']){
@@ -46,19 +46,20 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 					controller.displayCategories(cat.categories, true); //calls loadEntries on callback
 				});	
 
-				}else{
+			}else{
 					//display options in dropdown #categoryDropdown
 					controller.fillDropdown(categories);
 					controller.displayCategories(categories, true); //calls loadEntries on callback
 				}
 			});
-		});
-	};
-	var loadEntries = exports.loadEntries = function(categoryName, showOnlyUnique){
-		console.log("Model : loadEntries");
-		SL.getEntries(function(results){
-			var res = results["entries"];
-			console.log(results);
+
+			});
+		};
+		var loadEntries = exports.loadEntries = function(categoryName, showOnlyUnique){
+			console.log("Model : loadEntries");
+			SL.getEntries(function(results){
+				var res = results["entries"];
+				console.log(results);
 				//create empty entries-storage if empty
 				if(res == null){
 					browser.storage.local.set({"entries" : {}});
@@ -82,12 +83,13 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 					}
 				}
 			});
-	};
-	var storeEntry = exports.storeEntry = function(randID, mCredential, toggleModal) {
-		console.log("Model : storeEntry");	
-		crypt.encrypt_aes(mCredential.password, function(data){	
-			if(mCredential.password != null) mCredential.password = data;
-			console.log(mCredential);
+		};
+		var storeEntry = exports.storeEntry = function(randID, mCredential, toggleModal) {
+			console.log("Model : storeEntry");	
+			Logger.count();
+			crypt.encrypt_aes(mCredential.password, function(data){	
+				if(mCredential.password != null) mCredential.password = data;
+				console.log(mCredential);
 				//first get current storage
 				// SL.getEntries(function(results){
 					// var entries = results;
@@ -123,10 +125,10 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 
 			// });		
 		});
-	};
-	var addEntry = exports.addEntry = function() {
-		console.log("Model : addEntry");
-		/* initialise variables */
+		};
+		var addEntry = exports.addEntry = function() {
+			console.log("Model : addEntry");
+			/* initialise variables */
 		//check radio buttons
 		var useUniquePWD = false;
 		var selectedRadio = document.querySelector('.radio-option:not(.hidden)');
@@ -173,11 +175,13 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 			}
 			if(useUniquePWD){
 				var credential = {username: entryUsername, url: mUrl, password: pwdHash};
+				Logger.log({event: 'Add Entry', content: credential});
 				this.storeEntry(randID, credential, true);
 			}else{
 				// if(objTest.length < 1 && mUrl !== '' && entryUsername !== '') {
 					mUrl.value = ''; entryUsername.value = ''; entryCategory.value ='';
 					var credential = {category: entryCategory, username: entryUsername, url: mUrl};
+					Logger.log({event: 'Add Entry', content: credential});
 				// }
 				this.storeEntry(randID, credential, true);
 			}
