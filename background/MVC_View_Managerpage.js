@@ -2,25 +2,25 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 	function(showPW, crypt, $, SL, controller, psl) {
 		var exports = {};
 
-	var displayEntry = exports.displayEntry = function(randID, urlName, credential, hasCategory) {
-		console.log("View : displayEntry");
-		var entryContainer, content;
-		if(credential.category != null){
-			entryContainer = document.querySelector('#entryContainer');
-			content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ credential.url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-6">01.01.17</div><div class="entry-actions"><div class="col-lg-2"></div><div class="col-lg-2"><a><i id="'+ randID +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+randID+'" target="_blank" href="'+credential.url+'"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
-		}else{
-			entryContainer = document.querySelector('#uniqueEntryContainer');
-			entryContainer.style.display = '';
-			content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ credential.url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-3">01.01.17</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2"><span type="unique" url="'+credential.url+'" class="showPW">show</span></div><div class="col-lg-2"><a><i id="'+ randID +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+randID+'" target="_blank" href="'+credential.url+'"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
-		}
+		var displayEntry = exports.displayEntry = function(randID, urlName, credential, hasCategory) {
+			console.log("View : displayEntry");
+			var entryContainer, content;
+			if(credential.category != null){
+				entryContainer = document.querySelector('#entryContainer');
+				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ credential.url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-6">01.01.17</div><div class="entry-actions"><div class="col-lg-2"></div><div class="col-lg-2"><a><i id="'+ randID +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+randID+'" target="_blank" href="'+credential.url+'"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
+			}else{
+				entryContainer = document.querySelector('#uniqueEntryContainer');
+				entryContainer.style.display = '';
+				content = '<div class="col-lg-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3">'+ credential.url +'</div><div class="col-lg-2">'+ credential.username +'</div><div class="col-lg-4"><div class="row"><div class="col-lg-3">01.01.17</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2"><span type="unique" url="'+credential.url+'" class="showPW">show</span></div><div class="col-lg-2"><a><i id="'+ randID +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+randID+'" target="_blank" href="'+credential.url+'"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
+			}
 
-		var entryWrapper = document.createElement('div');
-		entryWrapper.setAttribute('id', 'entryWrapper_'+randID);
-		entryWrapper.setAttribute('class', 'entry-row row');
-		entryContainer.appendChild(entryWrapper);
+			var entryWrapper = document.createElement('div');
+			entryWrapper.setAttribute('id', 'entryWrapper_'+randID);
+			entryWrapper.setAttribute('class', 'entry-row row');
+			entryContainer.appendChild(entryWrapper);
 
-		var ew = $('#entryWrapper_'+randID);
-		ew.fadeIn();
+			var ew = $('#entryWrapper_'+randID);
+			ew.fadeIn();
 		// ew.animate({marginTop:"-=100px"},300);
 
 		$('#entryWrapper_'+randID).hover(function() {
@@ -35,7 +35,7 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 
 		wrapper.append(content);
 
-	
+
 		//wrapper.append('<div class="row entry"><div class="col-lg-12"><h4>'+url+'</h4><hr><div class="row"><div class="col-lg-8"><p>'+credential.username+'</p></div><div class="col-lg-2 entry-icons"><i id="'+url+'" class="material-icons">delete</i></div><div class="col-lg-2 entry-icons"><i id="open_'+credential.id+'" class="material-icons">open_in_new</i></div></div>');
 		var deleteBtn = document.getElementById(randID);
 		var openBtn = document.getElementById("open_"+randID);
@@ -161,20 +161,21 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 		      	var urlName = parsed.domain;
 		      	urlName = urlName.split(".")[0];
 		      	displaySearchEntry(key, urlName, results[key]);
-	      }
-	  }
-	};
-	var createCategoryElement = exports.createCategoryElement = function(categoryName, notes, iconName, pwd){
+		      }
+		  }
+		};
+		var createCategoryElement = exports.createCategoryElement = function(categoryName, notes, iconName, pwd, index){
+			var delay = 500 + index * 100;
+			console.log("delay: " + delay);
+			var container = document.querySelector('#categoryContainer');
+			require(['jquery', 'MVC_Controller_Managerpage'], function($, controller) {
 
-		var container = document.querySelector('#categoryContainer');
-		require(['jquery', 'MVC_Controller_Managerpage'], function($, controller) {
-
-			var hasPW = (pwd!=null);
-			var icon_lock = (hasPW) ? 'lock':'lock_open';
+				var hasPW = (pwd!=null);
+				var icon_lock = (hasPW) ? 'lock':'lock_open';
 
 		//load snippet
 		$('#categoryContainer').append('<div id="wrapper_'+categoryName+'"></div>');
-		$('#wrapper_'+categoryName).load('scripts/modules/ui/category_snippet.html',null,
+		$('#wrapper_'+categoryName).hide().load('scripts/modules/ui/category_snippet.html',null,
 		//$('#wrapper_'+categoryName).load('scripts/modules/ui/collapse_snippet.html',null,
 		function() {
 			//alter DOM (id, classnames)
@@ -233,13 +234,13 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 			.html(getIcon(iconName));					
 			$('#listGroup_'+categoryName).attr('aria-labelledby', 'heading_'+categoryName);
 
-		});
+		}).fadeIn(delay);
 	});
 
-		displayNumberEntries();	
+			displayNumberEntries();	
 
-		function getIcon(name){
-			console.log("View : getIcon");
+			function getIcon(name){
+				console.log("View : getIcon");
 		/*
 		var iconString = "folder";
 		switch(name){
@@ -255,8 +256,8 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 		*/
 		return name;
 	}
-	};
-	var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW){
+};
+var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW){
 	var entryContainer = $('#entryContainer');
 	var cardWrapper = entryContainer.parent();
 
@@ -278,12 +279,15 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 		var displayCategories = exports.displayCategories = function(loadUniqueEntries) {
 			console.log("View : displayCategories");
 			setupModalCategory(false);
+			$('#categoryContainer').empty();
 			// setupShowButton();
 			SL.getCategories(function(c){	
 				var categories = c.categories;
+				var index=0;
 				for(c in categories){				
 			// console.log(c + " password: " + categories[c]);
-			createCategoryElement(c,categories[c][0],categories[c][1], categories[c][2]);
+			createCategoryElement(c,categories[c][0],categories[c][1], categories[c][2], index);
+			index++;
 		}
 
 		if(loadUniqueEntries){
@@ -368,19 +372,18 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 			});
 		}
 		var deleteCategory = exports.deleteCategory = function(category){
-		//ask if sure
-		//if category is not empty --> move entries to unsorted
+		//if category is not empty --> move entries to unsorted (todo?)
 		console.log("View : deleteCategory");
 		var gettingCategories = browser.storage.local.get("categories");
 		gettingCategories.then((results) => {
 			var oldCategories = results.categories;					
-			delete oldCategories[category];	
+			delete oldCategories[category.replace(' ', '_')];	
 
 				//save the altered version of the entry-element in storage
 				var storingCategories = browser.storage.local.set({"categories" : oldCategories});
 				storingCategories.then(() => {
 					//remove element from DOM 
-					document.getElementById("wrapper_"+category).remove();
+					document.getElementById("wrapper_"+category.replace(' ', '_')).remove();
 					displayCategories(true);
 				}, onError);	
 

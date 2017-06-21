@@ -1,6 +1,6 @@
 :root {
 	--primary-color: #58568f; /* alternatives: #58568f; #a124ae; */
-	--highlight-color: #f0f069;
+	--highlight-color: #ffeb3b;
 	--dark-color: #212121;
 	--neutral-color: #d5d5d5;
 }
@@ -411,11 +411,14 @@ h2.row-header{
 }
 
 #modalMPW .modal-body{
-	background-color: var(--dark-color);
-	color: white;
+	color: var(--dark-color);
 }
 #modalMPW .modal-body a{
-	color: white;
+	color: var(--dark-color);
+}
+
+a .material-icons, a:hover .material-icons, a:focus .material-icons {
+    vertical-align: top;
 }
 
 .page-header{

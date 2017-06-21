@@ -1,14 +1,14 @@
 /* injected style sheet */
 :root {
 	--primary-color: #58568f; /* alternatives: #58568f; #a124ae; */
-	--highlight-color: #f0f069;
+	--highlight-color: #ffeb3b;
 	--dark-color: #212121;
 }
 
 .mpinput{
 	background-size: 13px;
 	background-repeat: no-repeat;
-	border: 2px solid #f0f069 !important;
+	border: 2px solid #ffeb3b !important;
 	color: black;
 	background-repeat: no-repeat;
 	background-position-x: 94%;
@@ -198,7 +198,7 @@ hr{
 
 .highlightInput{
 	color:black;
-	border: 2px solid #f0f069 !important;
+	border: 2px solid #ffeb3b !important;
 }
 
 #inputMPW{
