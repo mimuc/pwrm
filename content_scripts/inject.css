@@ -109,9 +109,9 @@
 	height:100%;
 	width:100%;	
 	line-height: 25px;
-	border-top: 1px solid black;
+	/*border-top: 1px solid black;
 	border-left: 1px solid black;
-	border-right: 1px solid black;
+	border-right: 1px solid black;*/
 	font-family: 'Roboto Slab';
 }
 
@@ -223,9 +223,9 @@ hr{
 }
 .mp-hidden.open {
 	height:132px !important;
-	border-bottom: 1px solid black;
+	/*border-bottom: 1px solid black;
 	border-left: 1px solid black;
-	border-right: 1px solid black;
+	border-right: 1px solid black;*/
 	-webkit-transition:height,  0.2s cubic-bezier(.25,.8,.25,1);
 	-moz-transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
 	-ms-transition: height,  0.2s cubic-bezier(.25,.8,.25,1);

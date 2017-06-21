@@ -86,7 +86,6 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 		};
 		var storeEntry = exports.storeEntry = function(randID, mCredential, toggleModal) {
 			console.log("Model : storeEntry");	
-			Logger.count();
 			crypt.encrypt_aes(mCredential.password, function(data){	
 				if(mCredential.password != null) mCredential.password = data;
 				console.log(mCredential);
