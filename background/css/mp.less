@@ -1,10 +1,8 @@
-:root {
-	--primary-color: #58568f; /* alternatives: #58568f; #a124ae; */
-	--highlight-color: #f0f069;
-	--dark-color: #212121;
-	--neutral-color: #d5d5d5;
-}
-
+@body-bg-color: #83b692; 
+@dark-color: #212121;
+@neutral-color: #d5d5d5;
+@button-bg-color: #f9627d; 
+@hightlight-color: #f0f069;
 
 html, body {
 	font-family: 'Roboto', 'Helvetica', sans-serif !important;
@@ -16,18 +14,7 @@ html, body {
 }
 
 a, a:hover{
-	color: var(--primary-color);
-}
-
-.checkbox label{
-	font-size: 18px !important;
-}
-.checkbox-material{
-	margin-right: 10px;
-}
-.circle, .check{
-	width: 18px !important;
-	height: 18px !important;
+	color: #212121;
 }
 
 .mp-section{
@@ -95,7 +82,7 @@ h1{
 	color: #505050;
 }
 .link:hover{
-	color: var(--dark-color);
+	color: @dark-color;
 	cursor: pointer;
 }
 .container{
@@ -111,8 +98,8 @@ h1{
 	font-weight: 500;
 	text-transform: uppercase;
 	letter-spacing: 0;
-	/*background-color: var(--highlight-color);*/
-	color:var(--dark-color);
+	/*background-color: @highlight-color;*/
+	color:@dark-color;
 	font-weight: 400;
 }
 
@@ -131,8 +118,8 @@ h1{
 .btn-mp:hover, .btn-mp:active, .btn-mp:focus, .btn-mp:target{
 	border:none;
 	filter: brightness(0.95);
-	background-color: var(--highlight-color);
-	color: var(--dark-color);
+	background-color: @highlight-color;
+	color: @dark-color;
 }
 
 .panel-group .panel{
@@ -145,8 +132,8 @@ h1{
 	transition: box-shadow 0.5s cubic-bezier(.25,.8,.25,1);
 	background-color: white;
 	/*background-color: #FAFAFA;*/
-	color: var(--dark-color);
-	/*border: 1px solid var(--dark-color) !important;*/
+	color: @dark-color;
+	/*border: 1px solid @dark-color !important;*/
 	cursor: pointer;
 }
 
@@ -157,9 +144,9 @@ h1{
 
 .panel-default > .panel-heading.panel-card.category-focused{
 	/* background-color: #69f0ae; */
-	color:var(--dark-color);
+	color:@dark-color;
 	opacity: 1;
-	background-color: var(--highlight-color);
+	background-color: @highlight-color;
 	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 	
 }
@@ -168,7 +155,7 @@ h1{
 	/*opacity: 0.1;*/
 	/*background-color: #FAFAFA !important;*/
 	background-color: white !important;
-	/*border: 1px solid var(--dark-color) !important;*/
+	/*border: 1px solid @dark-color !important;*/
 
 	
 }
@@ -254,9 +241,9 @@ h1{
 	-webkit-box-shadow: none !important;
 	-moz-box-shadow: none !important;
 	box-shadow: none !important;
-	background-color: var(--neutral-color);
+	background-color: @neutral-color;
 	line-height: 42px;
-	color: var(--dark-color);
+	color: @dark-color;
 	height:45px;
 	width:18%;
 	transition: all 0.5s;
@@ -264,7 +251,7 @@ h1{
 	font-size: 20px;
 }
 #search:focus{
-	background-color: var(--neutral-color);
+	background-color: @neutral-color;
 	opacity: 1;
 	width:50%;
 	border-radius: 0;
@@ -272,17 +259,17 @@ h1{
 }
 #search:focus + #search-icon{
 	right: 51%;
-	color: var(--dark-color);
+	color: @dark-color;
 	opacity: 1;
 }
 
 #search::placeholder{
-	color: var(--dark-color);
+	color: @dark-color;
 	font-size: 20px;
 }
 #search-icon{
 	transition: all 0.5s;
-	color: var(--dark-color);
+	color: @dark-color;
 	top:10px;
 	right:83%;
 	opacity: 0.5;
@@ -305,7 +292,7 @@ h2.row-header{
 }
 .entry-icons:hover{
 	cursor: pointer;
-	color: var(--dark-color);
+	color: @dark-color;
 }
 #overview{
 	width: 80%;
@@ -314,7 +301,7 @@ h2.row-header{
 
 .showPW{
 	background-color: rgba(0,0,0,0.1);
-	color: var(--dark-color);
+	color: @dark-color;
 	border-radius: 50px 50px 50px 50px;
 	padding: 4px 10px;
 	position: relative;
@@ -372,7 +359,7 @@ h2.row-header{
 	padding-top: 6px;
 	position: absolute;
 	font-size: 28px;
-	color: var(--dark-color);
+	color: @dark-color;
 }
 .categoryContent{
 	padding:5px;
@@ -411,7 +398,7 @@ h2.row-header{
 }
 
 #modalMPW .modal-body{
-	background-color: var(--dark-color);
+	background-color: @dark-color;
 	color: white;
 }
 #modalMPW .modal-body a{
@@ -441,7 +428,7 @@ input[type="tel"]:focus,
 input[type="color"]:focus,
 .uneditable-input:focus {   
 	/*border-color: rgba(161, 36, 174, 0.2);*/
-	border-color: var(--dark-color);
+	border-color: @dark-color;
 	box-shadow: none;
 	/*box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(161, 36, 174, 0.1);*/
 	outline: 0 none;
@@ -454,7 +441,7 @@ input[type="color"]:focus,
 	padding: 6px 12px;
 	font-size: 16px;
 	line-height: 1.42857143;
-	color: var(--dark-color);
+	color: @dark-color;
 	background-color: #fff;
 	background-image: none;
 	border: 1px solid #757575;

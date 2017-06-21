@@ -1,26 +1,27 @@
 /* login.js */
 $(document).ready(function() {
+	$.material.init();
 	//if no masterpw was set in local storage: init onboarding
 	var gettingMPW = browser.storage.local.get("mpw");
 		// , function(results){
-	gettingMPW.then((results) => {
-		var mpwHash = CryptoJS.SHA512(results["mpw"]);
-		if(results["mpw"] == null){
-			initOnboarding();
-		}else{
-			initLogin();
-		}
-	});
-	
-	$('#inputMPW').on('keyup', function() {
-		if (this.value.length > 0){
-			doubleCheckMPW(CryptoJS.SHA512($('#inputMPW').val()),
-				function(){
-					openManager();
-				});
-		}
-	});
-});
+			gettingMPW.then((results) => {
+				var mpwHash = CryptoJS.SHA512(results["mpw"]);
+				if(results["mpw"] == null){
+					initOnboarding();
+				}else{
+					initLogin();
+				}
+			});
+			
+			$('#inputMPW').on('keyup', function() {
+				if (this.value.length > 0){
+					doubleCheckMPW(CryptoJS.SHA512($('#inputMPW').val()),
+						function(){
+							openManager();
+						});
+				}
+			});
+		});
 
 // show onboarding ui elements
 function initOnboarding(){
@@ -40,9 +41,9 @@ function initOnboarding(){
 	};
 	$('#inputCreateMPW').on('keyup', function(event) {
 		if($(this).val().length > 0){
-				$('.progress').show();
-				$('.password-verdict').show();
-				$('.onboarding a.btn-mp').show();
+			$('.progress').show();
+			$('.password-verdict').show();
+			$('.onboarding a.btn-mp').show();
 		}else{
 			$('.progress').hide();
 			$('.password-verdict').hide();
@@ -62,7 +63,12 @@ function initOnboarding(){
 			$('.slide').animate({"left": "-=600"}, 500);
 		}
 	});
-	$('#btnOpenManager').on('click', openManager)
+	$('#btnOpenManager').on('click', function(){
+		var mode = $('input:radio:checked').val();
+		console.log(mode);
+		browser.storage.local.set({'mode' : mode});
+		openManager();
+	});
 	
 }
 
@@ -73,7 +79,7 @@ function openManager(){
 		gettingCurrent.then(function(cRes){
 			for (var i = 0; i < aRes.length; i++) {
 				if(aRes.length == 1){
-					console.log("length: 1");
+					// console.log("length: 1");
 					var removing = browser.windows.remove(cRes.id);
 					var creatingWindow = browser.windows.create({
 						"url": chrome.extension.getURL("background/background.html"),
@@ -160,7 +166,7 @@ $('#btnUnlock').on('click', function(){
 			openManager();
 		},
 		function(){
-			alert("hoidaus!");
+			// alert("hoidaus!");
 		}
 		);
 });

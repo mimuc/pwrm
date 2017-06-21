@@ -6,6 +6,9 @@
   <link rel="stylesheet" href="../background/css/bootstrap.css"/>
   <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet"> 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Bootstrap Material Design -->
+  <link href="../background/css/material/bootstrap-material-design.css" rel="stylesheet">
+  <link href="../background/css/material/ripples.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../background/css/mp.css"/>
   <link rel="stylesheet" href="login.css"/>
   <title>PWM Title</title>
@@ -36,7 +39,7 @@
     <input type="password" class="form-control" id="inputCreateMPW" placeholder="Your Masterpassword">
   </div>
   <div class="text-right">
-    <a class="btn btn-primary btn-mp btn-mp-raise">Next Step</a>
+    <a class="btn btn-primary btn-mp btn-lg btn-block btn-raised">Next Step</a>
   </div>
 </form>
 </div>
@@ -51,8 +54,8 @@
   <div class="form-group">
     <input type="password" class="form-control" id="inputConfirmMPW" placeholder="Re-type your Masterpassword">
   </div>
-  <div class="text-right" style="margin-top: 85px">
-    <a class="btn btn-primary btn-mp btn-mp-raise">Let's Start</a>
+  <div class="text-right" style="margin-top: 60px">
+    <a class="btn btn-primary btn-mp btn-lg btn-block btn-raised">Let's Start</a>
   </div>
 </form>
 </div>
@@ -67,13 +70,15 @@
       </div>
       <div class="slide">
         <h2 class="text-center">How do you organise your passwords?</h2>
+        
         <div class="radio radio-mp">
           <label>
-            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+            <input type="radio" name="optionsRadios" id="optionsRadios1" value="mode_topic" checked>
             <div class="radio-content">
              <div class="name">By Topic</div>
              <div class="example">
-               <span class="label label-default label-mp">Social Media</span>
+               <span class="label label-default label-mp">Private</span>
+               <span class="label label-default label-mp">Work</span>
                <span class="label label-default label-mp">Banking</span>
                <span class="label label-default label-mp">Other</span>
              </div>
@@ -81,20 +86,23 @@
 
          </label>
        </div>
-       <div class="radio radio-mp disabled">
+       <div class="radio radio-mp">
         <label>
-          <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+          <input type="radio" name="optionsRadios" id="optionsRadios2" value="mode_importance">
           <div class="radio-content">
            <div class="name">By Importance</div>
            <div class="example">
-            coming soon
+            <span class="label label-default label-mp">Very Important</span>
+            <span class="label label-default label-mp">Important</span>
+            <span class="label label-default label-mp">Less Important</span>
+            <span class="label label-default label-mp">Other</span>
           </div>
         </div>
       </label>
     </div>
     <div class="radio radio-mp disabled">
       <label>
-        <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled>
+        <input type="radio" name="optionsRadios" id="optionsRadios3" value="mode_frequency" disabled>
         <div class="radio-content">
          <div class="name">By Frequency</div>
          <div class="example">coming soon</div>
@@ -103,20 +111,23 @@
    </div>
    <div class="radio radio-mp disabled">
     <label>
-      <input type="radio" name="optionsRadios" id="optionsRadios4" value="option4" disabled>
+      <input type="radio" name="optionsRadios" id="optionsRadios4" value="mode_hints" disabled>
       <div class="radio-content">
        <div class="name">Hints help me to organise</div>
-       <div class="example">coming soon</div>
+       <span class="label label-default label-mp">Dog Password</span>
+       <span class="label label-default label-mp">Long Password</span>
+       <span class="label label-default label-mp">Festival 2009</span>
+       <span class="label label-default label-mp">Other</span>
      </div>
    </label>
  </div>
 </div>
 <div class="slide last">
-        <h2 class="text-center">You are ready to start!</h2>
-        <div class="text-center">
-    <a id="btnOpenManager" class="btn btn-primary btn-mp btn-mp-raise">Open Manager</a>
+  <h2 class="text-center">You are ready to start!</h2>
+  <div class="text-center">
+    <a id="btnOpenManager" class="btn btn-primary btn-mp btn-lg btn-raised">Open Manager</a>
   </div>
-      </div>
+</div>
 
 </div>
 <a id="next"><i class="material-icons">keyboard_arrow_right</i></a>
@@ -124,6 +135,8 @@
 </div>  
 </div>
 <script type="text/javascript" src="../background/scripts/jquery/jquery.js"></script>
+<script src="../background/scripts/material/material.js"></script>
+<script src="../background/scripts/material/ripples.js"></script>
 <script type="text/javascript" src="../background/scripts/pwstrength/dist/pwstrength-bootstrap.min.js"></script>
 <script type="text/javascript" src="../background/scripts/cryptojs/rollups/sha512.js"></script>
 <script type="text/javascript" src="login.js"></script>

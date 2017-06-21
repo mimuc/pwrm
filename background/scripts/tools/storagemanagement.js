@@ -6,12 +6,15 @@ define(function(){
 				callback(results);
 			});
 		},
-
 		setMPWHash: function(value){
 			var val = {"mpw" : CryptoJS.SHA512(value)}
 			browser.storage.local.set(val);
 		},
-
+		getOnboardingMode: function(callback){
+			browser.storage.local.get('mode').then((results) => {
+				callback(results);
+			});
+		},
 		getEntries: function(callback){
 			console.log("SM : getEntries");
 			var gettingEntries = browser.storage.local.get("entries");
@@ -20,14 +23,12 @@ define(function(){
 				callback(results);
 			});
 		},
-
 		getCategories: function(callback){
 			var gettingCategories = browser.storage.local.get("categories");
 			gettingCategories.then((results) => {
 				callback(results);
 			});
 		},
-
 		setEntries: function(value, callback){
 			console.log("SM : setEntries");
 			var storingEntry = browser.storage.local.set(value);
@@ -35,14 +36,12 @@ define(function(){
 				callback();
 			});
 		},
-
 		setCategories: function(value, callback){
 			var storingCategory = browser.storage.local.set(value);
 			storingCategory.then(()=> {
 				callback();
 			});
 		},
-
 		findEntries : function(value, callback){
 			this.getEntries(function(results){
 				console.log(results);
@@ -59,7 +58,6 @@ define(function(){
 				callback(foundEntries);
 			});
 		},
-
 		findEntryByURL: function(mUrl, callback){
 			this.getEntries(function(results){
 				console.log(results);
@@ -82,7 +80,6 @@ define(function(){
 				}
 			});
 		},
-
 		// key (randID => pseudo unique!) -> credentials[url, name, ...]
 		saveEntry: function(randID, credentials, callback){
 			console.log("SM : saveEntry");
@@ -97,9 +94,6 @@ define(function(){
 				});
 
 			});
-
-
-
 		},
 		countEntries : function(categories, callback){
 			var gettingEntries = browser.storage.local.get("entries");
@@ -118,6 +112,5 @@ define(function(){
 				callback(values);
 			});
 		}
-
 	}
 });

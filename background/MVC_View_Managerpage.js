@@ -267,9 +267,9 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 		
 
 		if(hasPW){
-			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden">*******</span><span type="cat" cat="'+name+'" class="showPW">show</span><a id="editCategory" class="link" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div></div><hr>');
+			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden">*******</span><span type="cat" cat="'+name+'" class="showPW">show</span><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div></div><hr>');
 		}else{
-			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lock_open</i> No password stored. <a id="editCategory" class="link" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div><hr>');
+			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lock_open</i> No password stored. <a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div><hr>');
 		}
 			//configure modal here (event.relatedTarget is created dynamically)
 			setupModalCategory(hasPW);

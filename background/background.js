@@ -12,6 +12,7 @@ require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Manag
 
 		/* call init on page load */
 		$(document).ready(function() {
+			$.material.init();
 			console.log("Browser used: " + navigator.userAgent);
 			$('#section-categories').show();
 			setup();

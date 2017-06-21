@@ -6,26 +6,53 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 			console.log("Model : initialize");
 		//create distinct categories elements depending on existing entries
 		SL.getCategories(function(results){
-			var categories = results["categories"];
-			if(categories == null || categories.length == 0){
-				var cat = {"categories" : {
-					Very_Important : ["Info", "folder"],
-					Important : ["Info", "folder"],
-					Crappy : ["Info", "trending_down"]
-					
-				}};
+			SL.getOnboardingMode(function(mode){
+				var categories = results["categories"];
+				if(categories == null || categories.length == 0){
+					var cat;
+				// create first categories depending on what user chose in onboarding
+				console.log(mode['mode']);
+				switch(mode['mode']){
+					case 'mode_topic':
+					cat = {"categories" : {
+						Private : ["Info", "folder"],
+						Work : ["Info", "folder"],
+						Banking : ["Info", "folder"]
+					}};
+					break;
+					case 'mode_importance':
+					cat = {"categories" : {
+						Very_Important : ["Info", "folder"],
+						Important : ["Info", "folder"],
+						Less_Important : ["Info", "folder"]
+					}};
+					break;
+					case 'mode_frequency':
+					cat = {"categories" : {
+						Daily : ["Info", "folder"],
+						Weekly : ["Info", "folder"],
+						Less_Frequent : ["Info", "folder"]
+					}};
+					break;
+					case 'mode_hints':
+					cat = {"categories" : {}};
+					break;
+				}
+
+
 				var setting = browser.storage.local.set(cat);
 				setting.then(function(){
 					controller.fillDropdown(cat.categories);
 					controller.displayCategories(cat.categories, true); //calls loadEntries on callback
 				});	
 
-			}else{
-			//display options in dropdown #categoryDropdown
-			controller.fillDropdown(categories);
-			controller.displayCategories(categories, true); //calls loadEntries on callback
-		}
-	});
+				}else{
+					//display options in dropdown #categoryDropdown
+					controller.fillDropdown(categories);
+					controller.displayCategories(categories, true); //calls loadEntries on callback
+				}
+			});
+		});
 	};
 	var loadEntries = exports.loadEntries = function(categoryName, showOnlyUnique){
 		console.log("Model : loadEntries");
@@ -37,7 +64,8 @@ define(["jquery","psl","scripts/tools/tools","scripts/cryptojs/rollups/aes","MVC
 					browser.storage.local.set({"entries" : {}});
 				}
 
-				if(showOnlyUnique){
+				
+				if(showOnlyUnique && !jQuery.isEmptyObject(res)){
 					$('#uniqueEntryContainer').empty();
 				}
 				for(key in res){	

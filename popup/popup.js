@@ -2,16 +2,18 @@ var HttpClient;
 var requestURL = "https://icons.better-idea.org/allicons.json?url=";
 var fab_wrapper; var feedback;
 $(document).ready(function($) {
-  // change action icon
-// setup pw meter
+  browser.storage.local.get('mpw').then((result) =>{
+    if(result['mpw']==null) $('#fab_wrapper').hide();
+  });
 
-var options = {};
-options.rules = {
-  activated: {
-    wordTwoCharacterClasses: true,
-    wordRepetitions: true
-  }
-};
+  // setup pw meter
+  var options = {};
+  options.rules = {
+    activated: {
+      wordTwoCharacterClasses: true,
+      wordRepetitions: true
+    }
+  };
 
 $('input[type="password"]').on('keyup', function(event) {
   if($(this).val().length > 0){
