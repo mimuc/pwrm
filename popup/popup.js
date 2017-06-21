@@ -86,7 +86,7 @@ window.onload = function() {
     $('#thisURL').html(entryURL);
 
 
-    chrome.runtime.sendMessage({task: "removeHint", url: entryURL});
+    browser.runtime.sendMessage({task: "removeHint", url: entryURL});
 
 
     checkAccount(entryURL);
@@ -221,14 +221,14 @@ function triggerStore(){
         console.log("input validate error");
       }else{
         onStoreMsgSuccess();
-        chrome.runtime.sendMessage(storeMsg);
+        browser.runtime.sendMessage(storeMsg);
       }
     }else{
       if($(validate[2]).find('input[type="password"]').val().length == 0){
         console.log("input validate error: password <empty></empty>");
       }else{
         onStoreMsgSuccess();
-        chrome.runtime.sendMessage(storeMsg);
+        browser.runtime.sendMessage(storeMsg);
       }
 
     }
@@ -261,8 +261,8 @@ function openPopup() {
 }
 
 
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
+browser.runtime.onMessage.addListener(
+  function(request) {
     if (request.msg === "ok") {
       $('#feedback').addClass('positive');
       $('#feedback h2').html('store success');

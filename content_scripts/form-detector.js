@@ -247,7 +247,7 @@ if($('#hbpwrm').length){
 
   $('.hintbox #openManager').click(function(){
     console.log("open manager");
-    chrome.runtime.sendMessage({task: "open_manager"}, function (response) {
+    browser.runtime.sendMessage({task: "open_manager"}, function (response) {
       console.log(response);
     });
   });
@@ -267,7 +267,7 @@ if($('#hbpwrm').length){
             var e = $('#inputMPW').attr('type');
             var mtype = $('.hintbox.login').hasClass('unique') ? 'unique' : 'cat';
 
-            chrome.runtime.sendMessage(
+            browser.runtime.sendMessage(
               {task: "showPW", url: URL, entryType: mtype, hash: val, category : credentials.category}
               );
           }
@@ -313,7 +313,7 @@ function showSignupHintbox(i){
      // console.log('relX: ' + relX +', relY: '+ relY);
      // if(relX > 0.9){
       // request create list (get categories from bg)
-      chrome.runtime.sendMessage({task: "getCategories"}, function (response) {
+      browser.runtime.sendMessage({task: "getCategories"}, function (response) {
         console.log(response);
 
       });
@@ -347,7 +347,7 @@ function checkAccount(){
     if(!accountFound || (accountFound && existingUsername != username)){
       //TODO: "want to add this account?"
 
-      chrome.runtime.sendMessage({task: "addHint", url: URL});
+      browser.runtime.sendMessage({task: "addHint", url: URL});
     }
   });
 }
@@ -359,9 +359,9 @@ function handleError(error) {
 
 
 
-chrome.runtime.onMessage.addListener(handleMessage);
+browser.runtime.onMessage.addListener(handleMessage);
 
-function handleMessage(request, sender, sendResponse){
+function handleMessage(request){
   console.log(request);
   if(request == "task_detect"){
     //start detector
@@ -407,7 +407,7 @@ function setupSignupHintbox(listItems){
     var hash = $(this).attr('hash');
       // autofill PW
       if(hash!=null && hash != 'undefined'){  
-        chrome.runtime.sendMessage({task : 'decrypt', content: hash});
+        browser.runtime.sendMessage({task : 'decrypt', content: hash});
       }
       // collapse hintbox
       $('.hintbox_head.signup').toggleClass('focused');

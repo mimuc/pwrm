@@ -6,7 +6,7 @@ require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Manag
 		var addPWD = document.querySelector('#btnAddPWD');
 		var addCategory = document.querySelector('#addCategory');
 		var modalCategory = document.querySelector('#modalCategory');
-
+  
 		browser.runtime.onMessage.addListener(handleMessage);
 		browser.tabs.onActivated.addListener(handleActivated);
 
@@ -24,8 +24,8 @@ require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Manag
 		/* old, not sure if still useful */
 
 //searches for entries and displays results matching the typed letters
-function searchAsync(value){
-	console.log("searchAsync: " + value);
+function search(value){
+	// console.log("search: " + value);
 	showSection(null, '#section-searchresults');
 	$('#section-searchresults h1').html("Results for: '" + value + "'");
 	controller.search(value);
@@ -122,7 +122,7 @@ function addListeners(){
 
 	  //listen for searchfield input
 	  $('#search').on('keyup', function() {
-	  	if (this.value.length > 0) searchAsync(this.value);
+	  	if (this.value.length > 0) search(this.value);
 	  });
 	}
 
@@ -158,10 +158,11 @@ function clearInputs(){
 function handleMessage(message, sender, sendResponse) {
 	console.log(message);
 	if(message.task == 'store'){
+		console.log("store msg");
 		console.log(message.url);
 		// TODO check if storing was successful and answer appropriately
-		chrome.runtime.sendMessage({'msg': 'ok'},function(response){
-		});
+		sendResponse({'msg': 'ok'});
+		// browser.runtime.sendMessage({'msg': 'ok'},function(response){});
 		require(['MVC_Controller_Managerpage'], function(controller){
 			controller.quickAddEntry(message.url, message.username, message.cat, message.pw);
 		});
