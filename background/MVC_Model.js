@@ -87,6 +87,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 		var storeEntry = exports.storeEntry = function(randID, mCredential, toggleModal) {
 			console.log("Model : storeEntry");	
 			crypt.encrypt_aes(mCredential.password, function(data){	
+				mCredential.creationDate = new Date(Date.now()).toLocaleString({ year: 'numeric', month : 'numeric', day : 'numeric' });
 				if(mCredential.password != null) mCredential.password = data;
 				console.log(mCredential);
 				//first get current storage
