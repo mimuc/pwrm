@@ -5,7 +5,6 @@
 	--neutral-color: #d5d5d5;
 }
 
-
 html, body {
 	font-family: 'Roboto', 'Helvetica', sans-serif !important;
 	margin: 0;
@@ -16,10 +15,23 @@ html, body {
 }
 
 #webexID{
-	position: absolute;
+	position: fixed;
 	bottom:10px;
 	right: 10px;
 	color: #212121;
+}
+
+#burger{
+	position: absolute;
+	color: #212121;
+}
+#burger i{
+	font-size: 28px;
+	padding-left: 24px;
+	padding-top: 24px;
+}
+#burger i:hover{
+	cursor: pointer;
 }
 
 a, a:hover{
@@ -196,7 +208,7 @@ h1{
 
 .navbar.navbar-mp .container{
 	height: 80px;
-	padding-top: 15px;
+	padding-top: 13px;
 
 }
 
@@ -425,7 +437,7 @@ h2.row-header{
 }
 
 a .material-icons, a:hover .material-icons, a:focus .material-icons {
-    vertical-align: top;
+	vertical-align: top;
 }
 
 .page-header{

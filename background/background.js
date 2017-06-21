@@ -6,7 +6,7 @@ require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Manag
 		var addPWD = document.querySelector('#btnAddPWD');
 		var addCategory = document.querySelector('#addCategory');
 		var modalCategory = document.querySelector('#modalCategory');
-  
+
 		browser.runtime.onMessage.addListener(handleMessage);
 		browser.tabs.onActivated.addListener(handleActivated);
 
@@ -19,7 +19,7 @@ require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Manag
 		});
 
 
-		/* old, not sure if still useful */
+			/* old, not sure if still useful */
 
 //searches for entries and displays results matching the typed letters
 function search(value){
@@ -44,6 +44,10 @@ function addListeners(){
 	$('#sidebar-preferences').on('click', function(){showSection($(this), '#section-preferences');});
 	$('#sidebar-about').on('click', function(){showSection($(this), '#section-about');});
 	setupPWMeter();
+
+	$('#burger').on('click', function(){
+		toggleNavigation();
+	});
 
 	$(document).on('click', '.showPW', function(e){
 		console.log(e.target.innerHTML);
@@ -143,6 +147,19 @@ function sendMessage(msg) {
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 		chrome.tabs.sendMessage(tabs[0].id, msg);
 	});
+}
+function toggleNavigation(){
+	if($('#sidebar').hasClass('minified')){
+		$('#sidebar .material-icons').animate({left: '24px'});
+		$('#sidebar').animate({left: '0'}); 
+		$('#sidebar').removeClass('minified');
+		$('#sidebar p').animate({opacity : '1'});
+	}else{
+		$('#sidebar').addClass('minified');
+		$('#sidebar .material-icons').animate({left: '24px'});
+		$('#sidebar').animate({left: '-240px'}); 
+		$('#sidebar p').animate({opacity : '0'});
+	}
 }
 function onError(e){
 	Logger.log({event: "Error", content : e});

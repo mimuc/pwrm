@@ -58,7 +58,7 @@ Martin Prinz 14.06.2017*/
 .sidebar-row > p{
 	margin-bottom: 0 !important;
 	padding: 0;
-	padding-left: 16px;
+	padding-left: 46px;
 	padding-right: 56px;
 	clear: both;
 	font-weight: 400;
@@ -69,6 +69,7 @@ Martin Prinz 14.06.2017*/
 	margin-right: 16px;
 	line-height: 53px;
 	vertical-align: middle;
+	position: fixed;
 
 }
 
