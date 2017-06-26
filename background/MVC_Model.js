@@ -105,7 +105,6 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 						SL.saveEntry(randID, mCredential, function(res){
 						// SL.setEntries(entries, function(){
 							console.log("store success");
-							console.log("res");
 							//update display entries immediately that do not have a category
 							//or if the chosen category is focused
 							var focusedCategory = document.querySelector('.category-focused');

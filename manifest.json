@@ -36,9 +36,9 @@
         "content_scripts/inject.css"]
     }
   ],
-  "background_page": {
-    "scripts": ["background/background.js"],
-    "page": ["background/background.html"]
+
+  "background": {
+    "page": "background/background.html"
   },
 
   "browser_action": {

@@ -7,6 +7,7 @@ require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Manag
 		var addCategory = document.querySelector('#addCategory');
 		var modalCategory = document.querySelector('#modalCategory');
 
+		
 		browser.runtime.onMessage.addListener(handleMessage);
 		browser.tabs.onActivated.addListener(handleActivated);
 
@@ -17,9 +18,6 @@ require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Manag
 			setup();
 			addListeners();
 		});
-
-
-			/* old, not sure if still useful */
 
 //searches for entries and displays results matching the typed letters
 function search(value){
@@ -172,6 +170,11 @@ function clearInputs(){
 //receives and answers messages from content_scripts [if needed]
 function handleMessage(message, sender, sendResponse) {
 	console.log(message);
+	console.log(sender);
+	if(message.task == 'test'){
+		console.log(message.task);
+		sendResponse("test received");
+	}
 	if(message.task == 'store'){
 		console.log("store msg");
 		console.log(message.url);
@@ -197,8 +200,6 @@ function handleMessage(message, sender, sendResponse) {
 		console.log("TODO: open manager");
 	}else if(message.task == "getCategories"){
 		SM.getCategories(function(results){
-			console.log(results);
-			sendMessage({action : "fillList", items : results});
 			sendResponse({action : "fillList", items : results});
 		});
 

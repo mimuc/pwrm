@@ -2,9 +2,10 @@ var HttpClient;
 var requestURL = "https://icons.better-idea.org/allicons.json?url=";
 var fab_wrapper; var feedback;
 $(document).ready(function($) {
-  browser.storage.local.get('mpw').then((result) =>{
-    if(result['mpw']==null) $('#fab_wrapper').hide();
-  });
+
+ browser.storage.local.get('mpw').then((result) =>{
+  if(result['mpw']==null) $('#fab_wrapper').hide();
+});
 
   // setup pw meter
   var options = {};
@@ -12,34 +13,34 @@ $(document).ready(function($) {
     activated: {
       wordTwoCharacterClasses: true,
       wordRepetitions: true
-    }
+    } 
   };
 
-$('input[type="password"]').on('keyup', function(event) {
-  if($(this).val().length > 0){
-    $('.progress').show();
-    $('.password-verdict').show();
-  }else{
-    $('.progress').hide();
-    $('.password-verdict').hide();
-  }
-});
-$('input[type="password"]').pwstrength(options);
-$('.progress').addClass("strength");
-$('.progress').hide();
+  $('input[type="password"]').on('keyup', function(event) {
+    if($(this).val().length > 0){
+      $('.progress').show();
+      $('.password-verdict').show();
+    }else{
+      $('.progress').hide();
+      $('.password-verdict').hide();
+    }
+  });
+  $('input[type="password"]').pwstrength(options);
+  $('.progress').addClass("strength");
+  $('.progress').hide();
 
-fab_wrapper = $('#fab_wrapper');
-feedback = $('#feedback');
-$('.manager').on('click', openPopup);
-fillDropdown();
+  fab_wrapper = $('#fab_wrapper');
+  feedback = $('#feedback');
+  $('.manager').on('click', openPopup);
+  fillDropdown();
 
-/* load material iconfont */
-var mi = document.createElement('style');
-mi.type = 'text/css';
-mi.textContent = '@font-face { font-family: material-icons; src: url("'
-+ chrome.extension.getURL('content_scripts/material-icons/MaterialIcons-Regular.woff')
-+ '"); }';
-document.head.appendChild(mi);
+  /* load material iconfont */
+  var mi = document.createElement('style');
+  mi.type = 'text/css';
+  mi.textContent = '@font-face { font-family: material-icons; src: url("'
+  + chrome.extension.getURL('content_scripts/material-icons/MaterialIcons-Regular.woff')
+  + '"); }';
+  document.head.appendChild(mi);
 
   // add radio button listener (modal entry)
   $("#radio-form :input").change(function() {
@@ -86,7 +87,7 @@ window.onload = function() {
     $('#thisURL').html(entryURL);
 
 
-    browser.runtime.sendMessage({task: "removeHint", url: entryURL});
+    browser.runtime.sendMessage({task: "removeHint", url: entryURL}).then(handleResponse);
 
 
     checkAccount(entryURL);
@@ -221,19 +222,16 @@ function triggerStore(){
         console.log("input validate error");
       }else{
         onStoreMsgSuccess();
-        browser.runtime.sendMessage(storeMsg);
+        browser.runtime.sendMessage(storeMsg).then(handleResponse, handleError);
       }
     }else{
       if($(validate[2]).find('input[type="password"]').val().length == 0){
         console.log("input validate error: password <empty></empty>");
       }else{
         onStoreMsgSuccess();
-        browser.runtime.sendMessage(storeMsg);
+        browser.runtime.sendMessage(storeMsg).then(handleResponse, handleError);
       }
-
     }
-
-
 
   });
 
@@ -261,9 +259,8 @@ function openPopup() {
 }
 
 
-browser.runtime.onMessage.addListener(
-  function(request) {
-    if (request.msg === "ok") {
+function handleResponse(request) {
+  if (request.msg === "ok") {
       $('#feedback').addClass('positive');
       $('#feedback h2').html('store success');
       $('#feedback').fadeIn(500, function() {
@@ -287,5 +284,12 @@ browser.runtime.onMessage.addListener(
 
       });
     }
-  }
-  );
+}
+
+function handleError(error) {
+  console.log(`Error: ${error}`);
+}
+
+
+  
+  
