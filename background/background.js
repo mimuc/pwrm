@@ -139,9 +139,9 @@ function addListeners(){
 //listen for tab changes to trigger form-detection (no reload needed)
 function handleActivated(activeInfo) {
 	console.log("Tab " + activeInfo.tabId +" was activated");
-	sendMessage("task_detect");
+	sendMessageToContentScript("task_detect");
 }
-function sendMessage(msg) {
+function sendMessageToContentScript(msg) {
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 		chrome.tabs.sendMessage(tabs[0].id, msg);
 	});
@@ -169,17 +169,15 @@ function clearInputs(){
 }
 //receives and answers messages from content_scripts [if needed]
 function handleMessage(message, sender, sendResponse) {
-	console.log(message);
-	console.log(sender);
+	// console.log(message);
+	// console.log(sender);
 	if(message.task == 'test'){
 		console.log(message.task);
 		sendResponse("test received");
-	}
-	if(message.task == 'store'){
+	}else if(message.task == 'store'){
+		sendResponse({msg: 'ok'});
 		console.log("store msg");
-		console.log(message.url);
 		// TODO check if storing was successful and answer appropriately
-		sendResponse({'msg': 'ok'});
 		// browser.runtime.sendMessage({'msg': 'ok'},function(response){});
 		require(['MVC_Controller_Managerpage'], function(controller){
 			controller.quickAddEntry(message.url, message.username, message.cat, message.pw);
@@ -200,7 +198,7 @@ function handleMessage(message, sender, sendResponse) {
 		console.log("TODO: open manager");
 	}else if(message.task == "getCategories"){
 		SM.getCategories(function(results){
-			sendResponse({action : "fillList", items : results});
+			sendMessageToContentScript({action : "fillList", items : results});
 		});
 
 	}

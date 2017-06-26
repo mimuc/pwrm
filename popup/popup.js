@@ -87,7 +87,7 @@ window.onload = function() {
     $('#thisURL').html(entryURL);
 
 
-    browser.runtime.sendMessage({task: "removeHint", url: entryURL}).then(handleResponse);
+    // browser.runtime.sendMessage({task: "removeHint", url: entryURL}).then(handleResponse);
 
 
     checkAccount(entryURL);
@@ -194,7 +194,8 @@ function triggerStore(){
     entryCategory = inputCategoryDropdown[0].value;
 
   }else{ //option-pwd
-    password =  CryptoJS.SHA512(document.querySelector('#enterPWD').value);
+    // password = JSON.stringify(CryptoJS.SHA512(document.querySelector('#enterPWD').value));
+    password = document.querySelector('#enterPWD').value;
     useUniquePWD = true;
   }
 
@@ -205,35 +206,38 @@ function triggerStore(){
     var host = pathArray[2];
     entryURL = protocol + '//' + host;
 
-    var storeMsg = {task: "store",
-    url: entryURL,
-    username: $('#enterName').val(),
-    cat: entryCategory,
-    pw: password
-  };
 
+    var storeMsg =  
+    {task: "store",
+     url: entryURL,
+     username: $('#enterName').val(),
+     cat: entryCategory,
+     pw: password
+   };
+    // console.log(storeMsg);
     // trigger form validation
     var validate = $('form').validator('validate');
     // check if there are errors
-    console.log(validate);
+    // console.log(validate);
 
     if($('.option-pwd').hasClass('hidden')){
-      if($('#form-username').find('.glyphicon-remove').length > 0){
-        console.log("input validate error");
-      }else{
-        onStoreMsgSuccess();
-        browser.runtime.sendMessage(storeMsg).then(handleResponse, handleError);
-      }
-    }else{
-      if($(validate[2]).find('input[type="password"]').val().length == 0){
-        console.log("input validate error: password <empty></empty>");
-      }else{
-        onStoreMsgSuccess();
-        browser.runtime.sendMessage(storeMsg).then(handleResponse, handleError);
-      }
-    }
+   if($('#form-username').find('.glyphicon-remove').length > 0){
+    console.log("input validate error");
+  }else{
+    onStoreMsgSuccess();
+    browser.runtime.sendMessage(storeMsg).then(handleResponse, handleError);
+  }
+}else{
 
-  });
+if($(validate[2]).find('input[type="password"]').val().length == 0){
+  console.log("input validate error: password <empty></empty>");
+}else{
+  onStoreMsgSuccess();
+  browser.runtime.sendMessage(storeMsg).then(handleResponse, handleError);
+}
+}
+
+});
 
   
 }
@@ -260,30 +264,31 @@ function openPopup() {
 
 
 function handleResponse(request) {
+  console.log("request: " + request);
   if (request.msg === "ok") {
-      $('#feedback').addClass('positive');
-      $('#feedback h2').html('store success');
-      $('#feedback').fadeIn(500, function() {
-        setTimeout(function(){
-         $('#feedback h2').fadeOut(500);
-         $('#feedback').fadeOut(1000);
-       }, 1000);
-        setTimeout(function(){
-          window.close();
-        }, 1000);
+    $('#feedback').addClass('positive');
+    $('#feedback h2').html('store success');
+    $('#feedback').fadeIn(500, function() {
+      setTimeout(function(){
+       $('#feedback h2').fadeOut(500);
+       $('#feedback').fadeOut(1000);
+     }, 1000);
+      setTimeout(function(){
+        window.close();
+      }, 1000);
 
-      });
-    }else if(request.msg === "error"){
-      $('#feedback').addClass('negative');
-      $('#feedback h2').html('error');
-      $('#feedback').fadeIn(500, function() {
-        setTimeout(function(){
-         $('#feedback h2').fadeOut(500);
-         $('#feedback').fadeOut(1000);
-       }, 1000);
+    });
+  }else if(request.msg === "error"){
+    $('#feedback').addClass('negative');
+    $('#feedback h2').html('error');
+    $('#feedback').fadeIn(500, function() {
+      setTimeout(function(){
+       $('#feedback h2').fadeOut(500);
+       $('#feedback').fadeOut(1000);
+     }, 1000);
 
-      });
-    }
+    });
+  }
 }
 
 function handleError(error) {
@@ -291,5 +296,4 @@ function handleError(error) {
 }
 
 
-  
-  
+

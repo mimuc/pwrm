@@ -12,6 +12,8 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 						var cat;
 				// create first categories depending on what user chose in onboarding
 				console.log(mode['mode']);
+				Logger.log({event : "Onboarding Option", content: mode['mode']});
+				
 				switch(mode['mode']){
 					case 'mode_topic':
 					cat = {"categories" : {
@@ -71,7 +73,6 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 				}
 				for(key in res){	
 					if(showOnlyUnique){
-						console.log("only display unique-pw entries");
 						if(categoryName == null && res[key].category == null){
 							controller.displayEntry(key, res[key], false); //hasCategory==false
 						}
@@ -104,7 +105,6 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 						//store changes
 						SL.saveEntry(randID, mCredential, function(res){
 						// SL.setEntries(entries, function(){
-							console.log("store success");
 							//update display entries immediately that do not have a category
 							//or if the chosen category is focused
 							var focusedCategory = document.querySelector('.category-focused');
@@ -144,12 +144,12 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 		
 		var randID = tools.guidGenerator();
 		var iurl = document.querySelector('.url');
-
 		//extract location.origin from URL
 		var pathArray = iurl.value.split( '/' );
 		var protocol = pathArray[0];
 		var host = pathArray[2];
 		var entryURL = protocol + '//' + host;
+		// TODO check if entryURL is possible -> url validation
 
 		var inputUsername = document.querySelector('.username');
 		/*
@@ -175,14 +175,14 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 			if(useUniquePWD){
 				var credential = {username: entryUsername, url: mUrl, password: pwdHash};
 				Logger.log({event: 'Add Entry', content: credential});
-				this.storeEntry(randID, credential, true);
+				storeEntry(randID, credential, true);
 			}else{
 				// if(objTest.length < 1 && mUrl !== '' && entryUsername !== '') {
 					mUrl.value = ''; entryUsername.value = ''; entryCategory.value ='';
 					var credential = {category: entryCategory, username: entryUsername, url: mUrl};
 					Logger.log({event: 'Add Entry', content: credential});
 				// }
-				this.storeEntry(randID, credential, true);
+				storeEntry(randID, credential, true);
 			}
 		// }, onError);	
 	};
@@ -206,15 +206,16 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 		// var gettingItem = browser.storage.local.get(entryURL);
 		// gettingItem.then((result) => {
 		// 	var objTest = Object.keys(result);
+
 		if(useUniquePWD){
 			var credential = {username: entryUsername, url: entryURL, password: mpw};
-			this.storeEntry(randID, credential, false);
+			storeEntry(randID, credential, false);
 		}else{
 				// if(objTest.length < 1 && entryURL !== '' && entryUsername !== '') {
-					entryURL.value = ''; entryUsername.value = ''; entryCategory.value ='';
+					// entryURL.value = ''; entryUsername.value = ''; entryCategory.value ='';
 					var credential = {category: entryCategory, username: entryUsername, url: entryURL};
 				// }
-				this.storeEntry(randID, credential, false);
+				storeEntry(randID, credential, false);
 			}
 		// }, onError);
 	};

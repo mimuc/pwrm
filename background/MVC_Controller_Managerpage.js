@@ -71,7 +71,7 @@ define(['scripts/modules/Logger', 'MVC_View_Managerpage', 'scripts/tools/showPW'
     });
    };
    var quickAddEntry = exports.quickAddEntry = function(murl, musername, mcat, mpw){
-    Logger.log({event : "QuickAddEntry", content: {murl, musername, mcat}});
+    Logger.log({event : "QuickAddEntry", content: {murl, musername, mcat, mpw}});
     console.log("Controller : quickAddEntry");
     require(['MVC_Model'], function(MVC_Model){
       MVC_Model.quickAddEntry(murl, musername, mcat, mpw);

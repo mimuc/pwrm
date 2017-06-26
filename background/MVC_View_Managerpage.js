@@ -215,7 +215,6 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 					displayCategoryHeader(catName, _hasPW); //update hasPW before displaying header
 					controller.loadEntries(categoryName, false);
 				}else{
-					console.log("deselected");
 					$('#panel_'+categoryName).toggleClass('category-focused');
 					panelCard.addClass('low-color');
 					var entryContainer = $('#entryContainer');

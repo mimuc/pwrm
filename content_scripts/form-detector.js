@@ -103,13 +103,13 @@ function findForms(){
     if(i.getAttribute("type").toUpperCase() === attr_pw.toUpperCase() ||
       new RegExp(regex_pw).test(i.outerHTML)){
 
-    if(credentials != null){
-      showHintbox(i, credentials[chosenIndex], categories, categoryIcon);
-    }else{
-      showSignupHintbox(i);
+      if(credentials != null){
+        showHintbox(i, credentials[chosenIndex], categories, categoryIcon);
+      }else{
+        showSignupHintbox(i);
+      }
     }
   }
-}
 
 }
 
@@ -247,9 +247,7 @@ if($('#hbpwrm').length){
 
   $('.hintbox #openManager').click(function(){
     console.log("open manager");
-    browser.runtime.sendMessage({task: "open_manager"}, function (response) {
-      console.log(response);
-    });
+    browser.runtime.sendMessage({task: "open_manager"});
   });
 
 
@@ -313,10 +311,7 @@ function showSignupHintbox(i){
      // console.log('relX: ' + relX +', relY: '+ relY);
      // if(relX > 0.9){
       // request create list (get categories from bg)
-      browser.runtime.sendMessage({task: "getCategories"}, function (response) {
-        console.log(response);
-
-      });
+    browser.runtime.sendMessage({task: "getCategories"});
       // $('input.mpinput').css( 'cursor', 'pointer' );
     // }
   }); 
@@ -325,8 +320,8 @@ function showSignupHintbox(i){
 }
 
 function removeHintbox(){
-   $('input.mpinput.login').unbind('click');
-  $('#hbpwrm').remove();
+ $('input.mpinput.login').unbind('click');
+ $('#hbpwrm').remove();
 }
 
 //submit button clicked. Check if there is an entry with this username for this website

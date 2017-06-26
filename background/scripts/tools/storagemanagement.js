@@ -86,8 +86,9 @@ define(function(){
 			var gettingEntries = browser.storage.local.get("entries");
 			gettingEntries.then((results) => {
 				var entries = results["entries"];
-				entries[randID] = credentials;
+				console.log(randID);
 				console.log(entries);
+				entries[randID] = credentials;
 				var storingEntry = browser.storage.local.set({"entries" : entries});
 				storingEntry.then(() => {
 					callback();
