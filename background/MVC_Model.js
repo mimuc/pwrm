@@ -5,6 +5,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 		var initialize = exports.initialize = function() {
 			console.log("Model : initialize");
 			SL.createExtensionIdentifier(); 
+			SL.initPreferences(function(results){controller.updatePreferences(results);});
 			SL.getCategories(function(results){
 				SL.getOnboardingMode(function(mode){
 					var categories = results["categories"];
@@ -88,7 +89,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 		var storeEntry = exports.storeEntry = function(randID, mCredential, toggleModal) {
 			console.log("Model : storeEntry");	
 			crypt.encrypt_aes(mCredential.password, function(data){	
-				mCredential.creationDate = new Date(Date.now()).toLocaleString({ year: 'numeric', month : 'numeric', day : 'numeric' });
+				mCredential.creationDate = tools.getDate();
 				if(mCredential.password != null) mCredential.password = data;
 				console.log(mCredential);
 				//first get current storage
@@ -226,7 +227,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 	};
 	var decrypt = exports.decrypt = function(content, callback){
 		crypt.auto_decrypt_aes(content, function(dec){
-			console.log(dec);
+			// console.log(dec);
 			callback(dec);
 		});
 	}

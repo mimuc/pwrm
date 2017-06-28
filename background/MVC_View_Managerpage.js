@@ -418,6 +418,12 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 
 		});
 	};
+	var updatePreferences = exports.updatePreferences = function(keys, values){
+		for(k in keys){
+			$('#'+keys[k]).prop('checked', values[k]);
+			
+		}
+	};
 	var moveToCategory = exports.moveToCategory = function(url, newCategory){
 		console.log("View : moveToCategory");
 		var gettingEntries = browser.storage.local.get("entries");
@@ -507,7 +513,6 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 			}
 		});
 	};
-
 	var deleteThisEntry = function(url){
 		console.log("View : deleteThisEntry");
 		var gettingEntries = browser.storage.local.get("entries");

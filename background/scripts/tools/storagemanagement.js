@@ -23,6 +23,24 @@ define(function(){
 				callback(results);
 			});
 		},
+		initPreferences : function(callback){
+			console.log("SM : initPreferences");
+			browser.storage.local.get("preferences").then((results) => {
+				if(results == null || results["preferences"] == null){
+					browser.storage.local.set({preferences : {}});
+				}else{
+					callback(results);
+				}
+			});
+		},
+		updatePreferences : function(key, value){
+			browser.storage.local.get("preferences").then((results) => {
+				results.preferences[key] = value;
+				console.log(results);
+				browser.storage.local.set(results);
+				browser.storage.local.get("preferences").then((results) => { console.log(results);});
+			});
+		},
 		getCategories: function(callback){
 			var gettingCategories = browser.storage.local.get("categories");
 			gettingCategories.then((results) => {

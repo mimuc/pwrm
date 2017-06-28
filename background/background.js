@@ -36,20 +36,9 @@ function showSection(clicked, section){
 }
 
 function addListeners(){
-	$('#sidebar-categories').on('click', function(){showSection($(this), '#section-categories');});
-	$('#sidebar-unique').on('click', function(){showSection($(this), '#section-unique');});
-	$('#sidebar-modifications').on('click', function(){showSection($(this), '#section-modifications');});
-	$('#sidebar-preferences').on('click', function(){showSection($(this), '#section-preferences');});
-	$('#sidebar-about').on('click', function(){showSection($(this), '#section-about');});
-	setupPWMeter();
-
-	$('#burger').on('click', function(){
-		toggleNavigation();
-	});
-
 	$(document).on('click', '.showPW', function(e){
-		console.log(e.target.innerHTML);
-		console.log("clicked on showPW");
+		// console.log(e.target.innerHTML);
+		// console.log("clicked on showPW");
 			// e.stopImmediatePropagation();
 			if(e.target.innerHTML == 'show'){
 				
@@ -69,6 +58,17 @@ function addListeners(){
 		}
 	});
 
+	$('#sidebar-categories').on('click', function(){showSection($(this), '#section-categories');});
+	$('#sidebar-unique').on('click', function(){showSection($(this), '#section-unique');});
+	// $('#sidebar-modifications').on('click', function(){showSection($(this), '#section-modifications');});
+	$('#sidebar-preferences').on('click', function(){showSection($(this), '#section-preferences');});
+	$('#sidebar-about').on('click', function(){showSection($(this), '#section-about');});
+	
+	setupPWMeter();
+	$('#preferences :checkbox').change(function(){
+		SM.updatePreferences($(this).attr('id'), this.checked);
+	});
+	$('#burger').on('click', function(){toggleNavigation();});
 
 	 // add event listeners to buttons and inputs
 	 addPWD.addEventListener('click', showPWInput);
@@ -169,7 +169,7 @@ function clearInputs(){
 }
 //receives and answers messages from content_scripts [if needed]
 function handleMessage(message, sender, sendResponse) {
-	// console.log(message);
+	console.log("Message received: " + message);
 	// console.log(sender);
 	if(message.task == 'test'){
 		console.log(message.task);
@@ -192,7 +192,9 @@ function handleMessage(message, sender, sendResponse) {
 	}else if(message.task =="removeHint"){
 		changeBrowserAction(true);
 	}else if(message.task == "decrypt"){
-		controller.decrypt(message.content);
+		controller.decrypt(message.pw, message.target);
+	}else if(message.task == "requestAutofill_PW"){
+		controller.decryptWithTarget(message.password, message.target);
 	}else if(message.task == "open_manager"){
 		// TODO
 		console.log("TODO: open manager");

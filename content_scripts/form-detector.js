@@ -88,6 +88,17 @@ function findForms(){
     var i = inputs[index];
     //escape submit buttons, hidden inputs
     if(i.type != "submit" && i.type != "hidden"){
+        //find password input
+        if(i.getAttribute("type").toUpperCase() === attr_pw.toUpperCase() ||
+          new RegExp(regex_pw).test(i.outerHTML)){
+         i.classList.add('mp-password');
+       if(credentials != null){
+        highlightUsername(i, credentials);
+        showHintbox(i, credentials[chosenIndex], categories, categoryIcon);
+      }else{
+        showSignupHintbox(i);
+      }
+    }
     //find username / mail input
     //test by type attribute, if false test as string with regular expression
     if(credentials != null){
@@ -99,17 +110,8 @@ function findForms(){
   }
 
 }
-    //find password input
-    if(i.getAttribute("type").toUpperCase() === attr_pw.toUpperCase() ||
-      new RegExp(regex_pw).test(i.outerHTML)){
 
-      if(credentials != null){
-        showHintbox(i, credentials[chosenIndex], categories, categoryIcon);
-      }else{
-        showSignupHintbox(i);
-      }
-    }
-  }
+}
 
 }
 
@@ -153,11 +155,30 @@ function lookupStorage(form){
 
 function highlightUsername(i, credentials){
   console.log("Function : highlightUsername");
+  console.log(i);
   i.classList.add('highlightInput');
   var input = $('input.highlightInput');
-  //autofill username 
-  i.value = credentials[chosenIndex].username;
-  i.html = credentials[chosenIndex].username;
+  //autofill 
+  if(i.classList.contains('mp-password')){
+    // request check -> if pw autofill enabled -> decrypt pw and return in msg
+    var enc = credentials[chosenIndex].password;
+    console.log(i);
+    // TODO message.task undefined
+    browser.runtime.sendMessage({task: "requestAutofill_PW", password: enc, target: i});
+  }else{
+    // autofill username if set in preferences
+    browser.storage.local.get('preferences').then((results) =>{
+      if(!i.classList.contains('mp-password') && results.preferences['pref_autofill_username']){
+        i.html = credentials[chosenIndex].username;
+        i.value = credentials[chosenIndex].username;
+      }
+
+    });
+
+  }
+
+
+
   // create and populate dropdown if size > 1
   if(credentials[1]!=null){
     var datalist = document.createElement('datalist');
@@ -194,7 +215,8 @@ function update(input){
 
 function showHintbox(i, credentials, categories, icon){
   console.log("Function : showHintbox");
-  removeHintbox();
+
+  // removeHintbox();
   var hintbox;  var c = credentials.category;
   if(c!=null){
   // category entry
@@ -222,6 +244,7 @@ if($('#hbpwrm').length){
   hintbox_div.appendChild(hintbox_w);
 
   i.parentNode.insertBefore(hintbox_div, i.nextSibling);
+  // HIER
 
   $('#hbpwrm .hintbox_head.login .left, #hbpwrm .hintbox_head.login .middle ').click(function(){
     $('.hintbox_head.login').toggleClass('focused');
@@ -311,7 +334,7 @@ function showSignupHintbox(i){
      // console.log('relX: ' + relX +', relY: '+ relY);
      // if(relX > 0.9){
       // request create list (get categories from bg)
-    browser.runtime.sendMessage({task: "getCategories"});
+      browser.runtime.sendMessage({task: "getCategories"});
       // $('input.mpinput').css( 'cursor', 'pointer' );
     // }
   }); 
@@ -384,6 +407,11 @@ function handleMessage(request){
     signupPW.attr('placeholder', ' ');
     signupPW.attr('aria-label', ' '); 
     signupPW.val(request.content);
+  }else if(request.action == "autofillPW"){
+
+    console.log(request.target);
+    console.log(request.content);
+
   }
 }
 function setupSignupHintbox(listItems){

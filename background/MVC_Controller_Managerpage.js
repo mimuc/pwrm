@@ -58,6 +58,14 @@ define(['scripts/modules/Logger', 'MVC_View_Managerpage', 'scripts/tools/showPW'
 
       view.createCategory(value, pw, $('#modalCategory').hasClass('new'));
     };
+    var updatePreferences = exports.updatePreferences = function(results){
+      var keys = []; var values = [];
+      for(key in results.preferences){
+        keys.push(key);
+        values.push(results.preferences[key]);
+      }
+      view.updatePreferences(keys, values);
+    };
     var addEntry = exports.addEntry = function(){
       console.log("Controller : addEntry");
       require(['MVC_Model'], function(MVC_Model){
@@ -77,11 +85,21 @@ define(['scripts/modules/Logger', 'MVC_View_Managerpage', 'scripts/tools/showPW'
       MVC_Model.quickAddEntry(murl, musername, mcat, mpw);
     });
   };
-  var decrypt = exports.decrypt = function(content){
+  var decrypt = exports.decrypt = function(content, target){
     require(['MVC_Model'], function(MVC_Model){
       MVC_Model.decrypt(content, function(result){
-         var msg = {action : "fillPW", content: result};
-          // does only work when backgroundpage is opened?!
+         var msg = {action : "fillPW", target: target, content: result};
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {  
+          chrome.tabs.sendMessage(tabs[0].id, msg, function(response) {
+          }); 
+        });
+      });
+    });
+  };
+  var decryptWithTarget = exports.decryptWithTarget = function(content, target){
+    require(['MVC_Model'], function(MVC_Model){
+      MVC_Model.decrypt(content, function(result){
+         var msg = {action : "autofillPW", target: target, content: result};
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {  
           chrome.tabs.sendMessage(tabs[0].id, msg, function(response) {
           }); 
