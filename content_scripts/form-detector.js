@@ -16,6 +16,7 @@ var hasLogin = false;
 var hasSignup = false;
 var chosenIndex = 0;
 var mCredentials, mCategories;
+var context = this;
 
 //var URL = document.URL;
 // use location.origin to extract base url
@@ -162,8 +163,8 @@ function highlightUsername(i, credentials){
   if(i.classList.contains('mp-password')){
     // request check -> if pw autofill enabled -> decrypt pw and return in msg
     var enc = credentials[chosenIndex].password;
-    console.log(i);
     // TODO message.task undefined
+    // message is not sent..
     browser.runtime.sendMessage({task: "requestAutofill_PW", password: enc, target: i});
   }else{
     // autofill username if set in preferences
@@ -327,7 +328,8 @@ function showSignupHintbox(i){
     });
     i.classList.add('mpinput');
     i.classList.add('signup');
-    $('input.mpinput.signup').click(function(e){
+    $('input.mpinput.signup').unbind().click(function(e){
+
      $('.hintbox.signup .grid.middle').html('Reusing a Password?');
      var parentOffset = $(this).offset(); 
      var relX = (e.pageX - parentOffset.left)/($(this).width());
@@ -408,11 +410,13 @@ function handleMessage(request){
     signupPW.attr('aria-label', ' '); 
     signupPW.val(request.content);
   }else if(request.action == "autofillPW"){
-
+    // TODO
+    console.log("autofillPW received");
     console.log(request.target);
     console.log(request.content);
 
   }
+    return true;
 }
 function setupSignupHintbox(listItems){
   console.log(listItems);

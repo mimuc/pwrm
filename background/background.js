@@ -96,8 +96,6 @@ function addListeners(){
 	 	// trigger form validation
 	 	var validate = $(this).parent().parent().parent().find('form').validator('validate');
 	 	// check if there are errors
-	 	console.log(validate);
-
 	 	if($('#enter-category-pwd').hasClass('hidden')){
 	 		if($('#modalCategoryName').parent().find('.glyphicon-remove').length > 0){
 	 			console.log("input validate error");
@@ -138,7 +136,7 @@ function addListeners(){
   }
 //listen for tab changes to trigger form-detection (no reload needed)
 function handleActivated(activeInfo) {
-	console.log("Tab " + activeInfo.tabId +" was activated");
+	// console.log("Tab " + activeInfo.tabId +" was activated");
 	sendMessageToContentScript("task_detect");
 }
 function sendMessageToContentScript(msg) {
@@ -176,7 +174,7 @@ function handleMessage(message, sender, sendResponse) {
 		sendResponse("test received");
 	}else if(message.task == 'store'){
 		sendResponse({msg: 'ok'});
-		console.log("store msg");
+		// console.log("store msg");
 		// TODO check if storing was successful and answer appropriately
 		// browser.runtime.sendMessage({'msg': 'ok'},function(response){});
 		require(['MVC_Controller_Managerpage'], function(controller){
@@ -194,16 +192,18 @@ function handleMessage(message, sender, sendResponse) {
 	}else if(message.task == "decrypt"){
 		controller.decrypt(message.pw, message.target);
 	}else if(message.task == "requestAutofill_PW"){
+		console.log("wos hey?");
 		controller.decryptWithTarget(message.password, message.target);
 	}else if(message.task == "open_manager"){
-		// TODO
-		console.log("TODO: open manager");
+		openBackground();
+
 	}else if(message.task == "getCategories"){
 		SM.getCategories(function(results){
 			sendMessageToContentScript({action : "fillList", items : results});
 		});
 
 	}
+	return true;
 }
 //programmatically preselect options in dropdown
 function setSelectedIndex(select, index){
@@ -250,4 +250,14 @@ function setupPWMeter(){
 	$('input[type="password"]').pwstrength(options);
 	$('.progress').addClass("strength");
 	$('.progress').hide();
+}
+
+
+function openBackground(){
+	browser.windows.create({
+		"url": "/login/login.html",
+		type: "panel",
+		height: 600,
+		width: 600
+	});
 }
