@@ -38,6 +38,8 @@ a, a:hover{
 	color: var(--primary-color);
 }
 
+
+
 .checkbox label{
 	font-size: 18px !important;
 }
@@ -259,6 +261,11 @@ h1{
 	font-size: 18px;
 	font-weight: 300;
 	padding: 15px;
+}
+
+#section-about li{
+		font-size: 18px;
+	font-weight: 300;
 }
 
 .cat-info{

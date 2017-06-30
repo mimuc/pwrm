@@ -35,14 +35,14 @@
      <div class="button-floating-shadow"></div>
      <div class="button button-sub" data-toggle="modal" data-target="#modal-newEntry"><p class="next-to-button">Entry</p><div class="text-center"><i class="material-icons">bookmark</i></div></div>
      <div class="button button-sub" data-toggle="modal" data-target="#modalCategory"><p class="next-to-button">Category</p><div class="text-center"><i class="material-icons">book</i></div></div>
-    <!--  <div class="button button-sub" data-toggle="modal" data-target="#modalModification"><p class="next-to-button">Modification</p><div class="text-center"><i class="material-icons">cached</i></div></div> -->
+     <!--  <div class="button button-sub" data-toggle="modal" data-target="#modalModification"><p class="next-to-button">Modification</p><div class="text-center"><i class="material-icons">cached</i></div></div> -->
    </div>
  </div>
 
 
  <nav class="navbar navbar-default navbar-fixed-top navbar-mp">
- <div id="burger"><i class="material-icons">menu</i></div>
-  <div class="container">
+   <div id="burger"><i class="material-icons">menu</i></div>
+   <div class="container">
     <form>
       <div class="form-group search has-feedback has-feedback-left">
         <input id="search" type="text" class="form-control" placeholder="Search" />
@@ -143,18 +143,40 @@
     </div>
 
 
-</div>
+  </div>
 </div>
 <div class="mp-section" id='section-about'>
  <div class="content row">
    <div class="page-header">
-     <h1>About</h1>
-     <p class="section-content">TODO</p>
-   </div>
-   <div class="card-wrapper">
-     <!-- <div id="modificationEntryContainer"></div> -->
-   </div>
+     <h2>Disclaimer</h2>
+     <p class="section-content">This is a browser-based password manager helping you to organize your accounts and passwords. <mark>To conduct a fieldstudy, single actions are logged on external files on the web. The logging is transparent and can be found at <a target="_blank" href="http://fuasmattn.de/pwm_logserver/logger.php">fuasmattn.de</a>.</mark> All data gathered by the manager is stored locally in the browser's storage. Passwords are encrypted via an JS implementation of AES and your Masterpassword as a key. The masterpassword's integrity is ensured by using a SHA-2 Hash for storage and comparison.</p>
+     <p class="section-content"><span class="warning">Warning!</span> This is a early version. <mark>The Browser Storage architecture and encryption via Javascript are not secure</mark>. Keep your device safe. We do not garantee yet to stand against cross-extension/site attacks.</p>
+     <h2>Contact</h2>
+     <p class="section-content">Contact: <a href="mailto:prinzm@cip.ifi.lmu.de">mprinz@cip.ifi.lmu.de</a></p>
+     <p class="section-content">Project: <a target="_blank" href="https://gitlab.lrz.de/fuasmattn/password-reuse-manager">Gitlab Project</a></p>
+
+     <hr>
+     <h2>Third-Party-Software</h2>
+     <ul>
+      <li><a target="_blank" href="http://requirejs.org/">requireJS</a></li>
+        <li><a target="_blank" href="  https://github.com/ablanco/jquery.pwstrength.bootstrap">Bootstrap Password Meter</a></li>
+         <li><a target="_blank" href="https://github.com/sytelus/CryptoJS">CryptoJS</a></li>
+          <li><a target="_blank" href="http://1000hz.github.io/bootstrap-validator/">Validator for Bootstrap</a></li>
+      
+       <li><a target="_blank" href="http://www.louistiti.fr/tutoriel-html5-css3-jquery-bouton-action-goutte-eau-morphing-material-design/34">FAB Button</a></li>
+     <li><a target="_blank" href="http://getbootstrap.com">Bootstrap</a></li>
+      <li><a target="_blank" href="http://fezvrasta.github.io/bootstrap-material-design">Bootstrap-Material-Design</a></li>
+      <li><a target="_blank" href="https://material.io/icons/">Material Icons</a></li>
+      <li><a target="_blank" href="https://jquery.com/">jQuery</a></li>
+
+
+    </ul>
+
+  </div>
+  <div class="card-wrapper">
+   <!-- <div id="modificationEntryContainer"></div> -->
  </div>
+</div>
 </div>
 <div class="mp-section" id='section-searchresults'>
  <div class="content row">
