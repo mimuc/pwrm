@@ -86,10 +86,10 @@ define(['scripts/tools/tools', 'scripts/modules/Logger', 'MVC_View_Managerpage',
       MVC_Model.quickAddEntry(murl, musername, mcat, mpw);
     });
   };
-  var decrypt = exports.decrypt = function(content, target){
+  var decrypt = exports.decrypt = function(content){
     require(['MVC_Model'], function(MVC_Model){
       MVC_Model.decrypt(content, function(result){
-         var msg = {action : "fillPW", target: target, content: result};
+         var msg = {action : "fillPW", content: result};
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {  
           chrome.tabs.sendMessage(tabs[0].id, msg, function(response) {
           }); 

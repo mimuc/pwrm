@@ -140,7 +140,7 @@ function addListeners(){
 //listen for tab changes to trigger form-detection (no reload needed)
 function handleActivated(activeInfo) {
 	// console.log("Tab " + activeInfo.tabId +" was activated");
-	sendMessageToContentScript("task_detect");
+	// sendMessageToContentScript("task_detect");
 }
 function sendMessageToContentScript(msg) {
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -170,7 +170,7 @@ function clearInputs(){
 }
 //receives and answers messages from content_scripts [if needed]
 function handleMessage(message, sender, sendResponse) {
-	console.log("Message received: " + message);
+	console.log("Message received: " + message.pw);
 	// console.log(sender);
 	if(message.task == 'test'){
 		console.log(message.task);
@@ -193,20 +193,18 @@ function handleMessage(message, sender, sendResponse) {
 	}else if(message.task =="removeHint"){
 		changeBrowserAction(true);
 	}else if(message.task == "decrypt"){
-		controller.decrypt(message.pw, message.target);
+		controller.decrypt(message.content, message.target);
 	}else if(message.task == "requestAutofill_PW"){
-		console.log("wos hey?");
 		controller.decryptWithTarget(message.password, message.target);
 	}else if(message.task == "open_manager"){
 		openBackground();
-
 	}else if(message.task == "getCategories"){
 		SM.getCategories(function(results){
 			sendMessageToContentScript({action : "fillList", items : results});
 		});
 
 	}
-	return true;
+	
 }
 //programmatically preselect options in dropdown
 function setSelectedIndex(select, index){

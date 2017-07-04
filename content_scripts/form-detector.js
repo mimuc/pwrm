@@ -336,7 +336,7 @@ function showSignupHintbox(i){
     });
     i.classList.add('mpinput');
     i.classList.add('signup');
-    $('input.mpinput.signup').unbind().click(function(e){
+    $('input.mpinput.signup').on('focus', function(e){
 
      $('.hintbox.signup .grid.middle').html('Reusing a Password?');
      var parentOffset = $(this).offset(); 
@@ -441,7 +441,8 @@ function setupSignupHintbox(listItems){
     var chosen = $(this).attr('id'); 
     var hash = $(this).attr('hash');
       // autofill PW
-      if(hash!=null && hash != 'undefined'){  
+      if(hash!=null && hash != 'undefined'){ 
+      console.log("requesting pw"); 
         browser.runtime.sendMessage({task : 'decrypt', content: hash});
       }
       // collapse hintbox
