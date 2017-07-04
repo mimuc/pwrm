@@ -170,7 +170,7 @@ function clearInputs(){
 }
 //receives and answers messages from content_scripts [if needed]
 function handleMessage(message, sender, sendResponse) {
-	console.log("Message received: " + message.pw);
+	console.log("Message received: " + message);
 	// console.log(sender);
 	if(message.task == 'test'){
 		console.log(message.task);
@@ -194,8 +194,9 @@ function handleMessage(message, sender, sendResponse) {
 		changeBrowserAction(true);
 	}else if(message.task == "decrypt"){
 		controller.decrypt(message.content, message.target);
-	}else if(message.task == "requestAutofill_PW"){
-		controller.decryptWithTarget(message.password, message.target);
+	}else if(message.task == "requestAutofillPW"){
+		console.log("received requestAutofillPW");
+		controller.decryptWithTarget(message.password);
 	}else if(message.task == "open_manager"){
 		openBackground();
 	}else if(message.task == "getCategories"){

@@ -96,12 +96,7 @@ function findForms(){
        if(credentials != null){
         highlightUsername(i, credentials);
         showHintbox(i, credentials[chosenIndex], categories, categoryIcon);
-        //autofill pw
-        // request check -> if pw autofill enabled -> decrypt pw and return in msg
-        var enc = credentials[chosenIndex].password;
-        // TODO message.task undefined
-        // message is not sent..
-        browser.runtime.sendMessage({task: "requestAutofill_PW", password: enc, target: i});
+        requestAutofillPW(credentials[chosenIndex], categories);
 
       }else{
         showSignupHintbox(i);
@@ -123,37 +118,55 @@ function findForms(){
 
 }
 
+function requestAutofillPW(item, categories){
+  //autofill pw
+  // request check -> if pw autofill enabled -> decrypt pw and return in msg
+  // distinguish between category-pw and unique-pw here..
+  var enc = item.password;
+  var type = 'unique';
+  if(enc==null){
+    enc = categories[item.category][2];
+    type = 'category';
+  }
+
+  // TODO message.task undefined<f
+  // message is not sent..
+  browser.runtime.sendMessage({task : "test"});
+  console.log("sending requestAutofillPW");
+  browser.runtime.sendMessage({task: "requestAutofillPW", password: enc, type: type});
+}
+
 function lookupStorage(form){
- var requestPromise = browser.storage.local.get();
- requestPromise.then(function(data){
-  var cat = data.categories; mCategories = cat;
-  var entries = data.entries;
-  var foundEntry = null;
-  var foundEntries = [];
-  for(key in entries){
-      // !! multiple possible
-      if(entries[key].url == URL){
-        foundEntry = entries[key];
-        foundEntries.push(entries[key]);
-      }
+   var requestPromise = browser.storage.local.get();
+   requestPromise.then(function(data){
+    var cat = data.categories; mCategories = cat;
+    var entries = data.entries;
+    var foundEntry = null;
+    var foundEntries = [];
+    for(key in entries){
+    // !! multiple possible
+    if(entries[key].url == URL){
+      foundEntry = entries[key];
+      foundEntries.push(entries[key]);
     }
+  }
     mCredentials = foundEntries;
-    if(foundEntry != null){
-      console.log(foundEntries);
-      console.log("Found "+foundEntries.length+" entries for this URL in local storage.");
-      console.log("first username is: " + foundEntries[chosenIndex].username);
-      if(foundEntries[chosenIndex].category == null){
-        //use unique icon
-        findInput(form, foundEntries, cat, 'lock');
-      }else{
-        /* there is a matching URL / account in the storage */
-        /* second parameter is the matching between entry.categoryName and categories --> icon */
-        findInput(form, foundEntries, cat, cat[foundEntries[chosenIndex].category][1]);
-      }
+  if(foundEntry != null){
+    console.log(foundEntries);
+    console.log("Found "+foundEntries.length+" entries for this URL in local storage.");
+    console.log("first username is: " + foundEntries[chosenIndex].username);
+    if(foundEntries[chosenIndex].category == null){
+      //use unique icon
+      findInput(form, foundEntries, cat, 'lock');
     }else{
-      console.log("No saved entry found for this URL.");
-      console.log(URL);
+      /* there is a matching URL / account in the storage */
+      /* second parameter is the matching between entry.categoryName and categories --> icon */
+      findInput(form, foundEntries, cat, cat[foundEntries[chosenIndex].category][1]);
     }
+  }else{
+    console.log("No saved entry found for this URL.");
+    console.log(URL);
+  }
 
   }, 
   function(data){
@@ -161,8 +174,8 @@ function lookupStorage(form){
   });
 }
 
-function highlightUsername(i, credentials){
-  console.log("Function : highlightUsername");
+     function highlightUsername(i, credentials){
+      console.log("Function : highlightUsername");
   // console.log(i);
   i.classList.add('highlightInput');
   var input = $('input.highlightInput');
@@ -214,6 +227,7 @@ function update(input){
   console.log("Function : update");
   var activeCred = mCredentials[chosenIndex];
   console.log(activeCred);
+  requestAutofillPW(activeCred, mCategories);
   // if(activeCred.password || mCategories[activeCred.category][2]) input.removeClass('unlocked'); input.addClass('locked');
   // if(!activeCred.password) input.removeClass('locked'); input.addClass('unlocked');
 
@@ -418,10 +432,9 @@ function handleMessage(request){
     signupPW.attr('aria-label', ' '); 
     signupPW.val(request.content);
   }else if(request.action == "autofillPW"){
-    // TODO
     console.log("autofillPW received");
-    console.log(request.target);
-    console.log(request.content);
+    $('.mp-password').first().val(request.content);
+    // console.log(request.content);
 
   }
   return true;
@@ -442,7 +455,7 @@ function setupSignupHintbox(listItems){
     var hash = $(this).attr('hash');
       // autofill PW
       if(hash!=null && hash != 'undefined'){ 
-      console.log("requesting pw"); 
+        console.log("requesting pw"); 
         browser.runtime.sendMessage({task : 'decrypt', content: hash});
       }
       // collapse hintbox

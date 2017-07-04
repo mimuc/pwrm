@@ -97,10 +97,10 @@ define(['scripts/tools/tools', 'scripts/modules/Logger', 'MVC_View_Managerpage',
       });
     });
   };
-  var decryptWithTarget = exports.decryptWithTarget = function(content, target){
+  var decryptWithTarget = exports.decryptWithTarget = function(content){
     require(['MVC_Model'], function(MVC_Model){
       MVC_Model.decrypt(content, function(result){
-         var msg = {action : "autofillPW", target: target, content: result};
+         var msg = {action : "autofillPW", content: result};
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {  
           chrome.tabs.sendMessage(tabs[0].id, msg, function(response) {
           }); 
