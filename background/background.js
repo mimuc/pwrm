@@ -17,6 +17,7 @@ require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Manag
 			$('#section-categories').show();
 			setup();
 			addListeners();
+			controller.displayNumberEntries();
 		});
 
 //searches for entries and displays results matching the typed letters

@@ -38,7 +38,9 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 					}};
 					break;
 					case 'mode_hints':
-					cat = {"categories" : {}};
+					cat = {"categories" : {
+						Create_Your_Categories : ["Info", "folder"]
+					}};
 					break;
 				}
 

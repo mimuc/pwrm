@@ -1,5 +1,4 @@
 :root {
-	--primary-color: #58568f; /* alternatives: #58568f; #a124ae; */
 	--highlight-color: #ffeb3b;
 	--dark-color: #212121;
 	--light-color: #f8f8f8;
@@ -14,6 +13,8 @@ html, body{
 	color: var(--dark-color);
 }
 
+
+
 p{
 	font-size: 1.2em;
 }
@@ -25,6 +26,10 @@ h2{
 	font-size:1.7em;
 }
 
+.btn-raised.btn-mp.btn-primary{
+	background-color: var(--highlight-color);
+	color: var(--dark-color);
+}
 .disabled{
 	opacity: 0.3;
 }

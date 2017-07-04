@@ -1,8 +1,9 @@
-define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/storagemanagement', 'MVC_Controller_Managerpage', 'psl'],
-	function(showPW, crypt, $, SL, controller, psl) {
+define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/storagemanagement', 'MVC_Controller_Managerpage', 'psl'],
+	function(tools, showPW, crypt, $, SL, controller, psl) {
 		var exports = {};
 
 		var displayEntry = exports.displayEntry = function(randID, urlName, credential, hasCategory) {
+
 			console.log("View : displayEntry");
 			var entryContainer, content;
 			if(credential.category != null){
@@ -178,7 +179,7 @@ define(['scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/st
 		//$('#wrapper_'+categoryName).load('scripts/modules/ui/collapse_snippet.html',null,
 		function() {
 			//alter DOM (id, classnames)
-			var catName = categoryName.replace('_', ' ');
+			var catName = tools.mReplaceAll(categoryName, '_', ' ');
 
 			$(this).children(":first").attr('id','categorywrapper_'+categoryName);
 			$('#_heading_').attr('id', 'panel_'+categoryName);
@@ -282,7 +283,7 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 			SL.getCategories(function(c){	
 				var categories = c.categories;
 				var index=0;
-				for(c in categories){				
+				for(c in categories){			
 			// console.log(c + " password: " + categories[c]);
 			createCategoryElement(c,categories[c][0],categories[c][1], categories[c][2], index);
 			index++;
@@ -310,7 +311,7 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 			crypt.encrypt_aes(pw, function(data){
 
 				var pw_enc = (pw=='') ? null : data;
-				var oldName = $('#editCategory').attr('oldValue');
+				var oldName = tools.mReplaceAll($('#editCategory').attr('oldValue'), " ", "_");
 				var randID = guidGenerator();
 				var cat = ["Info","folder", pw_enc ,randID];
 
@@ -333,6 +334,7 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 							}
 							if(oldName!=null){
 								if(name != oldName){
+									console.log("name: " + name +" : oldName: " + oldName);
 									console.log("name != oldName");
 									deleteCategory(oldName);
 									reassignEntries(oldName, name, mCat);
@@ -371,17 +373,18 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 		}
 		var deleteCategory = exports.deleteCategory = function(category){
 		//if category is not empty --> move entries to unsorted (todo?)
-		console.log("View : deleteCategory");
+		console.log("View : deleteCategory: " +category);
+
 		var gettingCategories = browser.storage.local.get("categories");
 		gettingCategories.then((results) => {
 			var oldCategories = results.categories;					
-			delete oldCategories[category.replace(' ', '_')];	
+			delete oldCategories[tools.mReplaceAll(category, ' ', '_')];	
 
 				//save the altered version of the entry-element in storage
 				var storingCategories = browser.storage.local.set({"categories" : oldCategories});
 				storingCategories.then(() => {
 					//remove element from DOM 
-					document.getElementById("wrapper_"+category.replace(' ', '_')).remove();
+					document.getElementById("wrapper_"+tools.mReplaceAll(category, '_', ' ')).remove();
 					displayCategories(true);
 				}, onError);	
 
@@ -483,6 +486,7 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 			$('#modalAction').toggleClass('hidden');
 		});
 		$('#modalCategory').on('show.bs.modal', function (e) {
+
 			$('#modalYesNo').addClass('hidden');
 			$('#modalAction').removeClass('hidden');
 			var oldValue = $('#editCategory').attr('oldValue');
@@ -507,6 +511,10 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 				$('#category-pwd').val(pw);
 				if(hasPW){			
 					$('#enter-category-pwd').removeClass('hidden');
+					$('#category-pwd').on('focus', function(){
+						// empty input
+						$(this).val('');
+					});
 				}else{
 					$('#enter-category-pwd').addClass('hidden');
 				}
@@ -551,6 +559,7 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 		};
 		return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 	};
+	// TODO move to storagemanager's logic
 	var reassignEntries = function(oldName, name, categories){
 		console.log("View : reassignEntries");
 		var gettingEntries = browser.storage.local.get("entries");

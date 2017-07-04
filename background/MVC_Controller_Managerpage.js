@@ -1,7 +1,7 @@
 // DON'T DEFINE MVC_MODEL HERE => circular dependency
 // solution: reuqire on demand
-define(['scripts/modules/Logger', 'MVC_View_Managerpage', 'scripts/tools/showPW', 'psl'],
-  function(Logger, view, showPW, psl){
+define(['scripts/tools/tools', 'scripts/modules/Logger', 'MVC_View_Managerpage', 'scripts/tools/showPW', 'psl'],
+  function(tools,Logger, view, showPW, psl){
     var exports = {};
 
     var changeCategoryIcon = exports.changeCategoryIcon = function(catName, iconName){
@@ -47,7 +47,8 @@ define(['scripts/modules/Logger', 'MVC_View_Managerpage', 'scripts/tools/showPW'
     };
     var createCategory = exports.createCategory = function(){
       var value = modalCategoryName.value;
-      value = value.replace(' ', '_');
+      value = tools.mReplaceAll(value, ' ', '_');
+      console.log(value);
       Logger.log({event: "Category Created", content: value});
       var pw; var ecpwd = $('#category-pwd');
       if(ecpwd.hasClass('hidden')){ 

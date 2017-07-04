@@ -50,7 +50,7 @@ function findForms(){
     ev.preventDefault(); // stop the form from submitting
     // checkAccount();
     // TODO
-    // console.log("submit detected");
+    console.log("submit detected");
     this.submit(); 
   });
 
@@ -96,6 +96,13 @@ function findForms(){
        if(credentials != null){
         highlightUsername(i, credentials);
         showHintbox(i, credentials[chosenIndex], categories, categoryIcon);
+        //autofill pw
+        // request check -> if pw autofill enabled -> decrypt pw and return in msg
+        var enc = credentials[chosenIndex].password;
+        // TODO message.task undefined
+        // message is not sent..
+        browser.runtime.sendMessage({task: "requestAutofill_PW", password: enc, target: i});
+
       }else{
         showSignupHintbox(i);
       }
@@ -156,17 +163,10 @@ function lookupStorage(form){
 
 function highlightUsername(i, credentials){
   console.log("Function : highlightUsername");
-  console.log(i);
+  // console.log(i);
   i.classList.add('highlightInput');
   var input = $('input.highlightInput');
-  //autofill 
-  if(i.classList.contains('mp-password')){
-    // request check -> if pw autofill enabled -> decrypt pw and return in msg
-    var enc = credentials[chosenIndex].password;
-    // TODO message.task undefined
-    // message is not sent..
-    browser.runtime.sendMessage({task: "requestAutofill_PW", password: enc, target: i});
-  }else{
+
     // autofill username if set in preferences
     browser.storage.local.get('preferences').then((results) =>{
       if(!i.classList.contains('mp-password') && results.preferences['pref_autofill_username']){
@@ -175,9 +175,6 @@ function highlightUsername(i, credentials){
       }
 
     });
-
-  }
-
 
 
   // create and populate dropdown if size > 1
@@ -201,6 +198,17 @@ function highlightUsername(i, credentials){
     });
   }
 }
+// http://www.mustbebuilt.co.uk/2012/04/20/replaceall-function-for-javascript-and-actionscript/
+function mReplaceAll(oldStr, removeStr, replaceStr, caseSenitivity){
+  if(caseSenitivity == 1){
+    cs = "g";
+  }else{
+    cs = "gi";  
+  }
+  var myPattern=new RegExp(removeStr,cs);
+  newStr =oldStr.replace(myPattern,replaceStr);
+  return newStr;
+}
 
 function update(input){
   console.log("Function : update");
@@ -223,10 +231,10 @@ function showHintbox(i, credentials, categories, icon){
   // category entry
   if(categories[c][2]!=null){
    i.classList.add('locked'); i.classList.remove('unlocked');
-   hintbox = '<div class="hintbox login"><div class="hintbox_head login"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category.replace('_', ' ') +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content login mp-hidden"><p>You used the password from category <strong>'+ credentials.category.replace('_', ' ')  +'</strong></p><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden"> ****** </span><span type="cat" cat="'+ credentials.category.replace('_', ' ') +'" class="showPW">show</span></div><input placeholder="Enter Masterpassword" type="password" id="inputMPW"><a class="btn-mp light" id="btnInputMPW">confirm</a><hr><a id="openManager">open manager</a></div></div>';
+   hintbox = '<div class="hintbox login"><div class="hintbox_head login"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ mReplaceAll(credentials.category, '_', ' ') +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content login mp-hidden"><p>You used the password from category <strong>'+ mReplaceAll(credentials.category, '_', ' ')   +'</strong></p><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden"> ****** </span><span type="cat" cat="'+ credentials.category.replace('_', ' ') +'" class="showPW">show</span></div><input placeholder="Enter Masterpassword" type="password" id="inputMPW"><a class="btn-mp light" id="btnInputMPW">confirm</a><hr><a id="openManager">open manager</a></div></div>';
  }else{
    i.classList.add('unlocked'); i.classList.remove('locked');
-   hintbox = '<div class="hintbox login"><div class="hintbox_head login"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ credentials.category.replace('_', ' ') +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content login mp-hidden"><p>You used the password from category <strong>'+ credentials.category.replace('_', ' ')  +'</strong></p><div id="pwhint_notstored"><i class="material-icons hastext">lock_open</i> No password stored</div><hr><a id="openManager">open manager</a></div></div>';
+   hintbox = '<div class="hintbox login"><div class="hintbox_head login"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ mReplaceAll(credentials.category, '_', ' ') +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content login mp-hidden"><p>You used the password from category <strong>'+ mReplaceAll(credentials.category, '_', ' ')   +'</strong></p><div id="pwhint_notstored"><i class="material-icons hastext">lock_open</i> No password stored</div><hr><a id="openManager">open manager</a></div></div>';
  }
 }else{
   // unique entry
@@ -416,7 +424,7 @@ function handleMessage(request){
     console.log(request.content);
 
   }
-    return true;
+  return true;
 }
 function setupSignupHintbox(listItems){
   console.log(listItems);
@@ -427,7 +435,7 @@ function setupSignupHintbox(listItems){
   for(key in listItems){
     var lock = (listItems[key][2] == null) ? 'lock_open' : 'lock';
 
-    $('#categoryList').append('<li id="'+ key +'" hash="'+ listItems[key][2] +'"><i class="material-icons">'+ listItems[key][1] +'</i><span>'+ key.replace('_', ' ') +'</span><i class="lock material-icons">'+ lock +'</i></li>')
+    $('#categoryList').append('<li id="'+ key +'" hash="'+ listItems[key][2] +'"><i class="material-icons">'+ listItems[key][1] +'</i><span>'+ mReplaceAll(key,'_', ' ') +'</span><i class="lock material-icons">'+ lock +'</i></li>')
   }
   $('#categoryList > li').on('click', function(){
     var chosen = $(this).attr('id'); 
@@ -443,7 +451,7 @@ function setupSignupHintbox(listItems){
       // change hintbox_head
       var icon = $(this).find('.material-icons').html();
       $('.hintbox_head.signup .grid.left .material-icons').html(icon);
-      $('.hintbox.signup .grid.middle').html(chosen.replace('_', ' '));
+      $('.hintbox.signup .grid.middle').html(mReplaceAll(categoryName, '_', ' '));
     });
 }
 

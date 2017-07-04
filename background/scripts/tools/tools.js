@@ -12,6 +12,19 @@ define(function() {
 		return new Date(Date.now()).toLocaleDateString({ year: 'numeric', month : 'numeric', day : 'numeric' });
 	};
 
+	// http://www.mustbebuilt.co.uk/2012/04/20/replaceall-function-for-javascript-and-actionscript/
+	var mReplaceAll = exports.mReplaceAll = function(oldStr, removeStr, replaceStr, caseSenitivity){
+    if(caseSenitivity == 1){
+        cs = "g";
+        }else{
+        cs = "gi";  
+    }
+    var myPattern=new RegExp(removeStr,cs);
+    newStr =oldStr.replace(myPattern,replaceStr);
+    return newStr;
+	};
+
+
 
 	return exports;
 	});
