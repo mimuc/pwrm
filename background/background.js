@@ -192,6 +192,8 @@ function handleMessage(message, sender, sendResponse) {
 		changeBrowserAction(false);
 	}else if(message.task =="removeHint"){
 		changeBrowserAction(true);
+	}else if(message.task =="log"){
+		Logger.log(message.content);
 	}else if(message.task == "decrypt"){
 		controller.decrypt(message.content, message.target);
 	}else if(message.task == "requestAutofillPW"){

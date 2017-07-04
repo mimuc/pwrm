@@ -49,6 +49,15 @@ function findForms(){
   $('form').submit(function(ev) {
     ev.preventDefault(); // stop the form from submitting
     // checkAccount();
+    console.log($(this));
+    var type;
+    if($(this).find('.mp-password.login')){
+      type = "Login";
+    }
+    if($(this).find('.mp-password.signup')){
+      type = "Signup";
+    }
+    browser.runtime.sendMessage({task: 'log', content: {event: "Submit Clicked", content : type + " probable (unsure about success)"}});
     // TODO
     console.log("submit detected");
     this.submit(); 
@@ -137,20 +146,20 @@ function requestAutofillPW(item, categories){
 }
 
 function lookupStorage(form){
-   var requestPromise = browser.storage.local.get();
-   requestPromise.then(function(data){
-    var cat = data.categories; mCategories = cat;
-    var entries = data.entries;
-    var foundEntry = null;
-    var foundEntries = [];
-    for(key in entries){
+ var requestPromise = browser.storage.local.get();
+ requestPromise.then(function(data){
+  var cat = data.categories; mCategories = cat;
+  var entries = data.entries;
+  var foundEntry = null;
+  var foundEntries = [];
+  for(key in entries){
     // !! multiple possible
     if(entries[key].url == URL){
       foundEntry = entries[key];
       foundEntries.push(entries[key]);
     }
   }
-    mCredentials = foundEntries;
+  mCredentials = foundEntries;
   if(foundEntry != null){
     console.log(foundEntries);
     console.log("Found "+foundEntries.length+" entries for this URL in local storage.");
@@ -168,17 +177,18 @@ function lookupStorage(form){
     console.log(URL);
   }
 
-  }, 
-  function(data){
-    console.log("error: " + entries);
-  });
+}, 
+function(data){
+  console.log("error: " + entries);
+});
 }
 
-     function highlightUsername(i, credentials){
-      console.log("Function : highlightUsername");
+function highlightUsername(i, credentials){
+  console.log("Function : highlightUsername");
   // console.log(i);
   i.classList.add('highlightInput');
   var input = $('input.highlightInput');
+  console.log(input);
 
     // autofill username if set in preferences
     browser.storage.local.get('preferences').then((results) =>{
@@ -186,9 +196,7 @@ function lookupStorage(form){
         i.html = credentials[chosenIndex].username;
         i.value = credentials[chosenIndex].username;
       }
-
     });
-
 
   // create and populate dropdown if size > 1
   if(credentials[1]!=null){
@@ -404,7 +412,7 @@ function handleError(error) {
 browser.runtime.onMessage.addListener(handleMessage);
 
 function handleMessage(request){
-  console.log(request);
+  // console.log(request);
   if(request == "task_detect"){
     //start detector
     init();
