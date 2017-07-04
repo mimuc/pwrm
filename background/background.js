@@ -199,7 +199,13 @@ function handleMessage(message, sender, sendResponse) {
 		controller.decrypt(message.content, message.target);
 	}else if(message.task == "requestAutofillPW"){
 		console.log("received requestAutofillPW");
-		controller.decryptWithTarget(message.password);
+		 browser.storage.local.get('preferences').then((results) =>{
+      		if(results.preferences['pref_autofill_password']){
+				controller.decryptWithTarget(message.password);
+      		}else{
+      			console.log("Password autofill disabled");
+      		}
+  		});
 	}else if(message.task == "open_manager"){
 		openBackground();
 	}else if(message.task == "checkAccount"){

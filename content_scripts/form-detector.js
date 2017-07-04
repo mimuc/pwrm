@@ -91,7 +91,6 @@ function findForms(){
   console.log("Function : findInput");
   var inputUsername;
   inputs = form.getElementsByTagName('input');
-  //TODO: add boxes and auto-fill username etc depending on user preferences
   for (index = 0; index < inputs.length; ++index) {
     var i = inputs[index];
     //escape submit buttons, hidden inputs
