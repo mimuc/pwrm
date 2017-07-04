@@ -189,6 +189,7 @@ function handleMessage(message, sender, sendResponse) {
 		// sendResponse(msg);
 		controller.requestPassword(message.url, message.entryType, message.hash, message.category); //passing sendresponse not working
 	}else if(message.task == 'addHint'){
+		console.log("check");
 		changeBrowserAction(false);
 	}else if(message.task =="removeHint"){
 		changeBrowserAction(true);
@@ -201,6 +202,9 @@ function handleMessage(message, sender, sendResponse) {
 		controller.decryptWithTarget(message.password);
 	}else if(message.task == "open_manager"){
 		openBackground();
+	}else if(message.task == "checkAccount"){
+		var content = message.content;
+		controller.checkAccount(content.username, content.url);
 	}else if(message.task == "getCategories"){
 		SM.getCategories(function(results){
 			sendMessageToContentScript({action : "fillList", items : results});

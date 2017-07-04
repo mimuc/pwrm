@@ -19,6 +19,11 @@ define(['scripts/tools/tools', 'scripts/modules/Logger', 'MVC_View_Managerpage',
         MVC_Model.search(value);
       });
     };
+    var checkAccount = exports.checkAccount = function(username, mUrl){
+      require(['MVC_Model'], function(MVC_Model){
+        MVC_Model.checkAccount(username, mUrl);
+      });
+    };
     var displaySearchResults = exports.displaySearchResults = function(results){
       view.displaySearchResults(results);
     };

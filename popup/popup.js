@@ -2,10 +2,22 @@ var HttpClient;
 var requestURL = "https://icons.better-idea.org/allicons.json?url=";
 var fab_wrapper; var feedback;
 $(document).ready(function($) {
+  // change back to normal action icon 
+  browser.runtime.sendMessage({task: 'removeHint'});
+  // get prefill username
+  // if exisiting delete it afterwards
+  browser.storage.local.get('username').then((result) =>{
+    var username = result['username'];
+    // prefill
+    $('#enterName').val(username);
+    // delete
+    browser.storage.local.set({'username': ''});
+  });
+  browser.storage.local.get('mpw').then((result) =>{
+    if(result['mpw']==null) $('#fab_wrapper').hide();
+  });
 
- browser.storage.local.get('mpw').then((result) =>{
-  if(result['mpw']==null) $('#fab_wrapper').hide();
-});
+
 
   // setup pw meter
   var options = {};
@@ -209,11 +221,11 @@ function triggerStore(){
 
     var storeMsg =  
     {task: "store",
-     url: entryURL,
-     username: $('#enterName').val(),
-     cat: entryCategory,
-     pw: password
-   };
+    url: entryURL,
+    username: $('#enterName').val(),
+    cat: entryCategory,
+    pw: password
+  };
     // console.log(storeMsg);
     // trigger form validation
     var validate = $('form').validator('validate');
@@ -221,21 +233,21 @@ function triggerStore(){
     // console.log(validate);
 
     if($('.option-pwd').hasClass('hidden')){
-   if($('#form-username').find('.glyphicon-remove').length > 0){
-    console.log("input validate error");
+     if($('#form-username').find('.glyphicon-remove').length > 0){
+      console.log("input validate error");
+    }else{
+      onStoreMsgSuccess();
+      browser.runtime.sendMessage(storeMsg).then(handleResponse, handleError);
+    }
   }else{
-    onStoreMsgSuccess();
-    browser.runtime.sendMessage(storeMsg).then(handleResponse, handleError);
-  }
-}else{
 
-if($(validate[2]).find('input[type="password"]').val().length == 0){
-  console.log("input validate error: password <empty></empty>");
-}else{
-  onStoreMsgSuccess();
-  browser.runtime.sendMessage(storeMsg).then(handleResponse, handleError);
-}
-}
+    if($(validate[2]).find('input[type="password"]').val().length == 0){
+      console.log("input validate error: password <empty></empty>");
+    }else{
+      onStoreMsgSuccess();
+      browser.runtime.sendMessage(storeMsg).then(handleResponse, handleError);
+    }
+  }
 
 });
 

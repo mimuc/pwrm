@@ -232,7 +232,23 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 			// console.log(dec);
 			callback(dec);
 		});
-	}
+	};
+	var checkAccount = exports.checkAccount = function(username, mUrl){
+		SL.findEntryByURL(mUrl, function(result){
+			var found = false;
+			for(key in result){
+				if(username == result[key].username){
+					found = true;
+				}
+			}
+			// in case there was no entry found for this url with this specific username
+			// show a hint in browser-action icon and prefill username when clicked on it
+			if(!found){
+				SL.setUsernameQuickAdd(username); 
+				browser.runtime.sendMessage({task : 'addHint'});
+			}
+		});
+	};
 
 	//private functions
 	var initCategories = function(){

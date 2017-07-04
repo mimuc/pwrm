@@ -80,11 +80,22 @@ define(function(){
 			this.getEntries(function(results){
 				console.log(results);
 				var entries = results["entries"];
+				var results = [];
 				for(key in entries){
 					if(entries[key].url == mUrl){
-						callback(entries[key]);
+						results.push(entries[key]);
 					}
 				}
+				callback(results);
+			});
+		},
+		setUsernameQuickAdd: function(username){
+			var entry = {'username' : username};
+			browser.storage.local.set(entry);
+		},
+		getUsernameQuickAdd : function(callback){
+			browser.storage.local.get('username').then((results) => {
+				callback(results['username']);
 			});
 		},
 		findEntryByUsername: function(name, callback){

@@ -48,8 +48,8 @@ function findForms(){
   // trigger action when form is submitted
   $('form').submit(function(ev) {
     ev.preventDefault(); // stop the form from submitting
-    // checkAccount();
-    console.log($(this));
+    var inputUN = $(this).find('input.highlightInput').first().val();
+    browser.runtime.sendMessage({task: "checkAccount", content: {username: inputUN, url : URL}});
     var type;
     if($(this).find('.mp-password.login')){
       type = "Login";
@@ -58,8 +58,6 @@ function findForms(){
       type = "Signup";
     }
     browser.runtime.sendMessage({task: 'log', content: {event: "Submit Clicked", content : type + " probable (unsure about success)"}});
-    // TODO
-    console.log("submit detected");
     this.submit(); 
   });
 
