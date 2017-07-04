@@ -338,6 +338,7 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 									console.log("name != oldName");
 									deleteCategory(oldName);
 									reassignEntries(oldName, name, mCat);
+									displayCategories(false);
 								}
 							}
 						}else{

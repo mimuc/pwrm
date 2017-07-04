@@ -102,12 +102,14 @@ function addListeners(){
 	 			console.log("input validate error");
 	 		}else{
 	 			controller.createCategory();
+	 			$('.panel-card').removeClass('category-focused');
 	 		}
 	 	}else{
 	 		if($(validate[0]).find('.glyphicon-remove').length > 0){
 	 			console.log("input validate error");
 	 		}else{
 	 			controller.createCategory();
+	 			$('.panel-card').removeClass('category-focused');
 	 		}
 
 	 	}
