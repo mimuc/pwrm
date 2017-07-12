@@ -177,7 +177,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 			}
 			if(useUniquePWD){
 				var credential = {username: entryUsername, url: mUrl, password: pwdHash};
-				Logger.log({event: 'Add Entry', content: credential});
+				Logger.log({event: 'Add Entry', content: {entryUsername, mUrl}});
 				storeEntry(randID, credential, true);
 			}else{
 				// if(objTest.length < 1 && mUrl !== '' && entryUsername !== '') {

@@ -311,7 +311,12 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 			crypt.encrypt_aes(pw, function(data){
 
 				var pw_enc = (pw=='') ? null : data;
-				var oldName = tools.mReplaceAll($('#editCategory').attr('oldValue'), " ", "_");
+				var oldName;
+				if($('#editCategory').attr('oldValue') != null){
+					oldName = tools.mReplaceAll($('#editCategory').attr('oldValue'), " ", "_");
+				}else{
+					oldName = null;
+				}
 				var randID = guidGenerator();
 				var cat = ["Info","folder", pw_enc ,randID];
 

@@ -16,23 +16,29 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 					entry = entry.replace(" ", "_");
 				}
 
-				$('#modalInputMPW').on('keyup', function() {
-					var val = $(this).val();
-					if (val.length > 0){
-						doubleCheckMPW(
-							CryptoJS.SHA512(val),
-							function(){getPW(val)});
-					}
-				});
-			// call origin: content script 
-			}else{
-				unique = (mType=='unique');
-				entry = (unique) ? mUrl : mCategory;
+				$('#modalInputMPW').on('keypress', function(e) {
+					if(e.which === 13){
+						e.preventDefault();
 
-				doubleCheckMPW(
-					CryptoJS.SHA512(mHash),
-					function(){getPW(mHash)}
-				);
+						var val = $(this).val();
+						if (val.length > 0){
+						// doubleCheckMPW(
+						// 	CryptoJS.SHA512(val),
+						// 	function(){getPW(val)});
+						getPW(val);
+					}
+				}
+			});
+			// call origin: content script 
+		}else{
+			unique = (mType=='unique');
+			entry = (unique) ? mUrl : mCategory;
+
+				// doubleCheckMPW(
+				// 	CryptoJS.SHA512(mHash),
+				// 	function(){getPW(mHash)}
+				// );
+				getPW(mHash);
 			}
 			$('#modalMPW').on('hidden.bs.modal', function (e) {
 				// console.log(entry);

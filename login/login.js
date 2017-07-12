@@ -21,6 +21,7 @@ $(document).ready(function() {
 						});
 				}
 			});
+
 		});
 
 // show onboarding ui elements
@@ -106,12 +107,36 @@ function openManager(){
 	});
 }
 
+$(document).keypress(function(e) {
+	if(e.which == 13) {
+	e.preventDefault();
+		if(!$('.onboarding').hasClass('hidden')){
+			var mpw = $('#inputCreateMPW').val();
+			//store mpw
+			// console.log(CryptoJS.SHA512(mpw).toString());
+			browser.storage.local.set({"mpw" : CryptoJS.SHA512(mpw).toString()});
+			$('.onboarding').fadeOut().addClass('hidden');
+			$('.onboarding_2').removeClass('hidden').fadeIn();
+		}else{
+			var mpwr = CryptoJS.SHA512($('#inputConfirmMPW').val()).toString();
+			// console.log(mpwr);
+			doubleCheckMPW(mpwr,
+			function(){
+				$('.onboarding_2').fadeOut().addClass('hidden');
+				$('.onboarding_3').removeClass('hidden').fadeIn();
+			},
+			function(){
+				alert("Passwords do not match!");
+			});
+		}
+	}
+});
 
 //first time mpw was entered -> encrypt and doublecheck hashes
 $('.onboarding a.btn-mp').click(function(){
 	var mpw = $('#inputCreateMPW').val();
 	//store mpw
-	console.log(CryptoJS.SHA512(mpw).toString());
+	// console.log(CryptoJS.SHA512(mpw).toString());
 	browser.storage.local.set({"mpw" : CryptoJS.SHA512(mpw).toString()});
 	$('.onboarding').fadeOut().addClass('hidden');
 	$('.onboarding_2').removeClass('hidden').fadeIn();
@@ -119,13 +144,15 @@ $('.onboarding a.btn-mp').click(function(){
 
 $('.onboarding_2 a.btn-mp').click(function(){
 	var mpwr = CryptoJS.SHA512($('#inputConfirmMPW').val()).toString();
-	console.log(mpwr);
+	// console.log(mpwr);
 	doubleCheckMPW(mpwr,
 		function(){
 			$('.onboarding_2').fadeOut().addClass('hidden');
 			$('.onboarding_3').removeClass('hidden').fadeIn();
+			// browser.storage.local.set({"mpw" : 'true'});
 		},
 		function(){
+			// $('#inputCreateMPW').addClass("");
 			alert("Passwords do not match!");
 		});
 });
@@ -133,10 +160,13 @@ $('.onboarding_2 a.btn-mp').click(function(){
 
 function doubleCheckMPW(a, doNext, showError){
 	console.log("Function : doubleCheckMPW");
-	console.log(a);
+	// console.log(a);
 	var callback = function(res){
-		if(a==res.mpw){doNext();
-		}else{}
+		if(a==res.mpw){
+			doNext();
+		}else{
+			showError();
+		}
 	}
 	getMPW(callback);
 }
