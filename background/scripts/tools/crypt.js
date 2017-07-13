@@ -13,27 +13,30 @@ define(['scripts/cryptojs/rollups/aes','scripts/tools/storagemanagement', 'scrip
 				console.log("encrypt key: " + key);
 				// console.log(result.mpw.toString());
 				// console.log(key);
-				// TODO
-				var iv = CryptoJS.enc.Hex.parse('asdf');
+
+				var iv = CryptoJS.lib.WordArray.random(128/8);
 				var enc = CryptoJS.AES.encrypt(msg,key, {
 					iv : iv,
 					padding: CryptoJS.pad.Pkcs7,
 					mode: CryptoJS.mode.CBC
 				});
-				var message = salt.toString() + ";;" + iv.toString() + ";;" + enc.toString();
-				console.log(enc.toString());
+
+				//  TODO don't separate strings obviously!
+				// var message = salt.toString() + ";;" + iv.toString() + ";;" + enc.toString();
+				var message = salt.toString() + iv.toString() + enc.toString();
+				console.log("iv size: " + iv.toString().length);
 				callback(message);
-			});
+			}); 
 		},
 
 		decrypt_aes:  function(message, passphrase, callback){
 		
-				// var salt = CryptoJS.enc.Hex.parse(message.substr(0,32));
-				// var iv = CryptoJS.enc.Hex.parse(message.substr(32,32));
-				// var encrypted = message.substring(36);
-				var salt = CryptoJS.enc.Hex.parse(message.split(";;")[0]);
-				var iv = CryptoJS.enc.Hex.parse(message.split(";;")[1]);
-				var encrypted = message.split(";;")[2];
+				var salt = CryptoJS.enc.Hex.parse(message.substr(0,32));
+				var iv = CryptoJS.enc.Hex.parse(message.substr(32,32));
+				var encrypted = message.substring(64);
+				// var salt = CryptoJS.enc.Hex.parse(message.split(";;")[0]);
+				// var iv = CryptoJS.enc.Hex.parse(message.split(";;")[1]);
+				// var encrypted = message.split(";;")[2];
 				console.log(message);
 				console.log(encrypted);
 

@@ -355,7 +355,8 @@ function showSignupHintbox(i){
     });
     i.classList.add('mpinput');
     i.classList.add('signup');
-    $('input.mpinput.signup').on('focus', function(e){
+
+    $('input.mpinput.signup').on('click', function(e){
 
      $('.hintbox.signup .grid.middle').html('Reusing a Password?');
      var parentOffset = $(this).offset(); 
