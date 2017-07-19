@@ -1,5 +1,5 @@
 
-require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Managerpage', 'scripts/tools/showPW', 'scripts/tools/storagemanagement'],
+require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Managerpage', 'scripts/tools/showPW', 'scripts/tools/storagemanagement', 'scripts/cryptojs/rollups/sha512'],
 	function(Logger, controller, view, showPW, SM){
 
 		var addBtn = document.querySelector('#addEntry');
@@ -68,7 +68,30 @@ function addListeners(){
 	setupPWMeter();
 	$('#preferences :checkbox').change(function(){
 		SM.updatePreferences($(this).attr('id'), this.checked);
-	});
+		// if pw autofill is enabled -> input mpw and store it until browser closed
+		if($(this).attr('id') == 'pref_autofill_password'){
+			if(this.checked){
+			// show mpw input
+			$('#modalMPW').modal('show');
+			$('#modalMPW').on('keypress', function(e){
+				if(e.which == 13){
+					e.preventDefault();
+					browser.storage.local.get("mpw").then(function(res){
+						if(res['mpw'] == CryptoJS.SHA512($('#modalInputMPW').val()).toString()){
+							SM.setMPW($('#modalInputMPW').val());
+							$('#modalMPW').modal('hide');
+						}else{
+							alert("Entered password was not correct.");
+						}
+					});
+				}
+			});
+		}else{
+			// unchecked -> delete mpw-tmp
+			SM.setMPW('');
+		}
+	}
+});
 	$('#burger').on('click', function(){toggleNavigation();});
 
 	 // add event listeners to buttons and inputs
@@ -199,13 +222,13 @@ function handleMessage(message, sender, sendResponse) {
 		controller.decrypt(message.content, message.target);
 	}else if(message.task == "requestAutofillPW"){
 		console.log("received requestAutofillPW");
-		 browser.storage.local.get('preferences').then((results) =>{
-      		if(results.preferences['pref_autofill_password']){
+		browser.storage.local.get('preferences').then((results) =>{
+			if(results.preferences['pref_autofill_password']){
 				controller.decryptWithTarget(message.password);
-      		}else{
-      			console.log("Password autofill disabled");
-      		}
-  		});
+			}else{
+				console.log("Password autofill disabled");
+			}
+		});
 	}else if(message.task == "open_manager"){
 		openBackground();
 	}else if(message.task == "checkAccount"){

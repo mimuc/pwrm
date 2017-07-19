@@ -6,9 +6,28 @@ define(function(){
 				callback(results);
 			});
 		},
+		getMPW: function(callback){
+			browser.storage.local.get('mpw-tmp').then((results) =>{
+				callback(results['mpw-tmp']);
+			});
+		},
+		setMPW: function(value){
+			var val = {"mpw-tmp" : value}
+			browser.storage.local.set(val);
+		},
 		setMPWHash: function(value){
 			var val = {"mpw" : CryptoJS.SHA512(value)}
 			browser.storage.local.set(val);
+		},
+		getPublicKey: function(callback){
+			browser.storage.local.get('public_rsa').then((results) =>{
+				callback(results['public_rsa']);
+			});
+		},
+		getRSAKeys: function(callback){
+			browser.storage.local.get('rsa_enc').then((results) =>{
+				callback(results['rsa_enc']);
+			});
 		},
 		getOnboardingMode: function(callback){
 			browser.storage.local.get('mode').then((results) => {

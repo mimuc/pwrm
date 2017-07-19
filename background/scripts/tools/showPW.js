@@ -73,7 +73,7 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 							//pw entry found
 							if(e[key].url == entry){
 
-								crypt.decrypt_aes(e[key].password, passphrase, function(result){
+								crypt.decrypt_rsa(e[key].password, passphrase, function(result){
 									if(mType == null){
 										elem.parent().parent().parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));
 										$('#modalMPW').modal('hide');
@@ -101,7 +101,7 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 						for(key in e){
 							if(key == entry){
 								// e[key][2]
-								crypt.decrypt_aes(e[key][2], passphrase, function(result){
+								crypt.decrypt_rsa(e[key][2], passphrase, function(result){
 									// console.log(result);
 									if(mType == null){
 										elem.parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));

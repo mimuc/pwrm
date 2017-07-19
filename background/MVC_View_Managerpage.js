@@ -308,7 +308,7 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 		};
 		var createCategory = exports.createCategory = function(name, pw, isNew){
 			console.log("View : createCategory");
-			crypt.encrypt_aes(pw, function(data){
+			crypt.encrypt_rsa(pw, function(data){
 
 				var pw_enc = (pw=='') ? null : data;
 				var oldName;

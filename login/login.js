@@ -1,28 +1,17 @@
 /* login.js */
 $(document).ready(function() {
 	$.material.init();
-	//if no masterpw was set in local storage: init onboarding
-	var gettingMPW = browser.storage.local.get("mpw");
-		// , function(results){
-			gettingMPW.then((results) => {
-				var mpwHash = CryptoJS.SHA512(results["mpw"]);
-				if(results["mpw"] == null){
-					initOnboarding();
-				}else{
-					initLogin();
-				}
-			});
-			
-			$('#inputMPW').on('keyup', function() {
-				if (this.value.length > 0){
-					doubleCheckMPW(CryptoJS.SHA512($('#inputMPW').val()),
-						function(){
-							openManager();
-						});
-				}
-			});
+	//if no rsa key pair was set in local storage: init onboarding
+	var getting = browser.storage.local.get("rsa_enc");
+	getting.then((results) => {
+		if(results["rsa_enc"] == null){
+			initOnboarding();
+		}else{
+			openManager();
+		}
+	});
 
-		});
+});
 
 // show onboarding ui elements
 function initOnboarding(){
@@ -66,7 +55,7 @@ function initOnboarding(){
 	});
 	$('#btnOpenManager').on('click', function(){
 		var mode = $('input:radio:checked').val();
-		console.log(mode);
+		// console.log(mode);
 		browser.storage.local.set({'mode' : mode});
 		openManager();
 	});
@@ -109,10 +98,10 @@ function openManager(){
 
 $(document).keypress(function(e) {
 	if(e.which == 13) {
-	e.preventDefault();
+		e.preventDefault();
 		if(!$('.onboarding').hasClass('hidden')){
 			var mpw = $('#inputCreateMPW').val();
-			//store mpw
+			//store mpw (deleted after check)
 			// console.log(CryptoJS.SHA512(mpw).toString());
 			browser.storage.local.set({"mpw" : CryptoJS.SHA512(mpw).toString()});
 			$('.onboarding').fadeOut().addClass('hidden');
@@ -120,23 +109,25 @@ $(document).keypress(function(e) {
 		}else{
 			var mpwr = CryptoJS.SHA512($('#inputConfirmMPW').val()).toString();
 			// console.log(mpwr);
+			var mpw = $('#inputConfirmMPW').val();
+
 			doubleCheckMPW(mpwr,
-			function(){
-				$('.onboarding_2').fadeOut().addClass('hidden');
-				$('.onboarding_3').removeClass('hidden').fadeIn();
-			},
-			function(){
-				alert("Passwords do not match!");
-			});
+				function(){
+					$('.onboarding_2').fadeOut().addClass('hidden');
+					$('.onboarding_3').removeClass('hidden').fadeIn();
+					createRSAKeys(mpw);
+				},
+				function(){
+					alert("Passwords do not match!");
+				});
 		}
 	}
 });
 
-//first time mpw was entered -> encrypt and doublecheck hashes
+
 $('.onboarding a.btn-mp').click(function(){
 	var mpw = $('#inputCreateMPW').val();
-	//store mpw
-	// console.log(CryptoJS.SHA512(mpw).toString());
+	
 	browser.storage.local.set({"mpw" : CryptoJS.SHA512(mpw).toString()});
 	$('.onboarding').fadeOut().addClass('hidden');
 	$('.onboarding_2').removeClass('hidden').fadeIn();
@@ -144,12 +135,13 @@ $('.onboarding a.btn-mp').click(function(){
 
 $('.onboarding_2 a.btn-mp').click(function(){
 	var mpwr = CryptoJS.SHA512($('#inputConfirmMPW').val()).toString();
+	var mpw = $('#inputConfirmMPW').val();
 	// console.log(mpwr);
 	doubleCheckMPW(mpwr,
 		function(){
 			$('.onboarding_2').fadeOut().addClass('hidden');
 			$('.onboarding_3').removeClass('hidden').fadeIn();
-			// browser.storage.local.set({"mpw" : 'true'});
+			createRSAKeys(mpw);
 		},
 		function(){
 			// $('#inputCreateMPW').addClass("");
@@ -158,12 +150,45 @@ $('.onboarding_2 a.btn-mp').click(function(){
 });
 
 
+function createRSAKeys(mpw){
+	var passphrase = mpw;
+	var bits = 1024;
+
+	// create RSA Key pair
+	var mRSAkey = cryptico.generateRSAKey(passphrase, bits);
+	// create encryption key based on mpw
+	var salt = CryptoJS.lib.WordArray.random(128/8);
+	var key = CryptoJS.PBKDF2(mpw, salt, {
+		keySize: 256/32, 
+		iterations: 100
+	});
+	// extract public key and store it [rsa_public]
+	var mPublicKeyString = cryptico.publicKeyString(mRSAkey); 
+    browser.storage.local.set({'public_rsa' : mPublicKeyString});  
+
+    // serialize rsa object for encryption
+    var RSAKeyString = JSON.stringify(mRSAkey);
+	// encrypt rsa object using encryption key and store it [rsa_enc]
+	var iv = CryptoJS.lib.WordArray.random(128/8);
+	var enc = CryptoJS.AES.encrypt(RSAKeyString,key, {
+		iv : iv,
+		padding: CryptoJS.pad.Pkcs7,
+		mode: CryptoJS.mode.CBC
+	});
+
+	var encrypted_rsa = salt.toString() + iv.toString() + enc.toString();
+	browser.storage.local.set({'rsa_enc' : encrypted_rsa});
+	
+}
+
 function doubleCheckMPW(a, doNext, showError){
 	console.log("Function : doubleCheckMPW");
 	// console.log(a);
 	var callback = function(res){
 		if(a==res.mpw){
 			doNext();
+			// delete mpw from local storage
+			// browser.storage.local.set({"mpw" : {}});
 		}else{
 			showError();
 		}
@@ -177,6 +202,7 @@ function getMPW(callback){
 }
 
 // show login ui elements
+// deprecated
 function initLogin(){
 	console.log("Function : initLogin");
 	$('#inputMPW').get(0).focus();
@@ -189,16 +215,6 @@ function initLogin(){
 
 }
 
-$('#btnUnlock').on('click', function(){
-	doubleCheckMPW(
-		CryptoJS.SHA512($('#inputMPW').val()),
-		function(){
-			openManager();
-		},
-		function(){
-			// alert("hoidaus!");
-		}
-		);
-});
+
 
 

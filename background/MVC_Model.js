@@ -90,7 +90,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 		};
 		var storeEntry = exports.storeEntry = function(randID, mCredential, toggleModal) {
 			console.log("Model : storeEntry");	
-			crypt.encrypt_aes(mCredential.password, function(data){	
+			crypt.encrypt_rsa(mCredential.password, function(data){	
 				mCredential.creationDate = tools.getDate();
 				if(mCredential.password != null) mCredential.password = data;
 				console.log(mCredential);
@@ -228,7 +228,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 		});
 	};
 	var decrypt = exports.decrypt = function(content, callback){
-		crypt.auto_decrypt_aes(content, function(dec){
+		crypt.auto_decrypt_rsa(content, function(dec){
 			// console.log(dec);
 			callback(dec);
 		});

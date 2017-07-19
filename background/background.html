@@ -129,7 +129,7 @@
               <input type="checkbox" id="pref_autofill_username"><span class="checkbox-material"></span>  Autofill username
             </label>
           </div>
-          <p class="help-block">Enable autofilling login forms on saved accounts.</p>
+          <p>Enable autofilling usernames in login forms.</p>
         </div>
         <div class="form-group">
           <div class="checkbox ">
@@ -137,7 +137,7 @@
               <input  type="checkbox" id="pref_autofill_password"><span class="checkbox-material"></span>  Autofill password
             </label>
           </div>
-          <p class="help-block">Enable autofilling password fields in case of stored password.</p>
+          <p>Enable autofilling password fields in case of stored password. For your convenience your Masterpassword will be stored unencrypted in your browser. This helps to decrypt your stored passwords automatically for autofilling forms. Deactivating this option will delete the stored Masterpassword.</p>
         </div>
 
       </div>
@@ -149,6 +149,7 @@
 <div class="mp-section" id='section-about'>
  <div class="content row">
    <div class="page-header">
+    <div class="hidden">
      <h2>Disclaimer</h2>
      <p class="section-content">This is a browser-based password manager helping you to organize your accounts and passwords. <mark>To conduct a fieldstudy, single actions are logged on external files on the web. The logging is transparent and can be found at <a target="_blank" href="http://fuasmattn.de/pwm_logserver/logger.php">fuasmattn.de</a>.</mark> All data gathered by the manager is stored locally in the browser's storage. Passwords are encrypted via an JS implementation of AES and your Masterpassword as a key. The masterpassword's integrity is ensured by using a SHA-2 Hash for storage and comparison.</p>
      <p class="section-content"><span class="warning">Warning!</span> This is a early version. <mark>The Browser Storage architecture and encryption via Javascript are not secure</mark>. Keep your device safe. We do not garantee yet to stand against cross-extension/site attacks.</p>
@@ -172,7 +173,7 @@
 
 
     </ul>
-
+</div>
   </div>
   <div class="card-wrapper">
    <!-- <div id="modificationEntryContainer"></div> -->
@@ -244,7 +245,7 @@
 
           <input type="password" class="form-control" id="modalInputMPW" placeholder="Enter Masterpassword" required>
         </div>
-        <div class="modal-hint">
+        <div class="modal-hint hidden">
           <i class="material-icons hastext">help_outline</i><span><a href="#">Forgot your Masterpassword?</a></span>
         </div>
       </form>
