@@ -10,6 +10,7 @@ requirejs.config({
 		"jquery" : "scripts/jquery/jquery",
 		"bootstrap" : "scripts/bootstrap/bootstrap",
 		"psl" : "scripts/tools/psl.min",
+
 	}
 });
 

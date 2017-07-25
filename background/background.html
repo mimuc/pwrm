@@ -21,6 +21,9 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet"> 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+<!-- Add zxcvbn before loading requirejs -->
+  <script type="text/javascript" src="scripts/pwstrength/zxcvbn.js"></script>
+
   <script data-main="app" src="scripts/requirejs/require.js"></script>
   <title>Password Reuse Manager</title>
 
@@ -252,7 +255,7 @@
     </div>
   </div>
 </div>
-</div>
+</div> 
 
 <div id="modal-newEntry" class="modal modal-mp fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
@@ -318,7 +321,8 @@
 <script src="scripts/jquery/jquery.js"></script>
 <script src="scripts/bootstrap/bootstrap.js"></script>
 <script src="scripts/tools/validator.js"></script>
-<script type="text/javascript" src="scripts/pwstrength/dist/pwstrength-bootstrap.min.js"></script>
+
+ <script type="text/javascript" src="scripts/pwstrength/dist/pwstrength-bootstrap.min.js"></script>
 <script src="scripts/tools/autocomplete.js"></script>
 <script src="scripts/material/material.js"></script>
 <script src="scripts/material/ripples.js"></script>

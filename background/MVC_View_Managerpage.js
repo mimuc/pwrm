@@ -469,8 +469,8 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 		});
 	};
 	var showPWInput = exports.showPWInput = function(){
-		var storePW = ($('#btnAddPWD').text() === 'add password') ? true : false;
-		var txt = (storePW) ? 'remove password' : 'add password';
+		var storePW = ($('#btnAddPWD').text() === 'set password') ? true : false;
+		var txt = (storePW) ? 'remove password' : 'set password';
 		var msg = (storePW) ? 'A category password will be stored.' : 'No password will be stored for this category and its entries.';
 		var icon = (storePW) ? 'lock':'lock_open';
 		$('#btnAddPWD').html(txt);
@@ -507,7 +507,7 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 				$('#modalCategory').removeClass('new');
 				$('#modalCategory #modalCategoryName').val(oldValue);
 
-				var txt = (hasPW) ? 'remove password' : 'add password';
+				var txt = (hasPW) ? 'remove password' : 'set password';
 				var msg = (hasPW) ? 'A category password will be stored.' : 'No password will be stored for this category and its entries.';
 				var icon = (hasPW) ? 'lock':'lock_open';
 				var pw = (hasPW) ? '*******' : '';
