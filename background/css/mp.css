@@ -124,6 +124,7 @@ h1{
 }
 .container.fixed{
 	margin-left: 330px !important;
+	max-width: 60% !important;
 }
 
 .btn-mp{

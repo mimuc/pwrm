@@ -41,8 +41,8 @@ function initOnboarding(){
 	});
 	$('#inputCreateMPW').pwstrength(options);
 	$('.progress').addClass("strength");
-	$('.progress').hide();
 	$('.onboarding a.btn-mp').hide();
+	$('.progress').hide();
 	$('.password-verdict').hide();
 	$('#next .material-icons').on('click', function(){	
 		if(++slide == $('.slide').length-1){
@@ -123,6 +123,19 @@ $(document).keypress(function(e) {
 	}
 });
 
+$('#restart').click(function(){
+	browser.storage.local.set({"mpw" : {}});
+	// empty input
+	$('#inputCreateMPW').val('');
+	// hide pwmeter
+	$('.progress').hide();
+	$('.password-verdict').hide();
+	// hide btn
+	$('.onboarding a.btn-mp').hide();
+	// show first slide
+	$('.onboarding_2').fadeOut().addClass('hidden');
+	$('.onboarding').removeClass('hidden').fadeIn();
+});
 
 $('.onboarding a.btn-mp').click(function(){
 	var mpw = $('#inputCreateMPW').val();
