@@ -81,12 +81,14 @@ define(function(){
 		},
 		findEntries : function(value, callback){
 			this.getEntries(function(results){
-				console.log(results);
 				var foundEntries = [];
 				var entries = results["entries"];
 				for(key in entries){
-					var murl = entries[key].url;
-					var mname = entries[key].username;
+					var u = entries[key].url;
+				 	 // filter actual website's name to prevent searching protocols or domains
+				 	 var murl = (new URL(u).hostname).split(".")[0]; 
+				 	 console.log(murl);
+				 	 var mname = entries[key].username;
 					// check if any entry contains the searched value as username/url
 					if(murl.indexOf(value) !== -1 || mname.indexOf(value) !== -1){
 						foundEntries.push(entries[key]);

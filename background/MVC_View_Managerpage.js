@@ -152,8 +152,8 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 	};
 	var displaySearchResults = exports.displaySearchResults = function(results){
 		$('#searchEntryContainer *').empty();
-		$('#searchResults-category').append('<h2 class="search-result-header"><i class="material-icons">book</i> categories</h2>');
-		$('#searchResults-unique').append('<h2 class="search-result-header"><i class="material-icons">list</i> unique</h2>');
+		$('#searchResults-category').append('<h2 class="search-result-header"><i class="material-icons">book</i> in Password Categories</h2>');
+		$('#searchResults-unique').append('<h2 class="search-result-header"><i class="material-icons">list</i> in Unique Passwords</h2>');
 		if(results!=0){
 			for(key in results){
 				var mUrl = results[key].url;

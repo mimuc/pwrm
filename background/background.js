@@ -15,9 +15,11 @@ require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Manag
 		$(document).ready(function() {
 			$.material.init();
 			$('#section-categories').show();
+			// $('[data-toggle="tooltip"]').tooltip(); // enable hover tooltips 
 			setup();
 			addListeners();
 			controller.displayNumberEntries();
+			window.addEventListener('resize', onResize, true);
 		});
 
 //searches for entries and displays results matching the typed letters
@@ -26,6 +28,10 @@ function search(value){
 	showSection(null, '#section-searchresults');
 	$('#section-searchresults h1').html("Results for: '" + value + "'");
 	controller.search(value);
+}
+
+function onResize(){
+	// console.log($(window).width());
 }
 
 function showSection(clicked, section){
@@ -38,9 +44,6 @@ function showSection(clicked, section){
 
 function addListeners(){
 	$(document).on('click', '.showPW', function(e){
-		// console.log(e.target.innerHTML);
-		// console.log("clicked on showPW");
-			// e.stopImmediatePropagation();
 			if(e.target.innerHTML == 'show'){
 				
 				showPW.trigger(($(this)));

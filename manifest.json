@@ -3,12 +3,11 @@
   "manifest_version": 2,
   "name": "Password Reuse Manager",
   "version": "1",
-  "description": "A password manager that helps to organise reused passwords without storing secret information.", 
-    // TODO
+  "description": "A password manager that helps to organise reused passwords without necessarily storing secret information.", 
   "homepage_url": "https://gitlab.lrz.de/fuasmattn/password-reuse-manager",
   "icons": {
     "48": "icons/icon-48.png"
-    // TODO
+
   },
 
   "permissions": [
