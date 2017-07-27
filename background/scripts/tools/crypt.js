@@ -3,11 +3,15 @@ define(['scripts/cryptojs/rollups/aes','scripts/tools/storagemanagement', 'scrip
 		console.log("Crypt called");
 		return{
 			encrypt_rsa:  function(msg, callback){
-				sl.getPublicKey(function(publicKey){
-					var encryptionResult = cryptico.encrypt(msg, publicKey);
-					console.log(encryptionResult.cipher);
-					callback(encryptionResult);
-				}); 
+				if(msg==null){
+					callback(null);
+				}else{
+					sl.getPublicKey(function(publicKey){
+						var encryptionResult = cryptico.encrypt(msg, publicKey);
+						console.log(encryptionResult.cipher);
+						callback(encryptionResult);
+					}); 
+				}
 			},
 
 			decrypt_rsa:  function(encryptedObject, passphrase, callback){

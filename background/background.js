@@ -1,5 +1,5 @@
 
-require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Managerpage', 'scripts/tools/showPW', 'scripts/cryptojs/rollups/sha512'],
+require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Managerpage', 'scripts/tools/showPW', 'scripts/tools/storagemanagement','scripts/cryptojs/rollups/sha512'],
 	function(Logger, controller, view, showPW, SM){
 
 		var addBtn = document.querySelector('#addEntry');
@@ -44,19 +44,19 @@ function showSection(clicked, section){
 
 function addListeners(){
 	$(document).on('click', '.showPW', function(e){
-			if(e.target.innerHTML == 'show'){
-				
-				showPW.trigger(($(this)));
-				$('#modalMPW').on('shown.bs.modal', function (e) {
-					$('#modalInputMPW').val('');
-					$('#modalInputMPW').focus();
-				});
-				$('#modalMPW').modal('show');
+		if(e.target.innerHTML == 'show'){
 
-			}else if(e.target.innerHTML == 'hide'){
-				
-				$(this).parent().parent().parent().find('.pwd-hidden').html('*******');
-				$(this).html('show');
+			showPW.trigger(($(this)));
+			$('#modalMPW').on('shown.bs.modal', function (e) {
+				$('#modalInputMPW').val('');
+				$('#modalInputMPW').focus();
+			});
+			$('#modalMPW').modal('show');
+
+		}else if(e.target.innerHTML == 'hide'){
+
+			$(this).parent().parent().parent().find('.pwd-hidden').html('*******');
+			$(this).html('show');
 
 			// do nothing
 		}
@@ -127,19 +127,30 @@ function addListeners(){
 	 		if($('#modalCategoryName').parent().find('.glyphicon-remove').length > 0){
 	 			console.log("input validate error");
 	 		}else{
-	 			controller.createCategory();
-	 			$('.panel-card').removeClass('category-focused');
+	 			toggleConfirm();
+			
 	 		}
 	 	}else{
 	 		if($(validate[0]).find('.glyphicon-remove').length > 0){
 	 			console.log("input validate error");
 	 		}else{
-	 			controller.createCategory();
-	 			$('.panel-card').removeClass('category-focused');
+	 			toggleConfirm();
+
 	 		}
 
 	 	}
 
+	 });
+
+	 var toggleConfirm = function(){
+	 	console.log("View : toggleConfirm");
+	 	$('#modalYesNo').toggleClass('hidden');
+	 	$('#modalAction').toggleClass('hidden');
+	 };
+
+	 $('#modalYes').on('click', function(event){
+	 	controller.createCategory();
+	 	$('.panel-card').removeClass('category-focused');
 	 });
 
 	 $("#radio-form :input").change(function() {
@@ -274,7 +285,7 @@ function setupPWMeter(){
 		common: {
 			zxcvbn : true,
 			zxcvbnTerms: ["123456","123456789","qwerty","qwertz","12345678","111111","1234567890","1234567","password","123123","987654321","qwertyuiop","mynoob","123321","666666","18atcskd2w","7777777","1q2w3e4r","654321","555555","3rjs1la7qe","google","1q2w3e4r5t","123qwe","zxcvbnm","1q2w3e"],
-        	userInputs: ['#modalCategoryName']
+			userInputs: ['#modalCategoryName']
 
 		}
 

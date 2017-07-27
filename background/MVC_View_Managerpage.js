@@ -324,8 +324,6 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 					var mCat = result;
 				//check if same name exists (--> override/change name or pw)
 				// if(categories.categories != null && categories.categories[name] != null){
-					toggleConfirm();
-					$('#modalYes').on('click', function(event){
 					// event.stopImmediatePropagation(); 
 					//push new entry 
 					mCat.categories[name] = cat;
@@ -360,7 +358,7 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 						toggleConfirm();
 					});
 				});			
-			});
+			
 		};
 		var displayNumberEntries = exports.displayNumberEntries = function(){
 			console.log("View : displayNumberEntries");

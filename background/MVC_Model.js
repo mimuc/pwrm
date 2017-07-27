@@ -92,7 +92,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 			console.log("Model : storeEntry");	
 			crypt.encrypt_rsa(mCredential.password, function(data){	
 				mCredential.creationDate = tools.getDate();
-				if(mCredential.password != null) mCredential.password = data;
+				if(mCredential.password != null && data !=null) mCredential.password = data;
 				console.log(mCredential);
 				//first get current storage
 				// SL.getEntries(function(results){
