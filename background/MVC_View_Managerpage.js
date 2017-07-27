@@ -309,8 +309,11 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 		var createCategory = exports.createCategory = function(name, pw, isNew){
 			console.log("View : createCategory");
 			crypt.encrypt_rsa(pw, function(data){
-
-				var pw_enc = (pw=='') ? null : data;
+				
+				var cat;
+				var pw_enc = (pw=='' || pw==null) ? null : data;
+				cat = (pw_enc==null) ? ["Info","folder" ,randID] : ["Info","folder", pw_enc ,randID];
+				
 				var oldName;
 				if($('#editCategory').attr('oldValue') != null){
 					oldName = tools.mReplaceAll($('#editCategory').attr('oldValue'), " ", "_");
@@ -318,7 +321,7 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 					oldName = null;
 				}
 				var randID = guidGenerator();
-				var cat = ["Info","folder", pw_enc ,randID];
+				
 
 				SL.getCategories(function(result){
 					var mCat = result;
@@ -349,8 +352,8 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 							displayCategories(false);
 						}
 					});
-
-					var icon = (pw==null) ? 'lock_open' : 'lock';
+console.log("check");
+					var icon = (pw=='' || pw==null) ? 'lock_open' : 'lock';
 					$('#panel_'+name+' .lock-icon').html(icon);
 				});
 					$('#modalNo').on('click', function(event){
