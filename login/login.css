@@ -13,6 +13,11 @@ html, body{
 	color: var(--dark-color);
 }
 
+html {
+	overflow: -moz-scrollbars-none;
+}
+
+
 .login-title{
 	font-weight: 400;
 	color: black;

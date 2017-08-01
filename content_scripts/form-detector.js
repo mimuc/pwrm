@@ -163,7 +163,7 @@ function lookupStorage(form){
     console.log("first username is: " + foundEntries[chosenIndex].username);
     if(foundEntries[chosenIndex].category == null){
       //use unique icon
-      findInput(form, foundEntries, cat, 'lock');
+      findInput(form, foundEntries, cat, 'lock_outline');
     }else{
       /* there is a matching URL / account in the storage */
       /* second parameter is the matching between entry.categoryName and categories --> icon */
@@ -253,7 +253,7 @@ function showHintbox(i, credentials, categories, icon){
    hintbox = '<div class="hintbox login"><div class="hintbox_head login"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ mReplaceAll(credentials.category, '_', ' ') +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content login mp-hidden"><p>You used the password from category <strong>'+ mReplaceAll(credentials.category, '_', ' ')   +'</strong></p><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden"> ****** </span><span type="cat" cat="'+ credentials.category.replace('_', ' ') +'" class="showPW">show</span></div><input placeholder="Enter Masterpassword" type="password" id="inputMPW"><a class="btn-mp light" id="btnInputMPW">confirm</a><hr><a id="openManager">open manager</a></div></div>';
  }else{
    i.classList.add('unlocked'); i.classList.remove('locked');
-   hintbox = '<div class="hintbox login"><div class="hintbox_head login"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ mReplaceAll(credentials.category, '_', ' ') +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content login mp-hidden"><p>You used the password from category <strong>'+ mReplaceAll(credentials.category, '_', ' ')   +'</strong></p><div id="pwhint_notstored"><i class="material-icons hastext">lock_open</i> No password stored</div><hr><a id="openManager">open manager</a></div></div>';
+   hintbox = '<div class="hintbox login"><div class="hintbox_head login"><div class="grid left"><i class="material-icons">'+ icon +'</i></div><div class="grid middle">'+ mReplaceAll(credentials.category, '_', ' ') +'</div><div class="grid right"><i id="ic_arrow" class="material-icons">close</i></div></div><div class="hintbox_content login mp-hidden"><p>You used the password from category <strong>'+ mReplaceAll(credentials.category, '_', ' ')   +'</strong></p><div id="pwhint_notstored"><i class="material-icons hastext">lightbulb_outline</i> Your hint: <strong>"'+categories[credentials.category][0]+'"</strong></div><hr><a id="openManager">open manager</a></div></div>';
  }
 }else{
   // unique entry
@@ -452,7 +452,7 @@ function setupSignupHintbox(listItems){
   $('.hintbox_content.signup').toggleClass('open');
   $('#ic_arrow').toggleClass('upsideDown');
   for(key in listItems){
-    var lock = (listItems[key][2] == null) ? 'lock_open' : 'lock';
+    var lock = (listItems[key][2] == null) ? 'lightbulb_outline' : 'lock_outline';
 
     $('#categoryList').append('<li id="'+ key +'" hash="'+ listItems[key][2] +'"><i class="material-icons">'+ listItems[key][1] +'</i><span>'+ mReplaceAll(key,'_', ' ') +'</span><i class="lock material-icons">'+ lock +'</i></li>')
   }

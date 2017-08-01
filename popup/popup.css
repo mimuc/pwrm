@@ -5,7 +5,11 @@
 	--neutral-color: #d5d5d5;
 }
 
-html {overflow: -moz-scrollbars-none;}
+html {
+	overflow: -moz-scrollbars-none;
+}
+
+
 
 html, body {
 	padding:0;
@@ -115,6 +119,10 @@ a:hover{
 
 #thisURL{
 	font-size:1.3em;
+	overflow: hidden;
+}
+#thisURL:hover{
+	cursor: pointer;
 }
 
 .footer{

@@ -18,28 +18,28 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 				switch(mode['mode']){
 					case 'mode_topic':
 					cat = {"categories" : {
-						Private : ["Info", "folder"],
-						Work : ["Info", "folder"],
-						Banking : ["Info", "folder"]
+						Private : ["private", "folder_open"],
+						Work : ["work", "folder_open"],
+						Banking : ["banking", "folder_open"]
 					}};
 					break;
 					case 'mode_importance':
 					cat = {"categories" : {
-						Very_Important : ["Info", "folder"],
-						Important : ["Info", "folder"],
-						Less_Important : ["Info", "folder"]
+						Very_Important : ["very important", "folder_open"],
+						Important : ["important", "folder_open"],
+						Less_Important : ["less important", "folder_open"]
 					}};
 					break;
 					case 'mode_frequency':
 					cat = {"categories" : {
-						Daily : ["Info", "folder"],
-						Weekly : ["Info", "folder"],
-						Less_Frequent : ["Info", "folder"]
+						Daily : ["daily", "folder_open"],
+						Weekly : ["weekly", "folder_open"],
+						Less_Frequent : ["less frequent", "folder_open"]
 					}};
 					break;
 					case 'mode_hints':
 					cat = {"categories" : {
-						Create_Your_Categories : ["Info", "folder"]
+						Create_Your_Categories : ["none set", "folder_open"]
 					}};
 					break;
 				}

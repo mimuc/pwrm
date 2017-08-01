@@ -53,16 +53,16 @@ define(['scripts/tools/tools', 'scripts/modules/Logger', 'MVC_View_Managerpage',
     var createCategory = exports.createCategory = function(){
       var value = modalCategoryName.value;
       value = tools.mReplaceAll(value, ' ', '_');
-      console.log(value);
       Logger.log({event: "Category Created", content: value});
-      var pw; var ecpwd = $('#category-pwd');
+      var pw; var hint; var ecpwd = $('#enter-category-pwd');
       if(ecpwd.hasClass('hidden')){ 
-        pw = null;        
+        pw = null; 
+        hint = $('#category-hint').val();       
       }else{
-        pw = ecpwd.val();
+        pw = $('#category-pwd').val();
+        hint = null;
       }
-
-      view.createCategory(value, pw, $('#modalCategory').hasClass('new'));
+      view.createCategory(value, pw, $('#modalCategory').hasClass('new'), hint);
     };
     var updatePreferences = exports.updatePreferences = function(results){
       var keys = []; var values = [];

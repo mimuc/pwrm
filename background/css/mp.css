@@ -356,10 +356,16 @@ h2.row-header{
 	background-color: rgba(0,0,0,0.3);
 }
 
-
 .material-icons.hastext{
 	top: 7px;
 	position: relative;
+}
+.material-icons.hastext:not(.link){
+	background-color: var(--highlight-color);
+	padding: 5px;
+	border-radius: 100%;
+	color: black;
+	font-size: 19px;
 }
 .categoryWrapper{
 	padding: 5px;

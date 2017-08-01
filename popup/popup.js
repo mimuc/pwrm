@@ -17,7 +17,19 @@ $(document).ready(function($) {
     if(result['mpw']==null) $('#fab_wrapper').hide();
   });
 
-
+function fabToggle(){
+  //store entry
+    if(fab_wrapper.hasClass('slide')){
+      triggerStore();
+    }else{
+     fab_wrapper.toggleClass('slide');
+     $('.button-floating').toggleClass('fab_checked');
+     $('.mid').toggleClass('open');
+     $('.mid .forms').toggle('fast', function() {
+      $('.mid .forms #enterName').focus();
+    });
+   }
+}
 
   // setup pw meter
   var options = {};
@@ -60,19 +72,9 @@ $(document).ready(function($) {
     $('.option-category').toggleClass('hidden'); 
   });
 
-  $('.button-floating').on('click', function(){
-    //store entry
-    if(fab_wrapper.hasClass('slide')){
-      triggerStore();
-    }else{
-     fab_wrapper.toggleClass('slide');
-     $('.button-floating').toggleClass('fab_checked');
-     $('.mid').toggleClass('open');
-     $('.mid .forms').toggle('fast', function() {
-      $('.mid .forms #enterName').focus();
-    });
-   }
- });
+  $('.button-floating').on('click', fabToggle);
+  $('#thisURL').on('click', fabToggle);
+
 });
 window.onload = function() {
 
@@ -97,6 +99,7 @@ window.onload = function() {
     var host = pathArray[2];
     var entryURL = protocol + '//' + host;
     $('#thisURL').html(entryURL);
+    $('#ask').html("Save entry for this page?");
 
 
     // browser.runtime.sendMessage({task: "removeHint", url: entryURL}).then(handleResponse);
@@ -113,9 +116,9 @@ function openPopup() {
  console.log("openPopup");
  browser.windows.create({
    "url": "/login/login.html",
-   type: "panel",
-   height: 600,
-   width: 600
+   type: "popup",
+   width: 650,
+   height:700
  });
 }
 
@@ -264,15 +267,6 @@ function onStoreMsgSuccess(){
   });
 }
 
-function openPopup() {
- console.log("openPopup");
- browser.windows.create({
-   "url": "/login/login.html",
-   type: "panel",
-   height: 600,
-   width: 600
- });
-}
 
 
 function handleResponse(request) {

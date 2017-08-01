@@ -165,13 +165,13 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 		      }
 		  }
 		};
-		var createCategoryElement = exports.createCategoryElement = function(categoryName, notes, iconName, pwd, index){
+		var createCategoryElement = exports.createCategoryElement = function(categoryName, hint, iconName, pwd, index){
 			var delay = 500 + index * 100;
 			var container = document.querySelector('#categoryContainer');
 			require(['jquery', 'MVC_Controller_Managerpage'], function($, controller) {
 
 				var hasPW = (pwd!=null);
-				var icon_lock = (hasPW) ? 'lock':'lock_open';
+				var icon = (hasPW) ? 'folder':'folder_open';
 
 		//load snippet
 		$('#categoryContainer').append('<div id="wrapper_'+categoryName+'"></div>');
@@ -190,7 +190,8 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 			.attr('aria-controls', 'listGroup_'+categoryName)
 			.html('<div class="cat-title">'+catName+'</div>');
 
-			$(this).find('.lock-icon').html(icon_lock);
+			$(this).find('.category-icons').html(icon);
+			$(this).find('.lock-icon').addClass('hidden');
 			
 
 			$(this).click(function(event) {
@@ -210,11 +211,15 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 					$('#panel_'+categoryName).toggleClass('category-focused');
 					entryContainer.empty();
 					// console.log($(this).attr('haspw'));
-					var ic = $(this).find('.lock-icon').text();
-					var _hasPW = (ic == 'lock') ? true : false;
-					// console.log("hasPW: " + _hasPW);
-					displayCategoryHeader(catName, _hasPW); //update hasPW before displaying header
-					controller.loadEntries(categoryName, false);
+					var ic = $(this).find('.category_icons').text();
+					console.log("ic :" + ic);
+					var _hasPW = (ic == 'folder') ? true : false;
+					console.log("hasPW: " + _hasPW);
+					SL.getHint(catName, function(result){
+						displayCategoryHeader(catName, _hasPW, result); //update hasPW before displaying header
+						controller.loadEntries(categoryName, false);
+						
+					});
 				}else{
 					$('#panel_'+categoryName).toggleClass('category-focused');
 					panelCard.addClass('low-color');
@@ -228,35 +233,18 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 					fadeSlideDown(cardWrapper);
 				}					
 			});
-
-			$('#cat-icon').attr('id',categoryName+'-icon')
-			.html(getIcon(iconName));					
+			console.log(iconName);
+			$('#cat-icon').attr('id',categoryName+'-icon').html(iconName);					
 			$('#listGroup_'+categoryName).attr('aria-labelledby', 'heading_'+categoryName);
 
 		}).fadeIn(delay);
 	});
 
 			displayNumberEntries();	
-
-			function getIcon(name){
-				console.log("View : getIcon");
-		/*
-		var iconString = "folder";
-		switch(name){
-			case "euro_symbol":
-			iconString = "euro_symbol";
-			break;
-			case "email":
-			iconString = "email";
-			break;
-		}
-
-		return iconString
-		*/
-		return name;
-	}
+	
+	
 };
-var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW){
+var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW, hint){
 	var entryContainer = $('#entryContainer');
 	var cardWrapper = entryContainer.parent();
 
@@ -267,9 +255,9 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 		
 
 		if(hasPW){
-			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock</i><span class="pwd-hidden">*******</span><span type="cat" cat="'+name+'" class="showPW">show</span><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div></div><hr>');
+			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock_outline</i><span class="pwd-hidden">*******</span><span type="cat" cat="'+name+'" class="showPW">show</span><br><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div></div><hr>');
 		}else{
-			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lock_open</i> No password stored. <a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div><hr>');
+			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lightbulb_outline</i> Your personal hint for this password: <strong>"'+hint+'"</strong><br><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div><hr>');
 		}
 			//configure modal here (event.relatedTarget is created dynamically)
 			setupModalCategory(hasPW);
@@ -306,13 +294,13 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 
 			}
 		};
-		var createCategory = exports.createCategory = function(name, pw, isNew){
+		var createCategory = exports.createCategory = function(name, pw, isNew, hint){
 			console.log("View : createCategory");
 			crypt.encrypt_rsa(pw, function(data){
-				
+				console.log("pw: " + pw);
 				var cat;
 				var pw_enc = (pw=='' || pw==null) ? null : data;
-				cat = (pw_enc==null) ? ["Info","folder" ,randID] : ["Info","folder", pw_enc ,randID];
+				cat = (pw_enc==null) ? [hint, "folder_open" ,randID] : [null,"folder", pw_enc ,randID];
 				
 				var oldName;
 				if($('#editCategory').attr('oldValue') != null){
@@ -338,29 +326,32 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 							while (entryContainer.firstChild) {
 								entryContainer.removeChild(entryContainer.firstChild);
 							}
+							displayCategories(false);
 							if(oldName!=null){
 								if(name != oldName){
-									console.log("name: " + name +" : oldName: " + oldName);
-									console.log("name != oldName");
+									// console.log("name: " + name +" : oldName: " + oldName);
+									// console.log("name != oldName");
 									deleteCategory(oldName);
 									reassignEntries(oldName, name, mCat);
 									displayCategories(false);
 								}
 							}
 						}else{
-							console.log("no update. was new category");
+							// console.log("no update. was new category");
 							displayCategories(false);
 						}
 					});
-console.log("check");
-					var icon = (pw=='' || pw==null) ? 'lock_open' : 'lock';
-					$('#panel_'+name+' .lock-icon').html(icon);
+					console.log("check");
+					// var icon = (pw=='' || pw==null) ? 'lightbulb_outline' : 'lock_outline';
+					// $('#panel_'+name+' .lock-icon').html(icon);
+					var icon = (pw=='' || pw==null) ? 'folder_open' : 'folder';
+					$('#panel_'+name+' .category-icons').html(icon);
 				});
-					$('#modalNo').on('click', function(event){
-						event.stopImmediatePropagation(); 
-						toggleConfirm();
-					});
-				});			
+				$('#modalNo').on('click', function(event){
+					event.stopImmediatePropagation(); 
+					toggleConfirm();
+				});
+			});			
 			
 		};
 		var displayNumberEntries = exports.displayNumberEntries = function(){
@@ -472,13 +463,15 @@ console.log("check");
 	var showPWInput = exports.showPWInput = function(){
 		var storePW = ($('#btnAddPWD').text() === 'set password') ? true : false;
 		var txt = (storePW) ? 'remove password' : 'set password';
-		var msg = (storePW) ? 'A category password will be stored.' : 'No password will be stored for this category and its entries.';
-		var icon = (storePW) ? 'lock':'lock_open';
+		var msg = (storePW) ? 'A category password will be stored.' : 'Save your personal hint that helps to remember your password instead of storing it.';
+		var icon = (storePW) ? 'lock_outline':'lightbulb_outline';
 		$('#btnAddPWD').html(txt);
 		$('#pw-hint span').html(msg);
 		$('#pw-hint i').html(icon);
 		$('#category-pwd').val('');
 		$('#enter-category-pwd').toggleClass('hidden');
+		$('#enter-category-hint').toggleClass('hidden');
+
 	};
 	var clearInputs = exports.clearInputs = function(){
 
@@ -509,8 +502,8 @@ console.log("check");
 				$('#modalCategory #modalCategoryName').val(oldValue);
 
 				var txt = (hasPW) ? 'remove password' : 'set password';
-				var msg = (hasPW) ? 'A category password will be stored.' : 'No password will be stored for this category and its entries.';
-				var icon = (hasPW) ? 'lock':'lock_open';
+				var msg = (hasPW) ? 'A category password will be stored.' : 'Save your personal hint that helps to remember your password instead of storing it.';
+				var icon = (hasPW) ? 'lock_outline':'lightbulb_outline';
 				var pw = (hasPW) ? '*******' : '';
 				$('#btnAddPWD').html(txt);
 				$('#pw-hint span').html(msg);
@@ -518,12 +511,14 @@ console.log("check");
 				$('#category-pwd').val(pw);
 				if(hasPW){			
 					$('#enter-category-pwd').removeClass('hidden');
+					$('#enter-category-hint').addClass('hidden');
 					$('#category-pwd').on('focus', function(){
 						// empty input
 						$(this).val('');
 					});
 				}else{
 					$('#enter-category-pwd').addClass('hidden');
+					$('#enter-category-hint').removeClass('hidden');
 				}
 			}
 		});

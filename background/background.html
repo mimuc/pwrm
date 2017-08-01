@@ -213,9 +213,9 @@
           <div class="help-block with-errors"></div>
         </div>
         <div id="pw-hint">
-          <i class="material-icons hastext">lock_open</i><span>No password will be stored for this category and its entries.</span>
+          <i class="material-icons hastext">lightbulb_outline</i><span>Save your personal hint that helps to remember your password instead of storing it.</span>
         </div>
-        <a id="btnAddPWD">add password</a>
+     
 
         <div id="enter-category-pwd" class="form-group has-feedback hidden">
           <label for="category-pwd">Enter a Category Password</label>
@@ -223,6 +223,13 @@
           <span class="glyphicon form-control-feedback" ></span>
           <div class="help-block with-errors"></div>
         </div>
+        <div id="enter-category-hint" class="form-group has-feedback">
+          <label for="category-hint">Enter a Hint for this Category Password</label>
+          <input type="text" minlength="1" class="form-control" id="category-hint" placeholder="Your hint" required>
+          <span class="glyphicon form-control-feedback" ></span>
+          <div class="help-block with-errors"></div>
+        </div>
+           <a id="btnAddPWD">set password</a>
       </form>
     </div>
     <div class="modal-footer">
@@ -247,6 +254,7 @@
         <div class="form-group">
 
           <input type="password" class="form-control" id="modalInputMPW" placeholder="Enter Masterpassword" required>
+          <button class="btn btn-primary btn-mp confirm">Confirm</button>
         </div>
         <div class="modal-hint hidden">
           <i class="material-icons hastext">help_outline</i><span><a href="#">Forgot your Masterpassword?</a></span>

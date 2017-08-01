@@ -45,7 +45,6 @@ function showSection(clicked, section){
 function addListeners(){
 	$(document).on('click', '.showPW', function(e){
 		if(e.target.innerHTML == 'show'){
-
 			showPW.trigger(($(this)));
 			$('#modalMPW').on('shown.bs.modal', function (e) {
 				$('#modalInputMPW').val('');
@@ -61,6 +60,7 @@ function addListeners(){
 			// do nothing
 		}
 	});
+
 
 	$('#sidebar-categories').on('click', function(){showSection($(this), '#section-categories');});
 	$('#sidebar-unique').on('click', function(){showSection($(this), '#section-unique');});
@@ -89,6 +89,7 @@ function addListeners(){
 					});
 				}
 			});
+
 		}else{
 			// unchecked -> delete mpw-tmp
 			SM.setMPW('');
@@ -128,10 +129,10 @@ function addListeners(){
 	 			console.log("input validate error");
 	 		}else{
 	 			toggleConfirm();
-			
+
 	 		}
 	 	}else{
-	 		if($(validate[0]).find('.glyphicon-remove').length > 0){
+	 		if($('#enter-category-hint').val() != '' && $(validate[0]).find('.glyphicon-remove').length > 0){
 	 			console.log("input validate error");
 	 		}else{
 	 			toggleConfirm();
@@ -291,8 +292,6 @@ function setupPWMeter(){
 
 	};
 
-
-
 	$('input[type="password"]:not(#modalInputMPW)').on('keyup', function(event) {
 		if($(this).val().length > 0){
 			$('.progress').show();
@@ -302,7 +301,7 @@ function setupPWMeter(){
 			$('.password-verdict').hide();
 		}
 	});
-	$('input[type="password"]').pwstrength(options);
+	$('input[type="password"]:not(#modalInputMPW)').pwstrength(options);
 	$('.progress').addClass("strength");
 	$('.progress').hide();
 }

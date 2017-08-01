@@ -79,6 +79,17 @@ define(function(){
 				callback();
 			});
 		},
+		getHint : function(catName, callback){
+			var gettingCategories = browser.storage.local.get("categories");
+			gettingCategories.then((results) => {
+				var res = results["categories"];
+				for(key in res){
+					if(key == catName){
+						callback(res[key][0]);
+					}
+				}
+			});
+		},
 		findEntries : function(value, callback){
 			this.getEntries(function(results){
 				var foundEntries = [];
