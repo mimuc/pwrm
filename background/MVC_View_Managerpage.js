@@ -241,12 +241,12 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 	});
 
 			displayNumberEntries();	
-	
-	
-};
-var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW, hint){
-	var entryContainer = $('#entryContainer');
-	var cardWrapper = entryContainer.parent();
+
+
+		};
+		var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW, hint){
+			var entryContainer = $('#entryContainer');
+			var cardWrapper = entryContainer.parent();
 
 
 		// cardWrapper.fadeIn(300);
@@ -255,12 +255,13 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 		
 
 		if(hasPW){
-			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock_outline</i><span class="pwd-hidden">*******</span><span type="cat" cat="'+name+'" class="showPW">show</span><br><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div></div><hr>');
+			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock_outline</i><span class="pwd-hidden">*******</span><span type="cat" cat="'+name+'" class="showPW">show</span><br><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a><a id="directAddEntry" class="btn btn-mp light" data-toggle="modal" data-value="'+name+'" data-target="#modal-newEntry">Add Entry</a></div></div><hr>');
 		}else{
-			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lightbulb_outline</i> Your personal hint for this password: <strong>"'+hint+'"</strong><br><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a></div><hr>');
+			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lightbulb_outline</i> Your personal hint for this password: <strong>"'+hint+'"</strong><br><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a><a id="directAddEntry" class="btn btn-mp light" data-toggle="modal" data-value="'+name+'" data-target="#modal-newEntry">Add Entry</a></div><hr>');
 		}
 			//configure modal here (event.relatedTarget is created dynamically)
 			setupModalCategory(hasPW);
+			setupModalEntry();
 			// setupShowButton();
 		};
 		var displayCategories = exports.displayCategories = function(loadUniqueEntries) {
@@ -479,6 +480,21 @@ var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW
 	}
 
 	// private functions
+	var setupModalEntry = function(){
+		$('#modal-newEntry').on('show.bs.modal', function (e) {
+			// pre-select category
+			var activeCategory = $('#directAddEntry').attr('data-value');
+			var options = $('#categoryDropdown option');
+			for(var i=0;i<options.length;i++){
+				if(options[i].innerText == activeCategory){
+					options[i].selected = true;
+				}
+			}
+			// empty all inputs
+			$('input').val('');
+
+		});
+	};
 	var setupModalCategory = function(hasPW){
 		$('#modalCategory').on('hidden.bs.modal', function (e) {
 			console.log("hide modal");
