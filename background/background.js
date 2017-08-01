@@ -45,7 +45,7 @@ function showSection(clicked, section){
 function addListeners(){
 	// close FAB when clicked anywhere else
 	$('.button-floating').on('click', function(e) {
-    e.stopPropagation();
+		e.stopPropagation();
 	});
 	$(document).on('click', function(){
 		$('#fab_wrapper').removeClass('button-floating-clicked');
@@ -78,32 +78,50 @@ function addListeners(){
 	
 	setupPWMeter();
 	$('#preferences :checkbox').change(function(){
-		SM.updatePreferences($(this).attr('id'), this.checked);
-		// if pw autofill is enabled -> input mpw and store it until browser closed
-		if($(this).attr('id') == 'pref_autofill_password'){
-			if(this.checked){
+		if($(this).attr('id') == 'pref_autofill_username'){
+			SM.updatePreferences($(this).attr('id'), this.checked);
+		}
+	});
+
+	$('#pref_autofill_password').on('click', function(e){
+
+		if((this.checked)){
+			e.preventDefault();
+
 			// show mpw input
 			$('#modalMPW').modal('show');
 			$('#modalMPW').on('keypress', function(e){
 				if(e.which == 13){
 					e.preventDefault();
-					browser.storage.local.get("mpw").then(function(res){
-						if(res['mpw'] == CryptoJS.SHA512($('#modalInputMPW').val()).toString()){
-							SM.setMPW($('#modalInputMPW').val());
-							$('#modalMPW').modal('hide');
-						}else{
-							alert("Entered password was not correct.");
-						}
-					});
+					tmpStoreMPW();
 				}
+			});
+			$('#modalMPW').on('click', '.confirm', function(e){
+				e.preventDefault();
+				tmpStoreMPW();
 			});
 
 		}else{
-			// unchecked -> delete mpw-tmp
+			SM.updatePreferences('pref_autofill_password', false);
 			SM.setMPW('');
 		}
+	});
+	// store mpw for auto-decryption for autofilling option
+	function tmpStoreMPW(){
+		browser.storage.local.get("mpw").then(function(res){
+			if(res['mpw'] == CryptoJS.SHA512($('#modalInputMPW').val()).toString()){
+				SM.setMPW($('#modalInputMPW').val());
+				$('#modalMPW').modal('hide');
+				// activate checkbox
+				$('#pref_autofill_password').prop('checked', true);
+				SM.updatePreferences('pref_autofill_password', true);
+
+			}else{
+				alert("Entered password was not correct.");
+			}
+		});
+
 	}
-});
 	$('#burger').on('click', function(){toggleNavigation();});
 
 	 // add event listeners to buttons and inputs
@@ -144,9 +162,7 @@ function addListeners(){
 	 			console.log("input validate error");
 	 		}else{
 	 			toggleConfirm();
-
 	 		}
-
 	 	}
 
 	 });

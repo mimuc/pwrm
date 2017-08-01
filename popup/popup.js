@@ -9,26 +9,32 @@ $(document).ready(function($) {
   browser.storage.local.get('username').then((result) =>{
     var username = result['username'];
     // prefill
+    console.log(username);
     $('#enterName').val(username);
     // delete
     browser.storage.local.set({'username': ''});
   });
+  // check if is first start
   browser.storage.local.get('mpw').then((result) =>{
-    if(result['mpw']==null) $('#fab_wrapper').hide();
-  });
-
-function fabToggle(){
-  //store entry
-    if(fab_wrapper.hasClass('slide')){
-      triggerStore();
-    }else{
-     fab_wrapper.toggleClass('slide');
-     $('.button-floating').toggleClass('fab_checked');
-     $('.mid').toggleClass('open');
-     $('.mid .forms').toggle('fast', function() {
-      $('.mid .forms #enterName').focus();
-    });
+    if(result['mpw']==null){
+      $('#fab_wrapper').hide();
+      // redirect to login
+      openPopup();
    }
+ });
+
+  function fabToggle(){
+  //store entry
+  if(fab_wrapper.hasClass('slide')){
+    triggerStore();
+  }else{
+   fab_wrapper.toggleClass('slide');
+   $('.button-floating').toggleClass('fab_checked');
+   $('.mid').toggleClass('open');
+   $('.mid .forms').toggle('fast', function() {
+    $('.mid .forms #enterName').focus();
+  });
+ }
 }
 
   // setup pw meter
