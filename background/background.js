@@ -48,7 +48,8 @@ function addListeners(){
 		e.stopPropagation();
 	});
 	$(document).on('click', function(){
-		$('#fab_wrapper').removeClass('button-floating-clicked');
+		$('#fab_wrapper').removeClass('button-floating-clicked'); // close FAB
+		$('#search').val('') // clear search input
 	});
 
 	$(document).on('click', '.showPW', function(e){
