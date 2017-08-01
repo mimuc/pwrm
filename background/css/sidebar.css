@@ -18,6 +18,7 @@ Martin Prinz 14.06.2017*/
 	
 }
 
+
 .sidebar-row.active{
 	color: #212121;
 	background-color: #EDEDED;
@@ -73,5 +74,16 @@ Martin Prinz 14.06.2017*/
 
 }
 
+.sidebar-row > .material-icons.blink{
+	 animation-duration: 1000ms;
+   animation-name: blink;
+   animation-iteration-count: infinite;
+   animation-direction: alternate;
+
 }
 
+@keyframes blink {
+  0%{color: black}
+  60%{ color: var(--highlight-color)}
+  100%{color: var(--highlight-color)}   
+ }

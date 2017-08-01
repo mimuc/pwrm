@@ -72,7 +72,7 @@ function addListeners(){
 
 
 	$('#sidebar-categories').on('click', function(){showSection($(this), '#section-categories');});
-	$('#sidebar-unique').on('click', function(){showSection($(this), '#section-unique');});
+	$('#sidebar-unique').on('click', function(){showSection($(this), '#section-unique'); $('#sidebar-unique > .material-icons').removeClass('blink');});
 	// $('#sidebar-modifications').on('click', function(){showSection($(this), '#section-modifications');});
 	$('#sidebar-preferences').on('click', function(){showSection($(this), '#section-preferences');});
 	$('#sidebar-about').on('click', function(){showSection($(this), '#section-about');});

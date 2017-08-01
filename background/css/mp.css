@@ -366,6 +366,7 @@ h2.row-header{
 	border-radius: 100%;
 	color: black;
 	font-size: 19px;
+	margin-right: 10px;
 }
 .categoryWrapper{
 	padding: 5px;

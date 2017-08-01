@@ -114,6 +114,8 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 							if(focusedCategory!=null) var focusedCategoryName = focusedCategory.getAttribute('id').split('_')[1];
 							if(mCredential.category == null ){
 								controller.displayEntry(randID, mCredential, false);
+								// activate blinking
+								$('#sidebar-unique > .material-icons').addClass('blink');
 							}else if(focusedCategoryName != null && mCredential.category == focusedCategoryName){
 								controller.displayEntry(randID, mCredential, true);
 							}
@@ -179,6 +181,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 				var credential = {username: entryUsername, url: mUrl, password: pwdHash};
 				Logger.log({event: 'Add Entry', content: {entryUsername, mUrl}});
 				storeEntry(randID, credential, true);
+
 			}else{
 				// if(objTest.length < 1 && mUrl !== '' && entryUsername !== '') {
 					mUrl.value = ''; entryUsername.value = ''; entryCategory.value ='';
