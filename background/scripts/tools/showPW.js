@@ -19,42 +19,36 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 				$('#modalInputMPW').on('keypress', function(e) {
 					if(e.which === 13){
 						e.preventDefault();
-
 						var val = $(this).val();
 						if (val.length > 0){
-						// doubleCheckMPW(
-						// 	CryptoJS.SHA512(val),
-						// 	function(){getPW(val)});
-						getPW(val);
+							getPW(val);
+						}
 					}
-				}
-			});
+				});
+				$('.confirm').on('click', function(e){
+					e.preventDefault();
+						var val = $('#modalInputMPW').val();
+						if (val.length > 0){
+							getPW(val);
+						}
+				});
 			// call origin: content script 
 		}else{
 			unique = (mType=='unique');
 			entry = (unique) ? mUrl : mCategory;
-
-				// doubleCheckMPW(
-				// 	CryptoJS.SHA512(mHash),
-				// 	function(){getPW(mHash)}
-				// );
-				getPW(mHash);
-			}
-			$('#modalMPW').on('hidden.bs.modal', function (e) {
-				// console.log(entry);
-			});
+			getPW(mHash);
+		}
 			
-			function doubleCheckMPW(a, doNext){
-				console.log("Function : doubleCheckMPW");
-				var callback = function(res){
-					// console.log(a.toString());
-					// console.log(res.toString());
-					if(a.toString() == res.toString()){
-						doNext();
-					}
-				}
-				getMPW(callback);
-			}
+			
+			// function doubleCheckMPW(a, doNext){
+			// 	console.log("Function : doubleCheckMPW");
+			// 	var callback = function(res){
+			// 		if(a.toString() == res.toString()){
+			// 			doNext();
+			// 		}
+			// 	}
+			// 	getMPW(callback);
+			// }
 
 			function getMPW(callback){
 				browser.storage.local.get("mpw").then(function(res){callback(res.mpw);});
