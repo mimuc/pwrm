@@ -43,6 +43,14 @@ function showSection(clicked, section){
 }
 
 function addListeners(){
+	// close FAB when clicked anywhere else
+	$('.button-floating').on('click', function(e) {
+    e.stopPropagation();
+	});
+	$(document).on('click', function(){
+		$('#fab_wrapper').removeClass('button-floating-clicked');
+	});
+
 	$(document).on('click', '.showPW', function(e){
 		if(e.target.innerHTML == 'show'){
 			showPW.trigger(($(this)));
