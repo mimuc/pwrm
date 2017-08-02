@@ -154,35 +154,27 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 		var protocol = pathArray[0];
 		var host = pathArray[2];
 		var entryURL = protocol + '//' + host;
-		// TODO check if entryURL is possible -> url validation
 
 		var inputUsername = document.querySelector('.username');
-		/*
-		var entryURL = inputURL.value;
-		console.log(entryURL.substring(entryURL.length-1));
-		if(entryURL.substring(entryURL.length-1)=='/'){
-			entryURL = entryURL.slice(0, -1);
-		}*/
+
 		var entryUsername = inputUsername.value;
+		
+		//dirty! 
+		var mUrl;
+		if(entryURL.indexOf('google')>0){
+			
+			mUrl = "https://accounts.google.com";
+			console.log(entryURL.indexOf('google'));
+		}
+		else{
+			mUrl = entryURL;
+		}
+		if(useUniquePWD){
+			var credential = {username: entryUsername, url: mUrl, password: pwdHash};
+			Logger.log({event: 'Add Entry', content: {entryUsername, mUrl}});
+			storeEntry(randID, credential, true);
 
-		// var gettingItem = browser.storage.local.get(entryURL);
-		// gettingItem.then((result) => {
-		// 	var objTest = Object.keys(result);
-			//dirty! 
-			var mUrl;
-			if(entryURL.indexOf('google')>0){
-				mUrl = "https://accounts.google.com";
-				console.log(entryURL.indexOf('google'));
-			}
-			else{
-				mUrl = entryURL;
-			}
-			if(useUniquePWD){
-				var credential = {username: entryUsername, url: mUrl, password: pwdHash};
-				Logger.log({event: 'Add Entry', content: {entryUsername, mUrl}});
-				storeEntry(randID, credential, true);
-
-			}else{
+		}else{
 				// if(objTest.length < 1 && mUrl !== '' && entryUsername !== '') {
 					mUrl.value = ''; entryUsername.value = ''; entryCategory.value ='';
 					var credential = {category: entryCategory, username: entryUsername, url: mUrl};
@@ -191,6 +183,12 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 				storeEntry(randID, credential, true);
 			}
 		// }, onError);	
+	};
+	var updateEntry = exports.updateEntry = function(id, murl, username){
+		SL.updateEntry(id, murl, username, function(entry){
+			console.log(entry);
+			// controller.displayEntry(id, entry, entry.category!=null);
+		});
 	};
 	var quickAddEntry = exports.quickAddEntry = function(murl, musername, mcat, mpw) {
 		console.log("Model : addEntry (quick)");

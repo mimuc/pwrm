@@ -10,7 +10,6 @@
   <link href="css/material/bootstrap-material-design.css" rel="stylesheet">
   <link href="css/material/ripples.min.css" rel="stylesheet">
   <!-- Custom Styles -->
-  <!-- <link rel="stylesheet/less" type="text/css" href="css/mp.less"/> -->
   <link rel="stylesheet" href="css/mp.css">
   <link rel="stylesheet" href="css/sidebar.css">
   <link rel="stylesheet" href="css/fab.css">
@@ -197,12 +196,72 @@
    </div>
  </div>
 </div>
+<div id="modal-newEntry" class="modal modal-mp fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">New Entry</h2>
+      </div>
+      <div class="modal-body">
+        <form role="form" data-toggle="validator"> 
+
+          <div class="form-group has-feedback">
+            <label for="enterURL">URL</label>             
+            <input id="enterURL" list="historyList" class="form-control new-entry url" minlength="1" type="url" placeholder="https://www." required/>
+            <span class="glyphicon form-control-feedback" ></span><div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group has-feedback">
+            <label for="enterName">Username</label>   
+            <input id="enterName" class="form-control new-entry username" type="text" minLength="1" placeholder="Your username or email" required/>
+            <span class="glyphicon form-control-feedback" ></span>
+            <div class="help-block with-errors"></div>
+          </div>
+        </form>
+        <form role="form" data-toggle="validator" id="radio-form">
+          <div class="form-group">
+            <div class="radio">
+              <label>
+                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option-category" checked="true"><span class="circle"></span><span class="check"></span>
+                Assign to a Category Password
+              </label>
+              <label class="active"></label>
+            </div>
+            <div class="radio">
+             <label>
+               <input type="radio" name="optionsRadios" id="optionsRadios2" value="option-pwd"><span class="circle"></span><span class="check"></span>
+               Use a unique password
+             </label>
+           </div>
+         </div>
+       </form>
+       <form role="form" data-toggle="validator">
+        <div class="form-group radio-option option-category" value="option-category">
+          <label for="categoryDropdown">Choose Password Category</label>
+          <select class="form-control" id="categoryDropdown"><!-- fill <options> on init() --></select>
+          <a class="link" data-toggle="modal" data-target="#modalCategory">Create new Category Password</a>
+        </div>
+        <div class="form-group has-feedback radio-option option-pwd hidden" value="option-pwd">
+          <label for="enterPWD">Enter a Unique Password</label>
+          <input minlength="1" id="enterPWD" class="form-control new-entry pwd" type="password" placeholder="" required/>
+          <span class="glyphicon form-control-feedback" ></span>
+          <div class="help-block with-errors"></div>
+        </div>
+      </form>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default btn-mp light" data-dismiss="modal">Close</button>
+      <button id="addEntry" type="submit" class="btn btn-primary btn-mp">Save</button>
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <!-- Modal Category -->
 <div class="modal modal-mp fade" id="modalCategory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-       <h2 class="modal-title" id="myModalLabel">Edit Category</h2>
+       <h2 class="modal-title" id="myModalLabel">Category Password</h2>
      </div>
      <div class="modal-body">
        <form role="form" data-toggle="validator">
@@ -213,7 +272,7 @@
           <div class="help-block with-errors"></div>
         </div>
         <div id="pw-hint">
-          <i class="material-icons hastext">lightbulb_outline</i><span>Save your personal hint that helps to remember your password instead of storing it.</span>
+          <i class="material-icons hastext">lightbulb_outline</i><span>Save a hint that helps to remember your password instead of storing it.</span>
         </div>
      
 
@@ -265,66 +324,7 @@
 </div>
 </div> 
 
-<div id="modal-newEntry" class="modal modal-mp fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 class="modal-title">Add new entry</h2>
-      </div>
-      <div class="modal-body">
-        <form role="form" data-toggle="validator"> 
 
-          <div class="form-group has-feedback">
-            <label for="enterURL">URL</label>             
-            <input id="enterURL" list="historyList" class="form-control new-entry url" minlength="1" type="url" placeholder="Account address" required/>
-            <span class="glyphicon form-control-feedback" ></span>
-            <div class="help-block with-errors"></div>
-          </div>
-          <div class="form-group has-feedback">
-            <label for="enterName">Username</label>   
-            <input id="enterName" class="form-control new-entry username" type="text" minLength="1" placeholder="Your username or email" required/>
-            <span class="glyphicon form-control-feedback" ></span>
-            <div class="help-block with-errors"></div>
-          </div>
-        </form>
-        <form role="form" data-toggle="validator" id="radio-form">
-          <div class="form-group">
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option-category" checked="true"><span class="circle"></span><span class="check"></span>
-                Assign to a Category Password
-              </label>
-              <label class="active"></label>
-            </div>
-            <div class="radio">
-             <label>
-               <input type="radio" name="optionsRadios" id="optionsRadios2" value="option-pwd"><span class="circle"></span><span class="check"></span>
-               Use a unique password
-             </label>
-           </div>
-         </div>
-       </form>
-       <form role="form" data-toggle="validator">
-        <div class="form-group radio-option option-category" value="option-category">
-          <label for="categoryDropdown">Choose Password Category</label>
-          <select class="form-control" id="categoryDropdown"><!-- fill <options> on init() --></select>
-        </div>
-        <div class="form-group has-feedback radio-option option-pwd hidden" value="option-pwd">
-          <label for="enterPWD">Enter a Unique Password</label>
-          <input minlength="1" id="enterPWD" class="form-control new-entry pwd" type="password" placeholder="" required/>
-          <span class="glyphicon form-control-feedback" ></span>
-          <div class="help-block with-errors"></div>
-        </div>
-      </form>
-
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-default btn-mp light" data-dismiss="modal">Close</button>
-      <button id="addEntry" type="submit" class="btn btn-primary btn-mp">Save</button>
-    </div>
-  </div><!-- /.modal-content -->
-</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
 <script src="scripts/jquery/jquery.js"></script>
 <script src="scripts/bootstrap/bootstrap.js"></script>

@@ -121,6 +121,25 @@ define(function(){
 				callback(results);
 			});
 		},
+		updateEntry : function(id,  murl, name, callback){
+			this.getEntries(function(results){
+				var entries = results["entries"];
+				var entry;
+
+				for(key in entries){
+					if(key == id){
+						entries[key].url = murl;
+						entries[key].username = name;
+						entry = entries[key];
+					}
+				}
+				var storingEntries = browser.storage.local.set({"entries" : entries});
+				storingEntries.then(() => {
+					callback(entry);
+				});
+			});
+			
+		},
 		setUsernameQuickAdd: function(username){
 			var entry = {'username' : username};
 			browser.storage.local.set(entry);
@@ -147,9 +166,8 @@ define(function(){
 			var gettingEntries = browser.storage.local.get("entries");
 			gettingEntries.then((results) => {
 				var entries = results["entries"];
-				console.log(randID);
-				console.log(entries);
 				entries[randID] = credentials;
+				console.log(entries);
 				var storingEntry = browser.storage.local.set({"entries" : entries});
 				storingEntry.then(() => {
 					callback();

@@ -8,11 +8,11 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 			var entryContainer, content;
 			if(credential.category != null){
 				entryContainer = document.querySelector('#entryContainer');
-			content = '<div class="col-lg-3 col-md-3 col-xs-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3 col-md-3 col-xs-3">'+ credential.url +'</div><div class="col-lg-2 col-md-2 col-xs-2">'+ credential.username +'</div><div class="col-lg-4 col-md-4 col-xs-4"><div class="row"><div class="col-lg-6 col-md-6 col-xs-6">'+ credential.creationDate +'</div><div class="entry-actions"><div class="col-lg-2"></div><div class="col-lg-2"><a><i id="'+ randID +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.url+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
+				content = '<div class="col-lg-3 col-md-3 col-xs-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="uUrl col-lg-3 col-md-3 col-xs-3">'+ credential.url +'</div><div class="uUsername col-lg-3 col-md-3 col-xs-3">'+ credential.username +'</div><div class="col-lg-3 col-md-3 col-xs-3"><div class="row"><div class="col-lg-6 col-md-6 col-xs-6">'+ credential.creationDate +'</div><div class="entry-actions"><div class="col-lg-2 col-md-2 col-xs-2"></div><div class="col-lg-2 col-md-2 col-xs-2"><a><i id="'+ randID +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2 col-md-2 col-xs-2"><a id="open_'+credential.url+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
 			}else{
 				entryContainer = document.querySelector('#uniqueEntryContainer');
 				entryContainer.style.display = '';
-			content = '<div class="col-lg-3 col-md-3 col-xs-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3 col-md-3 col-xs-3">'+ credential.url +'</div><div class="col-lg-2 col-md-2 col-xs-2">'+ credential.username +'</div><div class="col-lg-4 col-md-4 col-xs-4"><div class="row"><div class="col-lg-3 col-md-3 col-xs-3">'+ credential.creationDate +'</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2"><span type="unique" url="'+credential.url+'" class="showPW">show</span></div><div class="col-lg-2"><a><i id="'+ randID+'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.url+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
+				content = '<div class="col-lg-3 col-md-3 col-xs-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="uUrl col-lg-3 col-md-3 col-xs-3">'+ credential.url +'</div><div class="uUsername col-lg-3 col-md-3 col-xs-3">'+ credential.username +'</div><div class="col-lg-3 col-md-3 col-xs-3"><div class="row"><div class="col-lg-3 col-md-3 col-xs-3">'+ credential.creationDate +'</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2 col-md-2 col-xs-2"><span type="unique" url="'+credential.url+'" class="showPW">show</span></div><div class="col-lg-2 col-md-2 col-xs-2"><a><i id="'+ randID+'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.url+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
 			}
 
 			var entryWrapper = document.createElement('div');
@@ -36,21 +36,13 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 
 		wrapper.append(content);
 
-
+		
 		//wrapper.append('<div class="row entry"><div class="col-lg-12"><h4>'+url+'</h4><hr><div class="row"><div class="col-lg-8"><p>'+credential.username+'</p></div><div class="col-lg-2 entry-icons"><i id="'+url+'" class="material-icons">delete</i></div><div class="col-lg-2 entry-icons"><i id="open_'+credential.id+'" class="material-icons">open_in_new</i></div></div>');
 		var deleteBtn = document.getElementById(randID);
 		var openBtn = document.getElementById("open_"+randID);
-
-		// openBtn.addEventListener('click', function(e){
-		// 	var creating = browser.tabs.create({
-		// 		url: credential.url
-		// 	});
-		// });
-		//id (== url) is saved in button
 		
 		deleteBtn.addEventListener('click',function(e){
 			evtTgt = e.target;
-			//TODO adapt to new storage design
 			deleteThisEntry(evtTgt.getAttribute('id'));
 			//remove from DOM
 			document.querySelector('#entryWrapper_'+randID).remove();	
@@ -67,8 +59,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 				//console.log(response);
 				favIcon = JSON.parse(response).icons[0].url;
 			}else{
-				console.log("fallback to placeholder");
-				//TODO create initial-placeholder
+				// fallback to placeholder
 				favIcon = "http://placehold.it/50/ffffff?text="+urlName.substring(0,1);
 			}
 
@@ -124,7 +115,6 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 		
 		deleteBtn.addEventListener('click',function(e){
 			evtTgt = e.target;
-			//TODO adapt to new storage design
 			deleteThisEntry(evtTgt.getAttribute('id'));
 			//remove from DOM
 			document.querySelector('#entryWrapper_'+randID).remove();	
@@ -141,8 +131,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 				//console.log(response);
 				favIcon = JSON.parse(response).icons[0].url;
 			}else{
-				console.log("fallback to placeholder");
-				//TODO create initial-placeholder
+				// fallback to placeholder
 				favIcon = "http://placehold.it/50/ffffff?text="+urlName.substring(0,1);
 			}
 
@@ -314,9 +303,8 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 
 				SL.getCategories(function(result){
 					var mCat = result;
-				//check if same name exists (--> override/change name or pw)
-				// if(categories.categories != null && categories.categories[name] != null){
-					// event.stopImmediatePropagation(); 
+					// fill modal options
+					fillDropdown(mCat.categories);
 					//push new entry 
 					mCat.categories[name] = cat;
 					//store changes
@@ -464,7 +452,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 	var showPWInput = exports.showPWInput = function(){
 		var storePW = ($('#btnAddPWD').text() === 'set password') ? true : false;
 		var txt = (storePW) ? 'remove password' : 'set password';
-		var msg = (storePW) ? 'A category password will be stored.' : 'Save your personal hint that helps to remember your password instead of storing it.';
+		var msg = (storePW) ? 'A category password will be stored.' : 'Save a hint that helps to remember your password instead of storing it.';
 		var icon = (storePW) ? 'lock_outline':'lightbulb_outline';
 		$('#btnAddPWD').html(txt);
 		$('#pw-hint span').html(msg);
@@ -518,7 +506,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 				$('#modalCategory #modalCategoryName').val(oldValue);
 
 				var txt = (hasPW) ? 'remove password' : 'set password';
-				var msg = (hasPW) ? 'A category password will be stored.' : 'Save your personal hint that helps to remember your password instead of storing it.';
+				var msg = (hasPW) ? 'A category password will be stored.' : 'Save a hint that helps to remember your password instead of storing it.';
 				var icon = (hasPW) ? 'lock_outline':'lightbulb_outline';
 				var pw = (hasPW) ? '*******' : '';
 				$('#btnAddPWD').html(txt);

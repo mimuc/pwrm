@@ -47,10 +47,80 @@ function addListeners(){
 	$('.button-floating').on('click', function(e) {
 		e.stopPropagation();
 	});
-	$(document).on('click', function(){
+	$(document).on('click', function(e){
 		$('#fab_wrapper').removeClass('button-floating-clicked'); // close FAB
+		// if(!$(e.target).hasClass('.entry-focused')){$('.entry-row').removeClass('entry-focused');} // unfocus entry
 		$('#search').val('') // clear search input
 	});
+
+	$(document).on('click', '.entry-row', function(e){
+		if(!$(this).hasClass('entry-focused')){
+			var ID = $(this).attr('id').split('_')[1];	
+			var backup = $(this).html();
+			$(this).addClass('entry-focused');
+			var murl = $(this).find('.uUrl').text();
+			var username = $(this).find('.uUsername').text();
+			var elem = $(this);
+
+
+			$(this).find('.uUrl').html('<form role="form" data-toggle="validator"><div class="form-group edit has-feedback"><input class="form-control" id="updateUrl" type="url" value="'+murl+'" required/><span class="glyphicon form-control-feedback" ></span><div class="help-block with-errors"></div></div></form>');
+			$(this).find('.uUsername').html('<form role="form" data-toggle="validator"><div class="form-group edit has-feedback"><input class="form-control" id="updateUsername" value="'+username+'" required/><span class="glyphicon form-control-feedback" ></span><div class="help-block with-errors"></div></div></form>');
+			// show entry actions + add store action
+			$(this).find('.entry-actions').replaceWith('<div class="col-lg-2 col-md-2 col-xs-2"><a class="updateConfirm btn btn-mp btn-primary"><i class="material-icons">check_circle</i></a></div><div class="col-lg-2 col-md-2 col-xs-2"></div><div class="col-lg-2 col-md-2 col-xs-2"><a class="updateCancel btn btn-mp btn-primary"><i class="material-icons">cancel</i></a></div>');
+
+			// add listeners confirm & cancel
+			$('.updateCancel').on('click', function(e){
+				e.preventDefault();
+				console.log(backup);
+				elem.removeClass('entry-focused');
+				elem.html(backup);
+			});
+			$('.updateConfirm').on('click', function(e){
+				e.preventDefault();
+				// validate form
+				var validate = elem.find('form').validator('validate');
+				if($(validate).find('.glyphicon-remove').length > 0){
+					console.log("input validate error");
+				}else{
+					// update this entry
+					updateEntry(ID);
+					elem.removeClass('entry-focused');
+					backup = backup.replace(murl, $('#updateUrl').val());
+					backup = backup.replace(username, $('#updateUsername').val());
+					elem.html(backup);
+				}
+
+			});
+			// autocorrect if protocol is missing
+			$('#updateUrl').on('focusout', function(){$(this).val(correctURL($(this).val()))});
+		}
+	});
+	// $(document).on('keypress', function(e){
+	// 	if(e.which == 99){ // 'c'
+	// 		$('#modalCategory').modal('show');
+	// 	}else if(e.which == 101){ // 'e'
+	// 		$('#modal-newEntry').modal('show');
+	// 	} 
+	// });
+
+	// add https://www. if not or partly typed
+	$('#enterURL').on('focusout', function(e){
+		var val = $(this).val();
+		$(this).val(correctURL(val));
+	});
+
+	function correctURL(val){
+		if(val!=''){
+			var add = 'https://www.';
+			val = val.replace('www.','');
+			val = val.replace('https://','');
+			val = val.replace('http://', '');
+			val = add+val;
+			return val;
+		}else{
+			return '';
+		}
+	}
 
 	$(document).on('click', '.showPW', function(e){
 		if(e.target.innerHTML == 'show'){
@@ -306,6 +376,8 @@ function changeBrowserAction(add){
 		chrome.browserAction.setIcon({path: icon2});
 }
 
+
+
 function setupPWMeter(){
 	var options = {
 		common: {
@@ -338,5 +410,11 @@ function openBackground(){
 		type: "panel",
 		height: 600,
 		width: 600
+	});
+}
+
+function updateEntry(id){
+	require(['MVC_Controller_Managerpage'], function(controller){
+		controller.updateEntry(id);
 	});
 }
