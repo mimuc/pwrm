@@ -53,20 +53,21 @@ function addListeners(){
 		$('#search').val('') // clear search input
 	});
 
-	$(document).on('click', '.entry-row', function(e){
-		if(!$(this).hasClass('entry-focused')){
-			var ID = $(this).attr('id').split('_')[1];	
-			var backup = $(this).html();
-			$(this).addClass('entry-focused');
-			var murl = $(this).find('.uUrl').text();
-			var username = $(this).find('.uUsername').text();
-			var elem = $(this);
+	$(document).on('click', '.editable', function(e){
+		var elem = $(this).parent();
+		if(!elem.hasClass('entry-focused')){
+			var ID = elem.attr('id').split('_')[1];	
+			var backup = elem.html();
+			elem.addClass('entry-focused');
+			var murl = elem.find('.uUrl').text();
+			var username = elem.find('.uUsername').text();
+			// var elem = elem;
 
 
-			$(this).find('.uUrl').html('<form role="form" data-toggle="validator"><div class="form-group edit has-feedback"><input class="form-control" id="updateUrl" type="url" value="'+murl+'" required/><span class="glyphicon form-control-feedback" ></span><div class="help-block with-errors"></div></div></form>');
-			$(this).find('.uUsername').html('<form role="form" data-toggle="validator"><div class="form-group edit has-feedback"><input class="form-control" id="updateUsername" value="'+username+'" required/><span class="glyphicon form-control-feedback" ></span><div class="help-block with-errors"></div></div></form>');
+			elem.find('.uUrl').html('<form role="form" data-toggle="validator"><div class="form-group edit has-feedback"><input class="form-control" id="updateUrl" type="url" value="'+murl+'" required/><span class="glyphicon form-control-feedback" ></span><div class="help-block with-errors"></div></div></form>');
+			elem.find('.uUsername').html('<form role="form" data-toggle="validator"><div class="form-group edit has-feedback"><input class="form-control" id="updateUsername" value="'+username+'" required/><span class="glyphicon form-control-feedback" ></span><div class="help-block with-errors"></div></div></form>');
 			// show entry actions + add store action
-			$(this).find('.entry-actions').replaceWith('<div class="col-lg-2 col-md-2 col-xs-2"><a class="updateConfirm btn btn-mp btn-primary"><i class="material-icons">check_circle</i></a></div><div class="col-lg-2 col-md-2 col-xs-2"></div><div class="col-lg-2 col-md-2 col-xs-2"><a class="updateCancel btn btn-mp btn-primary"><i class="material-icons">cancel</i></a></div>');
+			elem.find('.entry-actions').replaceWith('<div class="col-lg-2 col-md-2 col-xs-2"><a class="updateConfirm btn btn-mp btn-primary"><i class="material-icons">check_circle</i></a></div><div class="col-lg-2 col-md-2 col-xs-2"></div><div class="col-lg-2 col-md-2 col-xs-2"><a class="updateCancel btn btn-mp btn-primary"><i class="material-icons">cancel</i></a></div>');
 
 			// add listeners confirm & cancel
 			$('.updateCancel').on('click', function(e){

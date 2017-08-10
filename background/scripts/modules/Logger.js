@@ -20,8 +20,6 @@ define(['jquery', 'scripts/tools/storagemanagement'], function($, SM){
 		});
 	};
 
-	
-
 	return exports;
 
 });

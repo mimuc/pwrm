@@ -171,14 +171,14 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 		}
 		if(useUniquePWD){
 			var credential = {username: entryUsername, url: mUrl, password: pwdHash};
-			Logger.log({event: 'Add Entry', content: {entryUsername, mUrl}});
+			Logger.log({event: 'Add Entry', content: {mUrl}});
 			storeEntry(randID, credential, true);
 
 		}else{
 				// if(objTest.length < 1 && mUrl !== '' && entryUsername !== '') {
 					mUrl.value = ''; entryUsername.value = ''; entryCategory.value ='';
 					var credential = {category: entryCategory, username: entryUsername, url: mUrl};
-					Logger.log({event: 'Add Entry', content: credential});
+					Logger.log({event: 'Add Entry', content: {entryCategory, mUrl}});
 				// }
 				storeEntry(randID, credential, true);
 			}

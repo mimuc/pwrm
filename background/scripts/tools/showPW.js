@@ -66,11 +66,10 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 						for(key in e){
 							//pw entry found
 							if(e[key].url == entry && e[key].category == null){
-								console.log(e[key]);
-								console.log("passphrase: " + passphrase);
 								crypt.decrypt_rsa(e[key].password, passphrase, function(result){
 									if(mType == null){
 										elem.parent().parent().parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));
+
 										$('#modalMPW').modal('hide');
 										elem.html('hide');
 										
