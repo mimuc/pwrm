@@ -83,11 +83,16 @@ define(function(){
 			var gettingCategories = browser.storage.local.get("categories");
 			gettingCategories.then((results) => {
 				var res = results["categories"];
+				var name = catName.replace(' ', '_');
+				var def = name;
 				for(key in res){
-					if(key == catName){
-						callback(res[key][0]);
+					if(key == name){
+						def = res[key][0];
+						console.log("hint found");
 					}
 				}
+
+				callback(def);
 			});
 		},
 		findEntries : function(value, callback){

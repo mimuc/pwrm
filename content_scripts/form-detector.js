@@ -21,7 +21,7 @@ var context = this;
 //var URL = document.URL;
 // use location.origin to extract base url
 var URL = location.origin;
-console.log(typeof location);
+// console.log(typeof location);
 
 //check against type-attribute 
 var attr_name = "email";
@@ -68,20 +68,21 @@ function findForms(){
     var visibleAllInputs = filterHiddenInputs(allInputs);
 
     // console.log("Form "+ i +" has "+ visiblePWInputs.length +" (visible) PW Input and "+ visibleAllInputs.length +" other Input Elements.");
-    
-    if(visiblePWInputs.length < 2 && visibleAllInputs.length == 2){
+      console.log(visibleAllInputs);
+    if(visiblePWInputs.length < 2 && visibleAllInputs.length <= 3){
+    // if(visiblePWInputs.length < 2){
       console.log("Form " + i + " is a Login Form.");
       lookupStorage(forms[i]); //calls findInput(..) in case of existing entry for this url
-    }else 
-
-    if(visiblePWInputs.length == 2 || (visiblePWInputs.length == 1 && visibleAllInputs.length > 2)){
+    }
+    else if(visiblePWInputs.length == 2 || (visiblePWInputs.length == 1 && visibleAllInputs.length > 2)){
       console.log("Form " + i + " is a Signup Form.");
       findInput(forms[i], null, null, null);
-    }else 
-
-    if(visiblePWInputs.length > 2){
-      console.log("Form " + i + " might be a Reset Form.");
     }
+    // else 
+
+    // if(visiblePWInputs.length > 2){
+    //   console.log("Form " + i + " might be a Reset Form.");
+    // }
 
    } //end of for-loop
  }

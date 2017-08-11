@@ -204,6 +204,8 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 					console.log("ic :" + ic);
 					var _hasPW = (ic == 'folder') ? true : false;
 					console.log("hasPW: " + _hasPW);
+					console.log("catName: " + catName);
+					console.log("categoryName: " + categoryName);
 					SL.getHint(catName, function(result){
 						displayCategoryHeader(catName, _hasPW, result); //update hasPW before displaying header
 						controller.loadEntries(categoryName, false);

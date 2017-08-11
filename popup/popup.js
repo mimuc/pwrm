@@ -7,9 +7,8 @@ $(document).ready(function($) {
   // get prefill username
   // if exisiting delete it afterwards
   browser.storage.local.get('username').then((result) =>{
-    var username = result['username'];
+    var username = result["username"].username;
     // prefill
-    console.log(username);
     $('#enterName').val(username);
     // delete
     browser.storage.local.set({'username': ''});
