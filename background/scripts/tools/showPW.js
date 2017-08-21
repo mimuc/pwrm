@@ -27,10 +27,10 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 				});
 				$('.confirm').on('click', function(e){
 					e.preventDefault();
-						var val = $('#modalInputMPW').val();
-						if (val.length > 0){
-							getPW(val);
-						}
+					var val = $('#modalInputMPW').val();
+					if (val.length > 0){
+						getPW(val);
+					}
 				});
 			// call origin: content script 
 		}else{
@@ -38,8 +38,8 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 			entry = (unique) ? mUrl : mCategory;
 			getPW(mHash);
 		}
-			
-			
+
+
 			// function doubleCheckMPW(a, doNext){
 			// 	console.log("Function : doubleCheckMPW");
 			// 	var callback = function(res){
@@ -68,13 +68,16 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 							if(e[key].url == entry && e[key].category == null){
 								crypt.decrypt_rsa(e[key].password, passphrase, function(result){
 									if(mType == null){
-										elem.parent().parent().parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));
+										if(result!=null){
+											elem.parent().parent().parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));
 
-										$('#modalMPW').modal('hide');
-										elem.html('hide');
+											$('#modalMPW').modal('hide');
+											elem.html('hide');
+										}else{
+											alert("Entered Masterpassword was not correct.");
+										}
 										
 									}else{
-
 										mCallback(result.toString(CryptoJS.enc.Utf8));
 									}
 
@@ -98,9 +101,13 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 								crypt.decrypt_rsa(e[key][2], passphrase, function(result){
 									// console.log(result);
 									if(mType == null){
-										elem.parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));
-										$('#modalMPW').modal('hide');
-										elem.html('hide');
+										if(result!=null){
+											elem.parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));
+											$('#modalMPW').modal('hide');
+											elem.html('hide');
+										}else{
+											warning("Entered Masterpassword was not correct.");
+										}
 										
 									}else{
 										mCallback(result.toString(CryptoJS.enc.Utf8));

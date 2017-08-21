@@ -53,7 +53,11 @@ function setupInputMPW(elem){
 							//pw entry found
 							if(key == entry){
 								crypt.decrypt_aes(e[key].password, passphrase, function(result){
-									elem.parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));
+									if(result!=null){
+										elem.parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));
+									}else{
+										alert("Entered Masterpassword was not correct.");
+									}
 								});
 								
 								$('#inputMPW').val('');
@@ -76,7 +80,11 @@ function setupInputMPW(elem){
 
 							if(key == entry){
 								crypt.decrypt_aes(e[key][2], passphrase, function(result){
-									elem.parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));
+									if(result!=null){
+										elem.parent().find('.pwd-hidden').html(result.toString(CryptoJS.enc.Utf8));
+									}else{
+										alert("Entered Masterpassword was not correct.");
+									}
 								});
 
 								$('#inputMPW').val('');
