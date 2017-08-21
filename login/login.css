@@ -127,6 +127,13 @@ strong{
 	padding: 0 110px 0 75px;
 	height:510px;
 }
+
+.slide.pic{
+	padding:0;
+}
+.slide.pic > img{
+	width:600px;
+}
 .slide-wrapper{
 	width:9999px;
 }
