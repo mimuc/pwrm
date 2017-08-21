@@ -141,7 +141,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 	};
 	var displaySearchResults = exports.displaySearchResults = function(results){
 		$('#searchEntryContainer *').empty();
-		$('#searchResults-category').append('<h2 class="search-result-header"><i class="material-icons">book</i> in Category Passwords</h2>');
+		$('#searchResults-category').append('<h2 class="search-result-header"><i class="material-icons">book</i> in Reuse Passwords</h2>');
 		$('#searchResults-unique').append('<h2 class="search-result-header"><i class="material-icons">list</i> in Unique Passwords</h2>');
 		if(results!=0){
 			for(key in results){
@@ -454,7 +454,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 	var showPWInput = exports.showPWInput = function(){
 		var storePW = ($('#btnAddPWD').text() === 'set password') ? true : false;
 		var txt = (storePW) ? 'remove password' : 'set password';
-		var msg = (storePW) ? 'A category password will be stored.' : 'Save a hint that helps to remember your password instead of storing it.';
+		var msg = (storePW) ? 'A Reuse Password will be stored.' : 'Save a hint that helps to remember your password instead of storing it.';
 		var icon = (storePW) ? 'lock_outline':'lightbulb_outline';
 		$('#btnAddPWD').html(txt);
 		$('#pw-hint span').html(msg);
@@ -508,7 +508,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 				$('#modalCategory #modalCategoryName').val(oldValue);
 
 				var txt = (hasPW) ? 'remove password' : 'set password';
-				var msg = (hasPW) ? 'A category password will be stored.' : 'Save a hint that helps to remember your password instead of storing it.';
+				var msg = (hasPW) ? 'A Reuse Password will be stored.' : 'Save a hint that helps to remember your password instead of storing it.';
 				var icon = (hasPW) ? 'lock_outline':'lightbulb_outline';
 				var pw = (hasPW) ? '*******' : '';
 				$('#btnAddPWD').html(txt);
