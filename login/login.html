@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 
 <html>
 <head>
@@ -11,6 +11,7 @@
   <link href="../background/css/material/ripples.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../background/css/mp.css"/>
   <link rel="stylesheet" href="login.css"/>
+  <script data-main="applogin" src="../background/scripts/requirejs/require.js"></script>
   <title>Password-Reuse-Manager</title>
 </head>
 
@@ -23,7 +24,8 @@
   </div>  
   <form>
     <div class="form-group mpw">
-      <input type="password" class="form-control" id="inputMPW" placeholder="Your Masterpassword">
+      <input type="password" class="form-control" id="inputMPW_login" placeholder="Your Masterpassword">
+      <button id="submitlogin" class="btn-mp">CONFIRM</button>
     </div>
   </form>
 </div>

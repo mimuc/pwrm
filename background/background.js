@@ -2,6 +2,7 @@
 require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Managerpage', 'scripts/tools/showPW', 'scripts/tools/storagemanagement','scripts/cryptojs/rollups/sha512'],
 	function(Logger, controller, view, showPW, SM){
 
+
 		var addBtn = document.querySelector('#addEntry');
 		var addPWD = document.querySelector('#btnAddPWD');
 		var addCategory = document.querySelector('#addCategory');
@@ -16,11 +17,15 @@ require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Manag
 			$.material.init();
 			$('#section-categories').show();
 			// $('[data-toggle="tooltip"]').tooltip(); // enable hover tooltips 
+
+			setChallenge();
 			setup();
 			addListeners();
 			controller.displayNumberEntries();
 			window.addEventListener('resize', onResize, true);
 		});
+
+
 
 //searches for entries and displays results matching the typed letters
 function search(value){
@@ -29,6 +34,7 @@ function search(value){
 	$('#section-searchresults h1').html("Results for: '" + value + "'");
 	controller.search(value);
 }
+
 
 function onResize(){
 	// console.log($(window).width());
@@ -271,6 +277,7 @@ function addListeners(){
   	// reconfigure radiogroups
   	$('#optionsRadios1').prop('checked',true); 
   }
+
 //listen for tab changes to trigger form-detection (no reload needed)
 function handleActivated(activeInfo) {
 	// console.log("Tab " + activeInfo.tabId +" was activated");
@@ -353,6 +360,21 @@ function handleMessage(message, sender, sendResponse) {
 	}
 	
 }
+function setChallenge(){
+	console.log("setChallenge");
+// store encrypted object for login challenge
+// SM.getChallenge(function(result){
+	browser.storage.local.get('challenge').then((results) =>{
+	if(!results['challenge']){
+		var challengeObject = "4815162342";
+		controller.setChallenge(challengeObject);
+		console.log("new challenge stored");
+	}else{
+		console.log("challenge found");
+		
+	}
+});
+}
 //programmatically preselect options in dropdown
 function setSelectedIndex(select, index){
 	select.options[index-1].selected = true;
@@ -419,3 +441,5 @@ function updateEntry(id){
 		controller.updateEntry(id);
 	});
 }
+
+

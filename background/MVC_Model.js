@@ -228,6 +228,11 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 			controller.displaySearchResults(results);
 		});
 	};
+	var setChallenge = exports.setChallenge = function(challengeObject){
+		crypt.encrypt_rsa(challengeObject, function(data){	
+			SL.setChallenge(data);
+		});
+	};
 	var decrypt = exports.decrypt = function(content, callback){
 		crypt.auto_decrypt_rsa(content, function(dec){
 			// console.log(dec);

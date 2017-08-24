@@ -36,8 +36,8 @@
      <div class="water-drop"></div>
      <div class="button button-floating"></div>
      <div class="button-floating-shadow"></div>
-     <div class="button button-sub" data-toggle="modal" data-target="#modal-newEntry"><p class="next-to-button">Entry</p><div class="text-center"><i class="material-icons">bookmark</i></div></div>
-     <div class="button button-sub" data-toggle="modal" data-target="#modalCategory"><p class="next-to-button">Category</p><div class="text-center"><i class="material-icons">book</i></div></div>
+     <div class="button button-sub" data-toggle="modal" data-target="#modal-newEntry"><p class="next-to-button">Account</p><div class="text-center"><i class="material-icons">bookmark</i></div></div>
+     <div class="button button-sub" data-toggle="modal" data-target="#modalCategory"><p class="next-to-button">Password</p><div class="text-center"><i class="material-icons">book</i></div></div>
      <!--  <div class="button button-sub" data-toggle="modal" data-target="#modalModification"><p class="next-to-button">Modification</p><div class="text-center"><i class="material-icons">cached</i></div></div> -->
    </div>
  </div>
@@ -86,7 +86,7 @@
     <div class="row content" id="content">
      <div class="page-header">
        <h1><i class="material-icons"></i>Reuse Passwords</h1>
-       <p class="section-content">Organise your reused passwords - each element represents a single password. You can assign multiple accounts that (re)use that password to a category. The actual storage of passwords is optional.</p>
+       <p class="section-content">Organise your reused passwords - each card element represents a single password. You can assign multiple accounts that (re)use that password to a "category". The actual storage of passwords is optional.</p>
      </div>
      <div id="categoryContainer"></div>
    </div>
@@ -100,7 +100,7 @@
    <div class="content row">
      <div class="page-header">
        <h1>Unique Passwords</h1>
-       <p class="section-content">Here you find all entries you explicitly create with a stored password.</p>
+       <p class="section-content">Here you find all account entries you explicitly create with a stored password.</p>
      </div>
      <div class="card-wrapper">
        <div id="uniqueEntryContainer">
@@ -200,7 +200,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title">New Entry</h2>
+        <h2 class="modal-title">New Account Entry</h2>
       </div>
       <div class="modal-body">
         <form role="form" data-toggle="validator"> 
@@ -236,7 +236,7 @@
        </form>
        <form role="form" data-toggle="validator">
         <div class="form-group radio-option option-category" value="option-category">
-          <label for="categoryDropdown">Choose Password Category</label>
+          <label for="categoryDropdown">Choose Reuse Password</label>
           <select class="form-control" id="categoryDropdown"><!-- fill <options> on init() --></select>
           <a class="link" data-toggle="modal" data-target="#modalCategory">Create new Reuse Password</a>
         </div>
@@ -267,7 +267,7 @@
        <form role="form" data-toggle="validator">
         <div class="form-group has-feedback">
           <!-- <label for="category-name">Category Name</label> -->
-          <input type="text" minlength="1" class="form-control" id="modalCategoryName" placeholder="Category Name" required>
+          <input type="text" minlength="1" class="form-control" id="modalCategoryName" placeholder="Give it a Name" Name" required>
           <span class="glyphicon form-control-feedback" ></span>
           <div class="help-block with-errors"></div>
         </div>
@@ -284,7 +284,7 @@
         </div>
         <div id="enter-category-hint" class="form-group has-feedback">
           <label for="category-hint">Enter a Hint for this Reuse Password</label>
-          <input type="text" minlength="1" class="form-control" id="category-hint" placeholder="Your hint" required>
+          <input type="text" minlength="1" class="form-control" id="category-hint" placeholder="Your Hint (e.g. my first movie & old password)" required>
           <span class="glyphicon form-control-feedback" ></span>
           <div class="help-block with-errors"></div>
         </div>

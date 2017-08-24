@@ -1,5 +1,5 @@
 define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jquery', 'scripts/tools/storagemanagement', 'MVC_Controller_Managerpage', 'psl'],
-	function(tools, showPW, crypt, $, SL, controller, psl) {
+	function(tools, showPW, crypt, $, SM, controller, psl) {
 		var exports = {};
 
 		var displayEntry = exports.displayEntry = function(randID, urlName, credential, hasCategory) {
@@ -206,7 +206,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 					console.log("hasPW: " + _hasPW);
 					console.log("catName: " + catName);
 					console.log("categoryName: " + categoryName);
-					SL.getHint(catName, function(result){
+					SM.getHint(catName, function(result){
 						displayCategoryHeader(catName, _hasPW, result); //update hasPW before displaying header
 						controller.loadEntries(categoryName, false);
 						
@@ -260,7 +260,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 			setupModalCategory(false);
 			$('#categoryContainer').empty();
 			// setupShowButton();
-			SL.getCategories(function(c){	
+			SM.getCategories(function(c){	
 				var categories = c.categories;
 				var index=0;
 				for(c in categories){			
@@ -303,14 +303,14 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 				var randID = guidGenerator();
 				
 
-				SL.getCategories(function(result){
+				SM.getCategories(function(result){
 					var mCat = result;
 					// fill modal options
 					fillDropdown(mCat.categories);
 					//push new entry 
 					mCat.categories[name] = cat;
 					//store changes
-					SL.setCategories(mCat, function(){
+					SM.setCategories(mCat, function(){
 						//empty entry container
 						if(!isNew){
 							var entryContainer = document.getElementById("entryContainer");
@@ -347,9 +347,9 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 		};
 		var displayNumberEntries = exports.displayNumberEntries = function(){
 			console.log("View : displayNumberEntries");
-			SL.getCategories(function(catResults){
+			SM.getCategories(function(catResults){
 				var categories = catResults["categories"];
-				SL.countEntries(categories, function(cKeys){
+				SM.countEntries(categories, function(cKeys){
 					console.log(cKeys);
 					// cKeys[catname] = number;
 					for(cKey in cKeys){
@@ -583,7 +583,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 			}
 			//store entries
 			if(newEntries != null){
-				SL.setEntries(newEntries, function(){
+				SM.setEntries(newEntries, function(){
 					console.log("store success");
 					displayNumberEntries();
 					fillDropdown(categories.categories);

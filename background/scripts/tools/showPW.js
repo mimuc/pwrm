@@ -39,20 +39,7 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 			getPW(mHash);
 		}
 
-
-			// function doubleCheckMPW(a, doNext){
-			// 	console.log("Function : doubleCheckMPW");
-			// 	var callback = function(res){
-			// 		if(a.toString() == res.toString()){
-			// 			doNext();
-			// 		}
-			// 	}
-			// 	getMPW(callback);
-			// }
-
-			function getMPW(callback){
-				browser.storage.local.get("mpw").then(function(res){callback(res.mpw);});
-			}
+		
 
 			function getPW(passphrase){
 				
@@ -106,7 +93,7 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 											$('#modalMPW').modal('hide');
 											elem.html('hide');
 										}else{
-											warning("Entered Masterpassword was not correct.");
+											alert("Entered Masterpassword was not correct.");
 										}
 										
 									}else{

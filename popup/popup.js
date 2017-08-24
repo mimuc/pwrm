@@ -14,10 +14,9 @@ $(document).ready(function($) {
     browser.storage.local.set({'username': ''});
   });
   // check if is first start
-  browser.storage.local.get('mpw').then((result) =>{
-    if(result['mpw']==null){
+  browser.storage.local.get('challenge').then((result) =>{
+    if(result['challenge']==null){
       $('#fab_wrapper').hide();
-      // redirect to login
       openPopup();
    }
  });

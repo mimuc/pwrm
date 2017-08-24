@@ -8,7 +8,7 @@ define(['scripts/cryptojs/rollups/aes','scripts/tools/storagemanagement', 'scrip
 				}else{
 					sl.getPublicKey(function(publicKey){
 						var encryptionResult = cryptico.encrypt(msg, publicKey);
-						console.log(encryptionResult.cipher);
+						// console.log(encryptionResult.cipher);
 						callback(encryptionResult);
 					}); 
 				}

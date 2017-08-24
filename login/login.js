@@ -2,12 +2,13 @@
 $(document).ready(function() {
 	$.material.init();
 	//if no rsa key pair was set in local storage: init onboarding
-	var getting = browser.storage.local.get("rsa_enc");
+	// var getting = browser.storage.local.get("rsa_enc");
+	var getting = browser.storage.local.get("challenge");
 	getting.then((results) => {
-		if(results["rsa_enc"] == null){
+		if(results["challenge"] == null){
 			initOnboarding();
 		}else{
-			openManager();
+			initLogin();
 		}
 	});
 
@@ -15,7 +16,7 @@ $(document).ready(function() {
 
 // show onboarding ui elements
 function initOnboarding(){
-	// set webexID for Logging
+	// set default webexID for Logging
 	browser.storage.local.set({"webexID" : "123456789"});
 	
 	var slide = 0;
@@ -60,7 +61,6 @@ function initOnboarding(){
 	});
 	
 }
-
 function openManager(){
 	var gettingAllWindows = browser.windows.getAll();
 	gettingAllWindows.then(function(aRes){
@@ -94,35 +94,63 @@ function openManager(){
 	});
 	});
 }
-
 $(document).keypress(function(e) {
+	// ENTER KEY PRESSED
 	if(e.which == 13) {
 		e.preventDefault();
-		if(!$('.onboarding').hasClass('hidden')){
-			var mpw = $('#inputCreateMPW').val();
-			//store mpw (deleted after check)
-			// console.log(CryptoJS.SHA512(mpw).toString());
-			browser.storage.local.set({"mpw" : CryptoJS.SHA512(mpw).toString()});
-			$('.onboarding').fadeOut().addClass('hidden');
-			$('.onboarding_2').removeClass('hidden').fadeIn();
+		// case: enter MPW for login challenge
+		if(!$('.login').hasClass('hidden')){
+			var mpw = $('#inputMPW_login').val();
+			doChallenge(mpw,		
+				function(){ console.log("challenge success")},
+			 	function(){ alert('Your Masterpassword was not correct.');} // failure
+			 	);
 		}else{
+			// case: enter new MPW
+			if(!$('.onboarding').hasClass('hidden')){
+				var mpw = $('#inputCreateMPW').val();
+				//store mpw (deleted after check)
+				// console.log(CryptoJS.SHA512(mpw).toString());
+				browser.storage.local.set({"mpw" : CryptoJS.SHA512(mpw).toString()});
+				$('.onboarding').fadeOut().addClass('hidden');
+				$('.onboarding_2').removeClass('hidden').fadeIn();
+			// case: confirm MPW
+		}else if(!$('.onboarding_2').hasClass('hidden')){
 			var mpwr = CryptoJS.SHA512($('#inputConfirmMPW').val()).toString();
-			// console.log(mpwr);
 			var mpw = $('#inputConfirmMPW').val();
-
 			doubleCheckMPW(mpwr,
 				function(){
 					$('.onboarding_2').fadeOut().addClass('hidden');
 					$('.onboarding_3').removeClass('hidden').fadeIn();
 					createRSAKeys(mpw);
+					browser.storage.local.remove('mpw');
 				},
 				function(){
+					// $('#inputCreateMPW').addClass("");
 					alert("Passwords do not match!");
 				});
 		}
 	}
+}
 });
 
+function doChallenge(passphrase, success, failure){
+	browser.storage.local.get('challenge').then((results) =>{
+		require(['../background/scripts/tools/storagemanagement', '../background/scripts/tools/crypt'], function(SM, crypt){
+			SM.getChallenge(function(res){
+				// console.log(res);
+				crypt.decrypt_rsa(res, passphrase, function(result){
+					// console.log(result);
+					if(result){
+						openManager();
+					}else{
+						alert('Your Masterpassword was not correct.');
+					}
+				});
+			});
+		});
+	});
+}
 $('#restart').click(function(){
 	browser.storage.local.set({"mpw" : {}});
 	// empty input
@@ -136,7 +164,6 @@ $('#restart').click(function(){
 	$('.onboarding_2').fadeOut().addClass('hidden');
 	$('.onboarding').removeClass('hidden').fadeIn();
 });
-
 $('.onboarding a.btn-mp').click(function(){
 	var mpw = $('#inputCreateMPW').val();
 	
@@ -144,7 +171,6 @@ $('.onboarding a.btn-mp').click(function(){
 	$('.onboarding').fadeOut().addClass('hidden');
 	$('.onboarding_2').removeClass('hidden').fadeIn();
 });
-
 $('.onboarding_2 a.btn-mp').click(function(){
 	var mpwr = CryptoJS.SHA512($('#inputConfirmMPW').val()).toString();
 	var mpw = $('#inputConfirmMPW').val();
@@ -154,16 +180,16 @@ $('.onboarding_2 a.btn-mp').click(function(){
 			$('.onboarding_2').fadeOut().addClass('hidden');
 			$('.onboarding_3').removeClass('hidden').fadeIn();
 			createRSAKeys(mpw);
+			browser.storage.local.remove('mpw');
 		},
 		function(){
 			// $('#inputCreateMPW').addClass("");
 			alert("Passwords do not match!");
 		});
 });
-
-
 function createRSAKeys(mpw){
 	var passphrase = mpw;
+	// console.log(passphrase);
 	var bits = 1024;
 
 	// create RSA Key pair
@@ -176,7 +202,7 @@ function createRSAKeys(mpw){
 	});
 	// extract public key and store it [rsa_public]
 	var mPublicKeyString = cryptico.publicKeyString(mRSAkey); 
-    browser.storage.local.set({'public_rsa' : mPublicKeyString});  
+	browser.storage.local.set({'public_rsa' : mPublicKeyString});  
 
     // serialize rsa object for encryption
     var RSAKeyString = JSON.stringify(mRSAkey);
@@ -192,7 +218,6 @@ function createRSAKeys(mpw){
 	browser.storage.local.set({'rsa_enc' : encrypted_rsa});
 	
 }
-
 function doubleCheckMPW(a, doNext, showError){
 	console.log("Function : doubleCheckMPW");
 	// console.log(a);
@@ -207,17 +232,23 @@ function doubleCheckMPW(a, doNext, showError){
 	}
 	getMPW(callback);
 }
-
 function getMPW(callback){
 	browser.storage.local.get("mpw").then(function(res){callback(res);
 	});
 }
-
-// show login ui elements
-// deprecated
+// show and setup login ui elements
 function initLogin(){
 	console.log("Function : initLogin");
-	$('#inputMPW').get(0).focus();
+	$('#inputMPW_login').get(0).focus();
+
+	$('#submitlogin').on('click', function(e){
+		e.preventDefault();
+		var mpw = $('#inputMPW_login').val();
+		doChallenge(mpw,		
+			function(){ console.log("challenge success")},
+			 	function(){ alert('Your Masterpassword was not correct.');} // failure
+		);
+	});
 
 	var gettingCurrent = browser.windows.getCurrent();
 	gettingCurrent.then(function(cRes){

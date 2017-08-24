@@ -1,4 +1,5 @@
 /* get storage items */
+// copy of original
 define(function(){
 	return{
 		getChallenge: function(callback){
