@@ -200,6 +200,8 @@ function createRSAKeys(mpw){
 		keySize: 256/32, 
 		iterations: 100
 	});
+
+	browser.storage.local.set({'enc-key' : key});
 	// extract public key and store it [rsa_public]
 	var mPublicKeyString = cryptico.publicKeyString(mRSAkey); 
 	browser.storage.local.set({'public_rsa' : mPublicKeyString});  

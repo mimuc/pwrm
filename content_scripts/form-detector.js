@@ -358,7 +358,6 @@ function showSignupHintbox(i){
     i.classList.add('signup');
 
     $('input.mpinput.signup').on('click', function(e){
-
      $('.hintbox.signup .grid.middle').html('Reusing a Password?');
      var parentOffset = $(this).offset(); 
      var relX = (e.pageX - parentOffset.left)/($(this).width());

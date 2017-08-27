@@ -10,13 +10,6 @@ define(function(){
 			var val = {'challenge' : value};
 			browser.storage.local.set(val);
 		},
-		getMPWHash: function(callback){
-			browser.storage.local.get('mpw').then((results) =>{
-				callback(results);
-			});
-		},
-		//
-		
 		getMPW: function(callback){
 			browser.storage.local.get('mpw-tmp').then((results) =>{
 				callback(results['mpw-tmp']);
@@ -26,11 +19,15 @@ define(function(){
 			var val = {"mpw-tmp" : value};
 			browser.storage.local.set(val);
 		},
-		setMPWHash: function(value){
-			var val = {"mpw" : CryptoJS.SHA512(value)};
+		getEncryptionKey: function(callback){
+			browser.storage.local.get('enc-key').then((results) =>{
+				callback(results['enc-key']);
+			});
+		},
+		setEncryptionKey: function(value){
+			var val = {"enc-key" : value};
 			browser.storage.local.set(val);
 		},
-
 		//
 		getPublicKey: function(callback){
 			browser.storage.local.get('public_rsa').then((results) =>{

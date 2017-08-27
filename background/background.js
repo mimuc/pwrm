@@ -1,6 +1,6 @@
 
-require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Managerpage', 'scripts/tools/showPW', 'scripts/tools/storagemanagement','scripts/cryptojs/rollups/sha512'],
-	function(Logger, controller, view, showPW, SM){
+require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Managerpage', 'scripts/tools/showPW', 'scripts/tools/storagemanagement','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'],
+	function(Logger, controller, view, showPW, SM, crypt){
 
 
 		var addBtn = document.querySelector('#addEntry');
@@ -22,7 +22,6 @@ require(['scripts/modules/Logger', 'MVC_Controller_Managerpage', 'MVC_View_Manag
 			setup();
 			addListeners();
 			controller.displayNumberEntries();
-			window.addEventListener('resize', onResize, true);
 		});
 
 
@@ -35,10 +34,6 @@ function search(value){
 	controller.search(value);
 }
 
-
-function onResize(){
-	// console.log($(window).width());
-}
 
 function showSection(clicked, section){
 	var activeSection = $(section);
@@ -186,18 +181,31 @@ function addListeners(){
 	});
 	// store mpw for auto-decryption for autofilling option
 	function tmpStoreMPW(){
-		browser.storage.local.get("mpw").then(function(res){
-			if(res['mpw'] == CryptoJS.SHA512($('#modalInputMPW').val()).toString()){
+		// browser.storage.local.get("mpw").then(function(res){
+		// 	if(res['mpw'] == CryptoJS.SHA512($('#modalInputMPW').val()).toString()){
+		// 		SM.setMPW($('#modalInputMPW').val());
+		// 		$('#modalMPW').modal('hide');
+		// 		// activate checkbox
+		// 		$('#pref_autofill_password').prop('checked', true);
+		// 		SM.updatePreferences('pref_autofill_password', true);
+
+		// 	}else{
+		// 		alert("Entered password was not correct.");
+		// 	}
+		// });
+
+		doChallenge($('#modalInputMPW').val(),
+			function(){
 				SM.setMPW($('#modalInputMPW').val());
 				$('#modalMPW').modal('hide');
 				// activate checkbox
 				$('#pref_autofill_password').prop('checked', true);
 				SM.updatePreferences('pref_autofill_password', true);
-
-			}else{
+			},
+			function(){
 				alert("Entered password was not correct.");
 			}
-		});
+			);
 
 	}
 	$('#burger').on('click', function(){toggleNavigation();});
@@ -337,6 +345,7 @@ function handleMessage(message, sender, sendResponse) {
 	}else if(message.task =="log"){
 		Logger.log(message.content);
 	}else if(message.task == "decrypt"){
+		console.log("msg task decrypt received");
 		controller.decrypt(message.content, message.target);
 	}else if(message.task == "requestAutofillPW"){
 		console.log("received requestAutofillPW");
@@ -365,15 +374,15 @@ function setChallenge(){
 // store encrypted object for login challenge
 // SM.getChallenge(function(result){
 	browser.storage.local.get('challenge').then((results) =>{
-	if(!results['challenge']){
-		var challengeObject = "4815162342";
-		controller.setChallenge(challengeObject);
-		console.log("new challenge stored");
-	}else{
-		console.log("challenge found");
-		
-	}
-});
+		if(!results['challenge']){
+			var challengeObject = "4815162342";
+			controller.setChallenge(challengeObject);
+			console.log("new challenge stored");
+		}else{
+			console.log("challenge found");
+
+		}
+	});
 }
 //programmatically preselect options in dropdown
 function setSelectedIndex(select, index){
@@ -440,6 +449,27 @@ function updateEntry(id){
 	require(['MVC_Controller_Managerpage'], function(controller){
 		controller.updateEntry(id);
 	});
+}
+
+function doChallenge(passphrase, success, failure){
+	browser.storage.local.get('challenge').then((res) =>{
+		console.log("doing challenge: " + passphrase);
+
+		require(['scripts/tools/crypt'], function(crypt){
+				// console.log(res);
+				crypt.decrypt_rsa(res['challenge'], passphrase, function(result){
+					// console.log(result);
+					if(result){
+						success();
+					}else{
+						failure();
+					}
+
+				});
+
+			});
+	});
+	
 }
 
 

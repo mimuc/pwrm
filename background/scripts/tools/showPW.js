@@ -69,10 +69,7 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 									}
 
 								});
-
-
-								
-								
+	
 							}
 						}
 
