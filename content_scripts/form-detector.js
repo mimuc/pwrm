@@ -1,5 +1,4 @@
-console.log("form-detector.js injected");
-
+console.log("form-detector.js injected"); 
 /* load material iconfont */
 var mi = document.createElement('style');
 mi.type = 'text/css';
@@ -7,6 +6,7 @@ mi.textContent = '@font-face { font-family: material-icons; src: url("'
 + chrome.extension.getURL('content_scripts/material-icons/MaterialIcons-Regular.woff')
 + '"); }';
 document.head.appendChild(mi);
+
 
 /* trigger storage lookup for matching accounts */
 window.addEventListener("DOMContentLoaded", init());
@@ -34,7 +34,7 @@ var regex_pw = /pass|password/;
 function init(){
   console.log("Function : init");
   //workaround to wait for DOM Elements being loaded async after DOMContentLoaded
-  setTimeout(function() { findForms(); }, 500);
+  setTimeout(function() { findForms(); }, 10);
 }
 
 function findForms(){
@@ -68,7 +68,7 @@ function findForms(){
     var visibleAllInputs = filterHiddenInputs(allInputs);
 
     // console.log("Form "+ i +" has "+ visiblePWInputs.length +" (visible) PW Input and "+ visibleAllInputs.length +" other Input Elements.");
-      console.log(visibleAllInputs);
+    console.log(visibleAllInputs);
     if(visiblePWInputs.length < 2 && visibleAllInputs.length <= 3){
     // if(visiblePWInputs.length < 2){
       console.log("Form " + i + " is a Login Form.");
