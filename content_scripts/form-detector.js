@@ -34,7 +34,7 @@ var regex_pw = /pass|password/;
 function init(){
   console.log("Function : init");
   //workaround to wait for DOM Elements being loaded async after DOMContentLoaded
-  setTimeout(function() { findForms(); }, 10);
+  findForms();
 }
 
 function findForms(){
