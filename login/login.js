@@ -102,7 +102,7 @@ $(document).keypress(function(e) {
 		if(!$('.login').hasClass('hidden')){
 			var mpw = $('#inputMPW_login').val();
 			doChallenge(mpw,		
-				function(){ console.log("challenge success")},
+				function(){ openManager();},
 			 	function(){ alert('Your Masterpassword was not correct.');} // failure
 			 	);
 		}else{
@@ -139,12 +139,13 @@ function doChallenge(passphrase, success, failure){
 		require(['../background/scripts/tools/storagemanagement', '../background/scripts/tools/crypt'], function(SM, crypt){
 			SM.getChallenge(function(res){
 				// console.log(res);
+				console.log(res);
 				crypt.decrypt_rsa(res, passphrase, function(result){
 					// console.log(result);
 					if(result){
-						openManager();
+						success();
 					}else{
-						alert('Your Masterpassword was not correct.');
+						failure();
 					}
 				});
 			});
@@ -247,7 +248,7 @@ function initLogin(){
 		e.preventDefault();
 		var mpw = $('#inputMPW_login').val();
 		doChallenge(mpw,		
-			function(){ console.log("challenge success")},
+			function(){ openManager();},
 			 	function(){ alert('Your Masterpassword was not correct.');} // failure
 		);
 	});
