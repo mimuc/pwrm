@@ -65,6 +65,9 @@
 .hintbox_head.focused{
 	
 }
+.hintbox p, .hintbox div{
+	font-size: 14px !important;
+}
 
 #hbpwrms .hintbox_content{
 	padding: 0 !important;
@@ -226,7 +229,7 @@ hr{
 	transition: height,  0.2s cubic-bezier(.25,.8,.25,1);
 }
 .mp-hidden.open {
-	height:132px !important;
+	height:auto !important;
 	/*border-bottom: 1px solid black;
 	border-left: 1px solid black;
 	border-right: 1px solid black;*/

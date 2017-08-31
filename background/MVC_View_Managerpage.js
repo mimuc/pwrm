@@ -246,9 +246,9 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 		
 
 		if(hasPW){
-			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock_outline</i><span class="pwd-hidden">*******</span><span type="cat" cat="'+name+'" class="showPW">show</span><br><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a><a id="directAddEntry" class="btn btn-mp light" data-toggle="modal" data-value="'+name+'" data-target="#modal-newEntry">Add Entry</a></div></div><hr>');
+			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock_outline</i><span class="pwd-hidden">*******</span><span type="cat" cat="'+name+'" class="showPW">show</span><br><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" hint="'+ hint +'" oldValue="'+ name +'">Edit category</a><a id="directAddEntry" class="btn btn-mp light" data-toggle="modal" data-value="'+name+'" data-target="#modal-newEntry">Add Entry</a></div></div><hr>');
 		}else{
-			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lightbulb_outline</i> Your personal hint for this password: <strong>"'+hint+'"</strong><br><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" oldValue="'+ name +'">Edit category</a><a id="directAddEntry" class="btn btn-mp light" data-toggle="modal" data-value="'+name+'" data-target="#modal-newEntry">Add Entry</a></div><hr>');
+			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lightbulb_outline</i> Your personal hint for this password: <strong>"'+hint+'"</strong><br><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" hint="'+ hint +'" oldValue="'+ name +'">Edit category</a><a id="directAddEntry" class="btn btn-mp light" data-toggle="modal" data-value="'+name+'" data-target="#modal-newEntry">Add Entry</a></div><hr>');
 		}
 			//configure modal here (event.relatedTarget is created dynamically)
 			setupModalCategory(hasPW);
@@ -492,20 +492,25 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 			$('#modalAction').toggleClass('hidden');
 		});
 		$('#modalCategory').on('show.bs.modal', function (e) {
+			// empty all inputs
+			$('input').val('');
 
 			$('#modalYesNo').addClass('hidden');
 			$('#modalAction').removeClass('hidden');
 			var oldValue = $('#editCategory').attr('oldValue');
+			var hint = $('#editCategory').attr('hint');
 
 			if($(e.relatedTarget).hasClass('button-sub')){
 				console.log("relatedTarget has button-sub");
 				$('#modalCategory #modalCategoryName').val('');
 				$('#modalCategory').addClass('new');
 				$('#editCategory').attr('oldValue', '');
+				$('#editCategory').attr('hint', '');
 				//do nothing --> completely new category when triggered from FAB button
 			}else{
 				$('#modalCategory').removeClass('new');
 				$('#modalCategory #modalCategoryName').val(oldValue);
+				$('#category-hint').val(hint);
 
 				var txt = (hasPW) ? 'remove password' : 'set password';
 				var msg = (hasPW) ? 'A Reuse Password will be stored.' : 'Save a hint that helps to remember your password instead of storing it.';
