@@ -48,7 +48,7 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 				if(unique){
 					// get unique pw
 					console.log("get unique pw");
-					browser.storage.local.get("entries").then(function(res){
+					browser.storage.sync.get("entries").then(function(res){
 						var e = res.entries;
 						for(key in e){
 							//pw entry found
@@ -76,7 +76,7 @@ define(['jquery','scripts/tools/crypt', 'scripts/cryptojs/rollups/sha512'] ,func
 					});
 				}else{
 					//get category pw
-					browser.storage.local.get("categories").then(function(res){
+					browser.storage.sync.get("categories").then(function(res){
 						var e = res.categories
 						// console.log("for category: " + entry);
 						for(key in e){

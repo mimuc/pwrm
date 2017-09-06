@@ -16,7 +16,7 @@ define(['scripts/cryptojs/rollups/aes','scripts/tools/storagemanagement', 'scrip
 
 			decrypt_rsa:  function(encryptedObject, passphrase, callback){
 				// recreate rsa key
-				var mRSAkey = cryptico.generateRSAKey(passphrase, 1024);
+				var mRSAkey = cryptico.generateRSAKey(passphrase, 2048);
 				// decrypt message using RSA Key
 				var decryptionResult = cryptico.decrypt(encryptedObject.cipher, mRSAkey);
 
@@ -27,7 +27,7 @@ define(['scripts/cryptojs/rollups/aes','scripts/tools/storagemanagement', 'scrip
 			// working version where rsa key is recreated with stored mpw
 			sl.getMPW(function(result){
 				// recreate rsa key
-				var mRSAkey = cryptico.generateRSAKey(result, 1024);
+				var mRSAkey = cryptico.generateRSAKey(result, 2048);
 				// decrypt message using RSA Key
 				var decryptionResult = cryptico.decrypt(encryptedObject.cipher, mRSAkey);
 

@@ -2,8 +2,8 @@
 $(document).ready(function() {
 	$.material.init();
 	//if no rsa key pair was set in local storage: init onboarding
-	// var getting = browser.storage.local.get("rsa_enc");
-	var getting = browser.storage.local.get("challenge");
+	// var getting = browser.storage.sync.get("rsa_enc");
+	var getting = browser.storage.sync.get("challenge");
 	getting.then((results) => {
 		if(results["challenge"] == null){
 			initOnboarding();
@@ -17,7 +17,7 @@ $(document).ready(function() {
 // show onboarding ui elements
 function initOnboarding(){
 	// set default webexID for Logging
-	browser.storage.local.set({"webexID" : "123456789"});
+	browser.storage.sync.set({"webexID" : "123456789"});
 	
 	var slide = 0;
 	console.log("Function : initOnboarding");
@@ -56,7 +56,7 @@ function initOnboarding(){
 	$('#btnOpenManager').on('click', function(){
 		var mode = $('input:radio:checked').val();
 		// console.log(mode);
-		browser.storage.local.set({'mode' : mode});
+		browser.storage.sync.set({'mode' : mode});
 		openManager();
 	});
 	
@@ -111,7 +111,7 @@ $(document).keypress(function(e) {
 				var mpw = $('#inputCreateMPW').val();
 				//store mpw (deleted after check)
 				// console.log(CryptoJS.SHA512(mpw).toString());
-				browser.storage.local.set({"mpw" : CryptoJS.SHA512(mpw).toString()});
+				browser.storage.sync.set({"mpw" : CryptoJS.SHA512(mpw).toString()});
 				$('.onboarding').fadeOut().addClass('hidden');
 				$('.onboarding_2').removeClass('hidden').fadeIn();
 			// case: confirm MPW
@@ -123,7 +123,7 @@ $(document).keypress(function(e) {
 					$('.onboarding_2').fadeOut().addClass('hidden');
 					$('.onboarding_3').removeClass('hidden').fadeIn();
 					createRSAKeys(mpw);
-					browser.storage.local.remove('mpw');
+					browser.storage.sync.remove('mpw');
 				},
 				function(){
 					// $('#inputCreateMPW').addClass("");
@@ -135,7 +135,7 @@ $(document).keypress(function(e) {
 });
 
 function doChallenge(passphrase, success, failure){
-	browser.storage.local.get('challenge').then((results) =>{
+	browser.storage.sync.get('challenge').then((results) =>{
 		require(['../background/scripts/tools/storagemanagement', '../background/scripts/tools/crypt'], function(SM, crypt){
 			SM.getChallenge(function(res){
 				// console.log(res);
@@ -153,7 +153,7 @@ function doChallenge(passphrase, success, failure){
 	});
 }
 $('#restart').click(function(){
-	browser.storage.local.set({"mpw" : {}});
+	browser.storage.sync.set({"mpw" : {}});
 	// empty input
 	$('#inputCreateMPW').val('');
 	// hide pwmeter
@@ -168,7 +168,7 @@ $('#restart').click(function(){
 $('.onboarding a.btn-mp').click(function(){
 	var mpw = $('#inputCreateMPW').val();
 	
-	browser.storage.local.set({"mpw" : CryptoJS.SHA512(mpw).toString()});
+	browser.storage.sync.set({"mpw" : CryptoJS.SHA512(mpw).toString()});
 	$('.onboarding').fadeOut().addClass('hidden');
 	$('.onboarding_2').removeClass('hidden').fadeIn();
 });
@@ -181,7 +181,7 @@ $('.onboarding_2 a.btn-mp').click(function(){
 			$('.onboarding_2').fadeOut().addClass('hidden');
 			$('.onboarding_3').removeClass('hidden').fadeIn();
 			createRSAKeys(mpw);
-			browser.storage.local.remove('mpw');
+			browser.storage.sync.remove('mpw');
 		},
 		function(){
 			// $('#inputCreateMPW').addClass("");
@@ -191,7 +191,7 @@ $('.onboarding_2 a.btn-mp').click(function(){
 function createRSAKeys(mpw){
 	var passphrase = mpw;
 	// console.log(passphrase);
-	var bits = 1024;
+	var bits = 2048;
 
 	// create RSA Key pair
 	var mRSAkey = cryptico.generateRSAKey(passphrase, bits);
@@ -202,10 +202,10 @@ function createRSAKeys(mpw){
 		iterations: 100
 	});
 
-	browser.storage.local.set({'enc-key' : key});
+	browser.storage.sync.set({'enc-key' : key});
 	// extract public key and store it [rsa_public]
 	var mPublicKeyString = cryptico.publicKeyString(mRSAkey); 
-	browser.storage.local.set({'public_rsa' : mPublicKeyString});  
+	browser.storage.sync.set({'public_rsa' : mPublicKeyString});  
 
     // serialize rsa object for encryption
     var RSAKeyString = JSON.stringify(mRSAkey);
@@ -218,7 +218,7 @@ function createRSAKeys(mpw){
 	});
 
 	var encrypted_rsa = salt.toString() + iv.toString() + enc.toString();
-	browser.storage.local.set({'rsa_enc' : encrypted_rsa});
+	browser.storage.sync.set({'rsa_enc' : encrypted_rsa});
 	
 }
 function doubleCheckMPW(a, doNext, showError){
@@ -228,7 +228,7 @@ function doubleCheckMPW(a, doNext, showError){
 		if(a==res.mpw){
 			doNext();
 			// delete mpw from local storage
-			// browser.storage.local.set({"mpw" : {}});
+			// browser.storage.sync.set({"mpw" : {}});
 		}else{
 			showError();
 		}
@@ -236,7 +236,7 @@ function doubleCheckMPW(a, doNext, showError){
 	getMPW(callback);
 }
 function getMPW(callback){
-	browser.storage.local.get("mpw").then(function(res){callback(res);
+	browser.storage.sync.get("mpw").then(function(res){callback(res);
 	});
 }
 // show and setup login ui elements

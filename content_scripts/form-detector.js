@@ -145,7 +145,7 @@ function requestAutofillPW(item, categories){
 }
 
 function lookupStorage(form){
- var requestPromise = browser.storage.local.get();
+ var requestPromise = browser.storage.sync.get();
  requestPromise.then(function(data){
   var cat = data.categories; mCategories = cat;
   var entries = data.entries;
@@ -190,7 +190,7 @@ function highlightUsername(i, credentials){
   console.log(input);
 
     // autofill username if set in preferences
-    browser.storage.local.get('preferences').then((results) =>{
+    browser.storage.sync.get('preferences').then((results) =>{
       if(!i.classList.contains('mp-password') && results.preferences['pref_autofill_username']){
         i.html = credentials[chosenIndex].username;
         i.value = credentials[chosenIndex].username;
@@ -382,7 +382,7 @@ function removeHintbox(){
 function checkAccount(){
   console.log("Function : checkAccount");
   var username = inputUsername.value;
-  var requestPromise = browser.storage.local.get();
+  var requestPromise = browser.storage.sync.get();
   requestPromise.then(function(data){
     var cat = data.categories; var entries = data.entries;
     var accountFound = false; var existingUsername;

@@ -45,7 +45,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 				}
 
 
-				var setting = browser.storage.local.set(cat);
+				var setting = browser.storage.sync.set(cat);
 				setting.then(function(){
 					controller.fillDropdown(cat.categories);
 					controller.displayCategories(cat.categories, true); //calls loadEntries on callback
@@ -67,7 +67,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 				console.log(results);
 				//create empty entries-storage if empty
 				if(res == null){
-					browser.storage.local.set({"entries" : {}});
+					browser.storage.sync.set({"entries" : {}});
 				}
 
 				
@@ -143,7 +143,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 			var entryCategory = inputCategoryDropdown[0].value;
 			
 		}else{ //option-pwd
-			var pwdHash = document.querySelector('#enterPWD').value;
+			var pwd = document.querySelector('#enterPWD').value;
 			useUniquePWD = true;
 		}
 		
@@ -160,17 +160,19 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 		var entryUsername = inputUsername.value;
 		
 		//dirty! 
+		//added for testing purpose
+		//google uses 2 steps for logins
 		var mUrl;
 		if(entryURL.indexOf('google')>0){
-			
 			mUrl = "https://accounts.google.com";
-			console.log(entryURL.indexOf('google'));
 		}
 		else{
 			mUrl = entryURL;
 		}
 		if(useUniquePWD){
-			var credential = {username: entryUsername, url: mUrl, password: pwdHash};
+			var pwStrengthValue = ($('.progress-bar').width() / $('.progress').width());
+			console.log("strength: " + pwStrengthValue);
+			var credential = {username: entryUsername, url: mUrl, password: pwd, pwStrength: pwStrengthValue};
 			Logger.log({event: 'Add Entry', content: {mUrl}});
 			storeEntry(randID, credential, true);
 
@@ -190,7 +192,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 			// controller.displayEntry(id, entry, entry.category!=null);
 		});
 	};
-	var quickAddEntry = exports.quickAddEntry = function(murl, musername, mcat, mpw) {
+	var quickAddEntry = exports.quickAddEntry = function(murl, musername, mcat, mpw, mps) {
 		console.log("Model : addEntry (quick)");
 		/* initialise variables */
 		//check radio buttons
@@ -207,12 +209,12 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 
 		var entryUsername = musername;
 
-		// var gettingItem = browser.storage.local.get(entryURL);
+		// var gettingItem = browser.storage.sync.get(entryURL);
 		// gettingItem.then((result) => {
 		// 	var objTest = Object.keys(result);
 
 		if(useUniquePWD){
-			var credential = {username: entryUsername, url: entryURL, password: mpw};
+			var credential = {username: entryUsername, url: entryURL, password: mpw, pwStrength: pws};
 			storeEntry(randID, credential, false);
 		}else{
 				// if(objTest.length < 1 && entryURL !== '' && entryUsername !== '') {
@@ -259,7 +261,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 	//private functions
 	var initCategories = function(){
 		console.log("Model : initCategories");
-		browser.storage.local.set({"categories" : {}});
+		browser.storage.sync.set({"categories" : {}});
 	};
 	var onError = function(e){
 		

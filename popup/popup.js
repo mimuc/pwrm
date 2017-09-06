@@ -6,15 +6,15 @@ $(document).ready(function($) {
   browser.runtime.sendMessage({task: 'removeHint'});
   // get prefill username
   // if exisiting delete it afterwards
-  browser.storage.local.get('username').then((result) =>{
+  browser.storage.sync.get('username').then((result) =>{
     var username = result["username"].username;
     // prefill
     $('#enterName').val(username);
     // delete
-    browser.storage.local.set({'username': ''});
+    browser.storage.sync.set({'username': ''});
   });
   // check if is first start
-  browser.storage.local.get('challenge').then((result) =>{
+  browser.storage.sync.get('challenge').then((result) =>{
     if(result['challenge']==null){
       $('#fab_wrapper').hide();
       openPopup();
@@ -128,7 +128,7 @@ function openPopup() {
 
 // Check if there is an entry with this username for this website
 function checkAccount(URL){
-  var requestPromise = browser.storage.local.get();
+  var requestPromise = browser.storage.sync.get();
   requestPromise.then(function(data){
     var cat = data.categories; var entries = data.entries;
     var accountFound = false; var username;
@@ -189,7 +189,7 @@ function onError(error) {
 
 
 function fillDropdown(){
-  var gettingCategories = browser.storage.local.get("categories");
+  var gettingCategories = browser.storage.sync.get("categories");
   gettingCategories.then(function(result){
 
     var categories = result.categories;
@@ -215,6 +215,7 @@ function triggerStore(){
   }else{ //option-pwd
     // password = JSON.stringify(CryptoJS.SHA512(document.querySelector('#enterPWD').value));
     password = document.querySelector('#enterPWD').value;
+    var pwStrengthValue = ($('.progress-bar').width() / $('.progress').width());
     useUniquePWD = true;
   }
 
@@ -231,7 +232,8 @@ function triggerStore(){
     url: entryURL,
     username: $('#enterName').val(),
     cat: entryCategory,
-    pw: password
+    pw: password,
+    pws: pwStrengthValue
   };
     // console.log(storeMsg);
     // trigger form validation
