@@ -73,9 +73,10 @@ define(['scripts/tools/tools', 'scripts/modules/Logger', 'MVC_View_Managerpage',
         hint = $('#category-hint').val();       
       }else{
         pw = $('#category-pwd').val();
+        var pwStrength = ($('#enter-category-pwd  .progress-bar').width() / $('#enter-category-pwd .progress').width());
         hint = null;
       }
-      view.createCategory(value, pw, $('#modalCategory').hasClass('new'), hint);
+      view.createCategory(value, pw, $('#modalCategory').hasClass('new'), hint, pwStrength);
     };
     var updatePreferences = exports.updatePreferences = function(results){
       var keys = []; var values = [];

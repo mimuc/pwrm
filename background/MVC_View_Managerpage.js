@@ -154,7 +154,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 		      }
 		  }
 		};
-		var createCategoryElement = exports.createCategoryElement = function(categoryName, hint, iconName, pwd, index){
+		var createCategoryElement = exports.createCategoryElement = function(categoryName, hint, iconName, pwd, index, pwStrength){
 			var delay = 500 + index * 100;
 			var container = document.querySelector('#categoryContainer');
 			require(['jquery', 'MVC_Controller_Managerpage'], function($, controller) {
@@ -187,11 +187,8 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 				var entryContainer = $('#entryContainer');
 				var panelCard = $('.panel-card');
 				event.stopImmediatePropagation(); //prevents firing twice per click
-
-				
+	
 				if(!$('#panel_'+categoryName).hasClass('category-focused')){
-					// testing
-					// end testing
 
 					panelCard.addClass('low-color');
 					panelCard.removeClass('category-focused');
@@ -201,13 +198,9 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 					entryContainer.empty();
 					// console.log($(this).attr('haspw'));
 					var ic = $(this).find('.category_icons').text();
-					console.log("ic :" + ic);
-					var _hasPW = (ic == 'folder') ? true : false;
-					console.log("hasPW: " + _hasPW);
-					console.log("catName: " + catName);
-					console.log("categoryName: " + categoryName);
+					var _hasPW = (ic == 'folder') ? true : false; //ugly
 					SM.getHint(catName, function(result){
-						displayCategoryHeader(catName, _hasPW, result); //update hasPW before displaying header
+						displayCategoryHeader(catName, _hasPW, result,pwStrength); //update hasPW before displaying header
 						controller.loadEntries(categoryName, false);
 						
 					});
@@ -235,7 +228,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 
 
 		};
-		var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW, hint){
+		var displayCategoryHeader = exports.displayCategoryHeader = function(name, hasPW, hint, pwStrength){
 			var entryContainer = $('#entryContainer');
 			var cardWrapper = entryContainer.parent();
 
@@ -246,7 +239,13 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 		
 
 		if(hasPW){
-			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock_outline</i><span class="pwd-hidden">*******</span><span type="cat" cat="'+name+'" class="showPW">show</span><br><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" hint="'+ hint +'" oldValue="'+ name +'">Edit category</a><a id="directAddEntry" class="btn btn-mp light" data-toggle="modal" data-value="'+name+'" data-target="#modal-newEntry">Add Entry</a></div></div><hr>');
+			// hardcoded width.. progressbar has 200px width
+			var progressBarColor;
+			var pws = pwStrength * 200;
+			var pwStrengthCalc = pws + "px";
+			console.log(pwStrengthCalc);
+			if(pws < 180){progressBarColor = "progress-bar-danger";}else{progressBarColor = "progress-bar-success";}
+			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock_outline</i><span class="pwd-hidden">*******</span><span type="cat" cat="'+name+'" class="showPW">show</span><span>Password Strength: </span><span><div class="progress strength mp-strength"><div class="progress-bar '+progressBarColor+'" style="width:'+pwStrengthCalc+'"></div></div></span><br><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" hint="'+ hint +'" oldValue="'+ name +'">Edit category</a><a id="directAddEntry" class="btn btn-mp light" data-toggle="modal" data-value="'+name+'" data-target="#modal-newEntry">Add Entry</a></div></div><hr>');
 		}else{
 			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lightbulb_outline</i> Your personal hint for this password: <strong>"'+hint+'"</strong><br><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" hint="'+ hint +'" oldValue="'+ name +'">Edit category</a><a id="directAddEntry" class="btn btn-mp light" data-toggle="modal" data-value="'+name+'" data-target="#modal-newEntry">Add Entry</a></div><hr>');
 		}
@@ -265,7 +264,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 				var index=0;
 				for(c in categories){			
 			// console.log(c + " password: " + categories[c]);
-			createCategoryElement(c,categories[c][0],categories[c][1], categories[c][2], index);
+			createCategoryElement(c,categories[c][0],categories[c][1], categories[c][2], index, categories[c][4]);
 			index++;
 		}
 
@@ -286,13 +285,13 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 
 			}
 		};
-		var createCategory = exports.createCategory = function(name, pw, isNew, hint){
+		var createCategory = exports.createCategory = function(name, pw, isNew, hint, pwStrength){
 			console.log("View : createCategory");
+			console.log("pwStrength: " + pwStrength);
 			crypt.encrypt_rsa(pw, function(data){
-				console.log("pw: " + pw);
 				var cat;
 				var pw_enc = (pw=='' || pw==null) ? null : data;
-				cat = (pw_enc==null) ? [hint, "folder_open" ,randID] : [null,"folder", pw_enc ,randID];
+				cat = (pw_enc==null) ? [hint, "folder_open" ,randID, null] : [null,"folder", pw_enc ,randID, pwStrength];
 				
 				var oldName;
 				if($('#editCategory').attr('oldValue') != null){

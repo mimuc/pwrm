@@ -277,6 +277,8 @@ function addListeners(){
 
 	function setup(){
 		clearInputs(); 
+
+
  	//init storage logic
  	require(["MVC_Model"], function init(MVC_Model){
  		MVC_Model.initialize();

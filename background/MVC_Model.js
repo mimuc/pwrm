@@ -214,7 +214,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 		// 	var objTest = Object.keys(result);
 
 		if(useUniquePWD){
-			var credential = {username: entryUsername, url: entryURL, password: mpw, pwStrength: pws};
+			var credential = {username: entryUsername, url: entryURL, password: mpw, pwStrength: mps};
 			storeEntry(randID, credential, false);
 		}else{
 				// if(objTest.length < 1 && entryURL !== '' && entryUsername !== '') {
