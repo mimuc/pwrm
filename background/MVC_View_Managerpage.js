@@ -385,13 +385,13 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 		//if category is not empty --> move entries to unsorted (todo?)
 		console.log("View : deleteCategory: " +category);
 
-		var gettingCategories = browser.storage.local.get("categories");
+		var gettingCategories = browser.storage.sync.get("categories");
 		gettingCategories.then((results) => {
 			var oldCategories = results.categories;					
 			delete oldCategories[tools.mReplaceAll(category, ' ', '_')];	
 
 				//save the altered version of the entry-element in storage
-				var storingCategories = browser.storage.local.set({"categories" : oldCategories});
+				var storingCategories = browser.storage.sync.set({"categories" : oldCategories});
 				storingCategories.then(() => {
 					//remove element from DOM 
 					document.getElementById("wrapper_"+tools.mReplaceAll(category, '_', ' ')).remove();
@@ -402,7 +402,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 	};
 	var changeCategoryIcon = exports.changeCategoryIcon = function(catName, iconName){
 		console.log("View : changeCategoryIcon");
-		var gettingEntries = browser.storage.local.get("categories");
+		var gettingEntries = browser.storage.sync.get("categories");
 		gettingEntries.then((results) => {
 			var id;
 			var cat = results.categories;					
@@ -416,7 +416,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 			console.log(newCat);
 
 			//store entries
-			var storingEntry = browser.storage.local.set(newCat);
+			var storingEntry = browser.storage.sync.set(newCat);
 			storingEntry.then(() => {
 				console.log("store success");
 				//display new entry			
@@ -439,7 +439,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 	};
 	var moveToCategory = exports.moveToCategory = function(url, newCategory){
 		console.log("View : moveToCategory");
-		var gettingEntries = browser.storage.local.get("entries");
+		var gettingEntries = browser.storage.sync.get("entries");
 		gettingEntries.then((results) => {
 			var id;
 			var entries = results.entries;					
@@ -454,7 +454,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 			console.log(newEntries);
 
 			//store entries
-			var storingEntry = browser.storage.local.set(newEntries);
+			var storingEntry = browser.storage.sync.set(newEntries);
 			storingEntry.then(() => {
 				console.log("store success");
 				//display new entry			
@@ -557,13 +557,13 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 	};
 	var deleteThisEntry = function(url){
 		console.log("View : deleteThisEntry");
-		var gettingEntries = browser.storage.local.get("entries");
+		var gettingEntries = browser.storage.sync.get("entries");
 		gettingEntries.then((results) => {
 			var oldEntries = results.entries;					
 			delete oldEntries[url];	
 
 				//save the altered version of the entry-element in storage
-				var storingEntry = browser.storage.local.set({"entries" : oldEntries});
+				var storingEntry = browser.storage.sync.set({"entries" : oldEntries});
 				storingEntry.then(() => {
 					console.log("element " + url + " deleted. Entries updated.");
 					displayNumberEntries();
@@ -596,7 +596,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 	// TODO move to storagemanager's logic
 	var reassignEntries = function(oldName, name, categories){
 		console.log("View : reassignEntries");
-		var gettingEntries = browser.storage.local.get("entries");
+		var gettingEntries = browser.storage.sync.get("entries");
 		gettingEntries.then((results) => {
 			var entries = results.entries;
 			for(key in entries){

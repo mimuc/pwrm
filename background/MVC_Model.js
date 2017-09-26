@@ -45,7 +45,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 				}
 
 
-				var setting = browser.storage.local.set(cat);
+				var setting = browser.storage.sync.set(cat);
 				setting.then(function(){
 					controller.fillDropdown(cat.categories);
 					controller.displayCategories(cat.categories, true); //calls loadEntries on callback
@@ -67,7 +67,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 				console.log(results);
 				//create empty entries-storage if empty
 				if(res == null){
-					browser.storage.local.set({"entries" : {}});
+					browser.storage.sync.set({"entries" : {}});
 				}
 
 				
@@ -209,7 +209,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 
 		var entryUsername = musername;
 
-		// var gettingItem = browser.storage.local.get(entryURL);
+		// var gettingItem = browser.storage.sync.get(entryURL);
 		// gettingItem.then((result) => {
 		// 	var objTest = Object.keys(result);
 
@@ -261,7 +261,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 	//private functions
 	var initCategories = function(){
 		console.log("Model : initCategories");
-		browser.storage.local.set({"categories" : {}});
+		browser.storage.sync.set({"categories" : {}});
 	};
 	var onError = function(e){
 		

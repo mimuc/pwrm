@@ -2,51 +2,51 @@
 define(function(){
 	return{
 		getChallenge: function(callback){
-			browser.storage.local.get('challenge').then((results) =>{
+			browser.storage.sync.get('challenge').then((results) =>{
 				callback(results['challenge']);
 			});
 		},
 		setChallenge: function(value){
 			var val = {'challenge' : value};
-			browser.storage.local.set(val);
+			browser.storage.sync.set(val);
 		},
 		getMPW: function(callback){
-			browser.storage.local.get('mpw-tmp').then((results) =>{
+			browser.storage.sync.get('mpw-tmp').then((results) =>{
 				callback(results['mpw-tmp']);
 			});
 		},
 		setMPW: function(value){
 			var val = {"mpw-tmp" : value};
-			browser.storage.local.set(val);
+			browser.storage.sync.set(val);
 		},
 		getEncryptionKey: function(callback){
-			browser.storage.local.get('enc-key').then((results) =>{
+			browser.storage.sync.get('enc-key').then((results) =>{
 				callback(results['enc-key']);
 			});
 		},
 		setEncryptionKey: function(value){
 			var val = {"enc-key" : value};
-			browser.storage.local.set(val);
+			browser.storage.sync.set(val);
 		},
 		//
 		getPublicKey: function(callback){
-			browser.storage.local.get('public_rsa').then((results) =>{
+			browser.storage.sync.get('public_rsa').then((results) =>{
 				callback(results['public_rsa']);
 			});
 		},
 		getRSAKeys: function(callback){
-			browser.storage.local.get('rsa_enc').then((results) =>{
+			browser.storage.sync.get('rsa_enc').then((results) =>{
 				callback(results['rsa_enc']);
 			});
 		},
 		getOnboardingMode: function(callback){
-			browser.storage.local.get('mode').then((results) => {
+			browser.storage.sync.get('mode').then((results) => {
 				callback(results);
 			});
 		},
 		getEntries: function(callback){
 			console.log("SM : getEntries");
-			var gettingEntries = browser.storage.local.get("entries");
+			var gettingEntries = browser.storage.sync.get("entries");
 			gettingEntries.then((results) => {
 				console.log(results);
 				callback(results);
@@ -54,43 +54,43 @@ define(function(){
 		},
 		initPreferences : function(callback){
 			console.log("SM : initPreferences");
-			browser.storage.local.get("preferences").then((results) => {
+			browser.storage.sync.get("preferences").then((results) => {
 				if(results == null || results["preferences"] == null){
-					browser.storage.local.set({preferences : {}});
+					browser.storage.sync.set({preferences : {}});
 				}else{
 					callback(results);
 				}
 			});
 		},
 		updatePreferences : function(key, value){
-			browser.storage.local.get("preferences").then((results) => {
+			browser.storage.sync.get("preferences").then((results) => {
 				results.preferences[key] = value;
 				console.log(results);
-				browser.storage.local.set(results);
-				browser.storage.local.get("preferences").then((results) => { console.log(results);});
+				browser.storage.sync.set(results);
+				browser.storage.sync.get("preferences").then((results) => { console.log(results);});
 			});
 		},
 		getCategories: function(callback){
-			var gettingCategories = browser.storage.local.get("categories");
+			var gettingCategories = browser.storage.sync.get("categories");
 			gettingCategories.then((results) => {
 				callback(results);
 			});
 		},
 		setEntries: function(value, callback){
 			console.log("SM : setEntries");
-			var storingEntry = browser.storage.local.set(value);
+			var storingEntry = browser.storage.sync.set(value);
 			storingEntry.then(() => {
 				callback();
 			});
 		},
 		setCategories: function(value, callback){
-			var storingCategory = browser.storage.local.set(value);
+			var storingCategory = browser.storage.sync.set(value);
 			storingCategory.then(()=> {
 				callback();
 			});
 		},
 		getHint : function(catName, callback){
-			var gettingCategories = browser.storage.local.get("categories");
+			var gettingCategories = browser.storage.sync.get("categories");
 			gettingCategories.then((results) => {
 				var res = results["categories"];
 				var name = catName.replace(' ', '_');
@@ -148,7 +148,7 @@ define(function(){
 						entry = entries[key];
 					}
 				}
-				var storingEntries = browser.storage.local.set({"entries" : entries});
+				var storingEntries = browser.storage.sync.set({"entries" : entries});
 				storingEntries.then(() => {
 					callback(entry);
 				});
@@ -157,10 +157,10 @@ define(function(){
 		},
 		setUsernameQuickAdd: function(username){
 			var entry = {'username' : username};
-			browser.storage.local.set(entry);
+			browser.storage.sync.set(entry);
 		},
 		getUsernameQuickAdd : function(callback){
-			browser.storage.local.get('username').then((results) => {
+			browser.storage.sync.get('username').then((results) => {
 				callback(results['username']);
 			});
 		},
@@ -178,12 +178,12 @@ define(function(){
 		// key (randID => pseudo unique!) -> credentials[url, name, ...]
 		saveEntry: function(randID, credentials, callback){
 			console.log("SM : saveEntry");
-			var gettingEntries = browser.storage.local.get("entries");
+			var gettingEntries = browser.storage.sync.get("entries");
 			gettingEntries.then((results) => {
 				var entries = results["entries"];
 				entries[randID] = credentials;
 				console.log(entries);
-				var storingEntry = browser.storage.local.set({"entries" : entries});
+				var storingEntry = browser.storage.sync.set({"entries" : entries});
 				storingEntry.then(() => {
 					callback();
 				});
@@ -192,7 +192,7 @@ define(function(){
 		},
 		// TOOD
 		countEntries : function(categories, callback){
-			var gettingEntries = browser.storage.local.get("entries");
+			var gettingEntries = browser.storage.sync.get("entries");
 			gettingEntries.then((eResults) => {
 				var entries = eResults["entries"];
 				var values = {};
@@ -210,12 +210,12 @@ define(function(){
 		},
 		createExtensionIdentifier : function(){
 			require(['scripts/modules/Logger'], function(Logger){
-				browser.storage.local.get('identifier').then((id) =>{
+				browser.storage.sync.get('identifier').then((id) =>{
 					var webexID;
 					if(!id['identifier']){
 						var rand = (""+Date.now()).substring(5);
 						webexID = 'PWM-'+rand;
-						browser.storage.local.set({'identifier' : webexID});
+						browser.storage.sync.set({'identifier' : webexID});
 						Logger.log({event: "Manager Installed", content: {'PWM-ID' : webexID}});
 					}else{
 						webexID = id['identifier'];
@@ -228,7 +228,7 @@ define(function(){
 			});
 		},
 		getExtensionIdentifier : function(callback){
-			browser.storage.local.get('identifier').then((id) =>{
+			browser.storage.sync.get('identifier').then((id) =>{
 				callback(id['identifier']);
 
 			});
