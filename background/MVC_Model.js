@@ -45,7 +45,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 				}
 
 
-				var setting = browser.storage.sync.set(cat);
+				var setting = browser.storage.local.set(cat);
 				setting.then(function(){
 					controller.fillDropdown(cat.categories);
 					controller.displayCategories(cat.categories, true); //calls loadEntries on callback
@@ -67,7 +67,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 				console.log(results);
 				//create empty entries-storage if empty
 				if(res == null){
-					browser.storage.sync.set({"entries" : {}});
+					browser.storage.local.set({"entries" : {}});
 				}
 
 				
@@ -170,7 +170,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 			mUrl = entryURL;
 		}
 		if(useUniquePWD){
-			var pwStrengthValue = ($('.progress-bar').width() / $('.progress').width());
+			var pwStrengthValue = ($('#modal-newEntry .progress-bar').width() / $('#modal-newEntry .progress').width());
 			console.log("strength: " + pwStrengthValue);
 			var credential = {username: entryUsername, url: mUrl, password: pwd, pwStrength: pwStrengthValue};
 			Logger.log({event: 'Add Entry', content: {mUrl}});
@@ -209,7 +209,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 
 		var entryUsername = musername;
 
-		// var gettingItem = browser.storage.sync.get(entryURL);
+		// var gettingItem = browser.storage.local.get(entryURL);
 		// gettingItem.then((result) => {
 		// 	var objTest = Object.keys(result);
 
@@ -261,7 +261,7 @@ define(["scripts/modules/Logger", "jquery","psl","scripts/tools/tools","scripts/
 	//private functions
 	var initCategories = function(){
 		console.log("Model : initCategories");
-		browser.storage.sync.set({"categories" : {}});
+		browser.storage.local.set({"categories" : {}});
 	};
 	var onError = function(e){
 		

@@ -6,7 +6,7 @@
     padding: 24px;
     overflow: hidden;   
     z-index: 1031;
-    width:200px;
+    width:205px;
 }
 
 #fab_content{
@@ -119,13 +119,14 @@
 }
 
 .next-to-button{
-    line-height:54px;
-    font-size:15px;
-    color:black;
-    position: absolute;
-    width: 100px;
-    right: 70px;
-    text-align: right;
+  line-height: 54px;
+  font-size: 15px;
+  color: black;
+  position: absolute;
+  width: 187px;
+  right: 70px;
+  text-align: right;
+  background-color: #fafafa;
 
 }
 

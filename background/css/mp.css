@@ -72,6 +72,22 @@ a, a:hover{
 	margin-top: 10px;
 	border-radius: 35px !important;
 }
+.progress.mp-strength.unique{
+	width: 200px;
+	display: inline-flex;
+	border-radius: 35px !important;
+	margin: 0;
+	padding: 0;
+}
+.progress-container{
+	top: 12px;
+	position: absolute;
+	left: 13px;
+}
+
+.progress.mp-strength.unique.progress{
+	height: 5px !important;
+}
 
 .search-result-header{
 	color: #595959;
@@ -487,7 +503,7 @@ h2.row-header{
 .pwd-hidden{
 	min-width: 160px;
 	display: inline-block;
-	padding-left: 10px;
+	/*padding-left: 10px;*/
 	letter-spacing: 3px;
 	font-weight: 800;
 	vertical-align: middle;

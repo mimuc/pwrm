@@ -181,7 +181,7 @@ function addListeners(){
 	});
 	// store mpw for auto-decryption for autofilling option
 	function tmpStoreMPW(){
-		// browser.storage.sync.get("mpw").then(function(res){
+		// browser.storage.local.get("mpw").then(function(res){
 		// 	if(res['mpw'] == CryptoJS.SHA512($('#modalInputMPW').val()).toString()){
 		// 		SM.setMPW($('#modalInputMPW').val());
 		// 		$('#modalMPW').modal('hide');
@@ -351,7 +351,7 @@ function handleMessage(message, sender, sendResponse) {
 		controller.decrypt(message.content, message.target);
 	}else if(message.task == "requestAutofillPW"){
 		console.log("received requestAutofillPW");
-		browser.storage.sync.get('preferences').then((results) =>{
+		browser.storage.local.get('preferences').then((results) =>{
 			if(results.preferences['pref_autofill_password']){
 				controller.decryptWithTarget(message.password);
 			}else{
@@ -375,7 +375,7 @@ function setChallenge(){
 	console.log("setChallenge");
 // store encrypted object for login challenge
 // SM.getChallenge(function(result){
-	browser.storage.sync.get('challenge').then((results) =>{
+	browser.storage.local.get('challenge').then((results) =>{
 		if(!results['challenge']){
 			var challengeObject = "4815162342";
 			controller.setChallenge(challengeObject);
@@ -454,7 +454,7 @@ function updateEntry(id){
 }
 
 function doChallenge(passphrase, success, failure){
-	browser.storage.sync.get('challenge').then((res) =>{
+	browser.storage.local.get('challenge').then((res) =>{
 		console.log("doing challenge: " + passphrase);
 
 		require(['scripts/tools/crypt'], function(crypt){

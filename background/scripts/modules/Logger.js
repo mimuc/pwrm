@@ -3,7 +3,7 @@ define(['jquery', 'scripts/tools/storagemanagement'], function($, SM){
 	var exports = {};
 
 	var log = exports.log = function(value){
-		browser.storage.sync.get('identifier').then(function(result){
+		browser.storage.local.get('identifier').then(function(result){
 		var file = "Log_"+result["identifier"];
 
 

@@ -6,13 +6,23 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 
 			console.log("View : displayEntry");
 			var entryContainer, content;
+			// display as Entry inside a Reuse Password
 			if(credential.category != null){
 				entryContainer = document.querySelector('#entryContainer');
 				content = '<div class="col-lg-3 col-md-3 col-xs-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="uUrl editable col-lg-3 col-md-3 col-xs-3">'+ credential.url +'</div><div class="uUsername editable col-lg-3 col-md-3 col-xs-3">'+ credential.username +'</div><div class="col-lg-3 col-md-3 col-xs-3"><div class="row"><div class="col-lg-6 col-md-6 col-xs-6">'+ credential.creationDate +'</div><div class="entry-actions"><div class="col-lg-2 col-md-2 col-xs-2"></div><div class="col-lg-2 col-md-2 col-xs-2"><a><i id="'+ randID +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2 col-md-2 col-xs-2"><a id="open_'+credential.url+'" href="'+credential.url+'" target="_blank"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
 			}else{
+				// display as Unique Entry
 				entryContainer = document.querySelector('#uniqueEntryContainer');
 				entryContainer.style.display = '';
-				content = '<div class="col-lg-3 col-md-3 col-xs-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="uUrl editable col-lg-3 col-md-3 col-xs-3">'+ credential.url +'</div><div class="uUsername editable col-lg-3 col-md-3 col-xs-3">'+ credential.username +'</div><div class="col-lg-3 col-md-3 col-xs-3"><div class="row"><div class="col-lg-3 col-md-3 col-xs-3">'+ credential.creationDate +'</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2 col-md-2 col-xs-2"><span type="unique" url="'+credential.url+'" class="showPW">show</span></div><div class="col-lg-2 col-md-2 col-xs-2"><a><i id="'+ randID+'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.url+'" href="'+credential.url+'" target="_blank"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
+				// hardcoded width.. progressbar has 200px width
+				pwStrength = credential.pwStrength;
+				var progressBarColor;
+				var pws = pwStrength * 200;
+				var pwStrengthCalc = pws + "px";
+				if(pws < 180){progressBarColor = "progress-bar-danger";}else{progressBarColor = "progress-bar-success";}
+
+				// content = '<div class="col-lg-1 col-md-1 col-xs-1"><a><img class="placeholder-img" src=""></a></div><div class="uUrl editable col-lg-3 col-md-3 col-xs-3">'+ credential.url +'</div><div class="uUsername editable col-lg-3 col-md-3 col-xs-3">'+ credential.username +'</div><div class="col-lg-5 col-md-5 col-xs-5"><div class="row"><div class="col-lg-3 col-md-3 col-xs-3">'+ credential.creationDate +'</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2 col-md-2 col-xs-2"><span type="unique" url="'+credential.url+'" class="showPW">show</span></div><div class="col-lg-2 col-md-2 col-xs-2"><a><i id="'+ randID+'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.url+'" href="'+credential.url+'" target="_blank"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
+				content = '<div class="col-lg-1 col-md-1 col-xs-1"><a><img class="placeholder-img" src=""></a></div><div class="uUrl editable col-lg-3 col-md-3 col-xs-3">'+ credential.url +'</div><div class="uUsername editable col-lg-3 col-md-3 col-xs-3">'+ credential.username +'</div><div class="col-lg-5 col-md-5 col-xs-5"><div class="row"><div class="col-lg-6 col-md-6 col-xs-6"><span class="pwd-hidden">******** </span><span class="progress-container"><div class="progress strength mp-strength unique"><div class="progress-bar '+progressBarColor+'" style="width:'+pwStrengthCalc+'"></div></div></span></div><div class="entry-actions"><div class="col-lg-2 col-md-2 col-xs-2"><span type="unique" url="'+credential.url+'" class="showPW">show</span></div><div class="col-lg-2 col-md-2 col-xs-2"><a><i id="'+ randID+'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.url+'" href="'+credential.url+'" target="_blank"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
 			}
 
 			var entryWrapper = document.createElement('div');
@@ -71,13 +81,25 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 		// console.log("View : displayEntry (search)");
 		var entryContainer, content;
 		var resultContainer = $('#searchEntryContainer');
+		// display reuse password entries
 		if(credential.category != null){
 			entryContainer = document.querySelector('#searchResults-category');
 			content = '<div class="col-lg-3 col-md-3 col-xs-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3 col-md-3 col-xs-3">'+ credential.url +'</div><div class="col-lg-2 col-md-2 col-xs-2">'+ credential.username +'</div><div class="col-lg-4 col-md-4 col-xs-4"><div class="row"><div class="col-lg-6 col-md-6 col-xs-6">'+ credential.creationDate +'</div><div class="entry-actions"><div class="col-lg-2"></div><div class="col-lg-2"><a><i id="'+ randID +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.url+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
 		}else{
+			// display unique entry
 			entryContainer = document.querySelector('#searchResults-unique');
 			entryContainer.style.display = '';
-			content = '<div class="col-lg-3 col-md-3 col-xs-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3 col-md-3 col-xs-3">'+ credential.url +'</div><div class="col-lg-2 col-md-2 col-xs-2">'+ credential.username +'</div><div class="col-lg-4 col-md-4 col-xs-4"><div class="row"><div class="col-lg-3 col-md-3 col-xs-3">'+ credential.creationDate +'</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2"><span type="unique" url="'+credential.url+'" class="showPW">show</span></div><div class="col-lg-2"><a><i id="'+ randID+'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.url+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
+			// hardcoded width.. progressbar has 200px width
+				pwStrength = credential.pwStrength;
+				var progressBarColor;
+				var pws = pwStrength * 200;
+				var pwStrengthCalc = pws + "px";
+				if(pws < 180){progressBarColor = "progress-bar-danger";}else{progressBarColor = "progress-bar-success";}
+
+				// content = '<div class="col-lg-1 col-md-1 col-xs-1"><a><img class="placeholder-img" src=""></a></div><div class="uUrl editable col-lg-3 col-md-3 col-xs-3">'+ credential.url +'</div><div class="uUsername editable col-lg-3 col-md-3 col-xs-3">'+ credential.username +'</div><div class="col-lg-5 col-md-5 col-xs-5"><div class="row"><div class="col-lg-3 col-md-3 col-xs-3">'+ credential.creationDate +'</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2 col-md-2 col-xs-2"><span type="unique" url="'+credential.url+'" class="showPW">show</span></div><div class="col-lg-2 col-md-2 col-xs-2"><a><i id="'+ randID+'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.url+'" href="'+credential.url+'" target="_blank"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
+				content = '<div class="col-lg-1 col-md-1 col-xs-1"><a><img class="placeholder-img" src=""></a></div><div class="uUrl editable col-lg-3 col-md-3 col-xs-3">'+ credential.url +'</div><div class="uUsername editable col-lg-3 col-md-3 col-xs-3">'+ credential.username +'</div><div class="col-lg-5 col-md-5 col-xs-5"><div class="row"><div class="col-lg-6 col-md-6 col-xs-6"><span class="pwd-hidden">******** </span><span class="progress-container"><div class="progress strength mp-strength unique"><div class="progress-bar '+progressBarColor+'" style="width:'+pwStrengthCalc+'"></div></div></span></div><div class="entry-actions"><div class="col-lg-2 col-md-2 col-xs-2"><span type="unique" url="'+credential.url+'" class="showPW">show</span></div><div class="col-lg-2 col-md-2 col-xs-2"><a><i id="'+ randID+'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.url+'" href="'+credential.url+'" target="_blank"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
+		
+			// content = '<div class="col-lg-3 col-md-3 col-xs-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3 col-md-3 col-xs-3">'+ credential.url +'</div><div class="col-lg-2 col-md-2 col-xs-2">'+ credential.username +'</div><div class="col-lg-4 col-md-4 col-xs-4"><div class="row"><div class="col-lg-3 col-md-3 col-xs-3">'+ credential.creationDate +'</div><div class="col-lg-3"><span class="pwd-hidden">******** </span></div><div class="entry-actions"><div class="col-lg-2"><span type="unique" url="'+credential.url+'" class="showPW">show</span></div><div class="col-lg-2"><a><i id="'+ randID+'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.url+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
 		}
 
 		var entryWrapper = document.createElement('div');
@@ -187,7 +209,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 				var entryContainer = $('#entryContainer');
 				var panelCard = $('.panel-card');
 				event.stopImmediatePropagation(); //prevents firing twice per click
-	
+
 				if(!$('#panel_'+categoryName).hasClass('category-focused')){
 
 					panelCard.addClass('low-color');
@@ -363,13 +385,13 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 		//if category is not empty --> move entries to unsorted (todo?)
 		console.log("View : deleteCategory: " +category);
 
-		var gettingCategories = browser.storage.sync.get("categories");
+		var gettingCategories = browser.storage.local.get("categories");
 		gettingCategories.then((results) => {
 			var oldCategories = results.categories;					
 			delete oldCategories[tools.mReplaceAll(category, ' ', '_')];	
 
 				//save the altered version of the entry-element in storage
-				var storingCategories = browser.storage.sync.set({"categories" : oldCategories});
+				var storingCategories = browser.storage.local.set({"categories" : oldCategories});
 				storingCategories.then(() => {
 					//remove element from DOM 
 					document.getElementById("wrapper_"+tools.mReplaceAll(category, '_', ' ')).remove();
@@ -380,7 +402,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 	};
 	var changeCategoryIcon = exports.changeCategoryIcon = function(catName, iconName){
 		console.log("View : changeCategoryIcon");
-		var gettingEntries = browser.storage.sync.get("categories");
+		var gettingEntries = browser.storage.local.get("categories");
 		gettingEntries.then((results) => {
 			var id;
 			var cat = results.categories;					
@@ -394,7 +416,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 			console.log(newCat);
 
 			//store entries
-			var storingEntry = browser.storage.sync.set(newCat);
+			var storingEntry = browser.storage.local.set(newCat);
 			storingEntry.then(() => {
 				console.log("store success");
 				//display new entry			
@@ -417,7 +439,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 	};
 	var moveToCategory = exports.moveToCategory = function(url, newCategory){
 		console.log("View : moveToCategory");
-		var gettingEntries = browser.storage.sync.get("entries");
+		var gettingEntries = browser.storage.local.get("entries");
 		gettingEntries.then((results) => {
 			var id;
 			var entries = results.entries;					
@@ -432,7 +454,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 			console.log(newEntries);
 
 			//store entries
-			var storingEntry = browser.storage.sync.set(newEntries);
+			var storingEntry = browser.storage.local.set(newEntries);
 			storingEntry.then(() => {
 				console.log("store success");
 				//display new entry			
@@ -535,13 +557,13 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 	};
 	var deleteThisEntry = function(url){
 		console.log("View : deleteThisEntry");
-		var gettingEntries = browser.storage.sync.get("entries");
+		var gettingEntries = browser.storage.local.get("entries");
 		gettingEntries.then((results) => {
 			var oldEntries = results.entries;					
 			delete oldEntries[url];	
 
 				//save the altered version of the entry-element in storage
-				var storingEntry = browser.storage.sync.set({"entries" : oldEntries});
+				var storingEntry = browser.storage.local.set({"entries" : oldEntries});
 				storingEntry.then(() => {
 					console.log("element " + url + " deleted. Entries updated.");
 					displayNumberEntries();
@@ -574,7 +596,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 	// TODO move to storagemanager's logic
 	var reassignEntries = function(oldName, name, categories){
 		console.log("View : reassignEntries");
-		var gettingEntries = browser.storage.sync.get("entries");
+		var gettingEntries = browser.storage.local.get("entries");
 		gettingEntries.then((results) => {
 			var entries = results.entries;
 			for(key in entries){

@@ -38,7 +38,7 @@ function setupInputMPW(elem){
 	}
 
 	function getMPW(callback){
-		browser.storage.sync.get("mpw").then(function(res){callback(res.mpw);});
+		browser.storage.local.get("mpw").then(function(res){callback(res.mpw);});
 	}
 
 	function getPW(passphrase){
@@ -47,7 +47,7 @@ function setupInputMPW(elem){
 		if(unique){
 			console.log("get unique pw");
 					// get unique pw
-					browser.storage.sync.get("entries").then(function(res){
+					browser.storage.local.get("entries").then(function(res){
 						var e = res.entries;
 						for(key in e){
 							//pw entry found
@@ -74,7 +74,7 @@ function setupInputMPW(elem){
 				}else{
 					console.log("getting cat pw");
 					//get cat pw
-					browser.storage.sync.get("categories").then(function(res){
+					browser.storage.local.get("categories").then(function(res){
 						var e = res.categories
 						for(key in e){
 

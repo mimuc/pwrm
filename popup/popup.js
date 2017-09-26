@@ -6,15 +6,15 @@ $(document).ready(function($) {
   browser.runtime.sendMessage({task: 'removeHint'});
   // get prefill username
   // if exisiting delete it afterwards
-  browser.storage.sync.get('username').then((result) =>{
+  browser.storage.local.get('username').then((result) =>{
     var username = result["username"].username;
     // prefill
     $('#enterName').val(username);
     // delete
-    browser.storage.sync.set({'username': ''});
+    browser.storage.local.set({'username': ''});
   });
   // check if is first start
-  browser.storage.sync.get('challenge').then((result) =>{
+  browser.storage.local.get('challenge').then((result) =>{
     if(result['challenge']==null){
       $('#fab_wrapper').hide();
       openPopup();
@@ -128,7 +128,7 @@ function openPopup() {
 
 // Check if there is an entry with this username for this website
 function checkAccount(URL){
-  var requestPromise = browser.storage.sync.get();
+  var requestPromise = browser.storage.local.get();
   requestPromise.then(function(data){
     var cat = data.categories; var entries = data.entries;
     var accountFound = false; var username;
@@ -189,7 +189,7 @@ function onError(error) {
 
 
 function fillDropdown(){
-  var gettingCategories = browser.storage.sync.get("categories");
+  var gettingCategories = browser.storage.local.get("categories");
   gettingCategories.then(function(result){
 
     var categories = result.categories;
