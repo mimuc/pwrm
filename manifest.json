@@ -2,13 +2,13 @@
 
   "manifest_version": 2,
   "name": "Password Reuse Manager for Firefox",
-  "version": "1.41",
+  "version": "1.5",
   "description": "A password manager that helps to organise reused passwords without necessarily storing secret information.", 
   "homepage_url": "https://gitlab.lrz.de/fuasmattn/password-reuse-manager",
   "icons": {
     "48": "icons/icon-48.png",
-    "96": "icons/icon-48.png",
-    "128": "icons/icon-48.png"
+    "96": "icons/icon-96.png",
+    "128": "icons/icon-128.png"
 
   },
 

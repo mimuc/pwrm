@@ -88,6 +88,12 @@ function openManager(){
 						browser.windows.update(aRes[i].id,{"focused":true})
 					});
 
+				}else{
+					alert("wurscht");
+					chrome.tabs.create({
+						"url": chrome.extension.getURL("background/background.html")
+					});
+
 				}
 			}
 		}		

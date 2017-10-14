@@ -6,7 +6,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 
 			console.log("View : displayEntry");
 			var entryContainer, content;
-			// display as Entry inside a Reuse Password
+			// display as Entry inside a Reused Password
 			if(credential.category != null){
 				entryContainer = document.querySelector('#entryContainer');
 				content = '<div class="col-lg-3 col-md-3 col-xs-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="uUrl editable col-lg-3 col-md-3 col-xs-3">'+ credential.url +'</div><div class="uUsername editable col-lg-3 col-md-3 col-xs-3">'+ credential.username +'</div><div class="col-lg-3 col-md-3 col-xs-3"><div class="row"><div class="col-lg-6 col-md-6 col-xs-6">'+ credential.creationDate +'</div><div class="entry-actions"><div class="col-lg-2 col-md-2 col-xs-2"></div><div class="col-lg-2 col-md-2 col-xs-2"><a><i id="'+ randID +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2 col-md-2 col-xs-2"><a id="open_'+credential.url+'" href="'+credential.url+'" target="_blank"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
@@ -81,7 +81,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 		// console.log("View : displayEntry (search)");
 		var entryContainer, content;
 		var resultContainer = $('#searchEntryContainer');
-		// display reuse password entries
+		// display Reused Password entries
 		if(credential.category != null){
 			entryContainer = document.querySelector('#searchResults-category');
 			content = '<div class="col-lg-3 col-md-3 col-xs-3"><a><img class="placeholder-img" src=""></a>'+ urlName +'</div><div class="col-lg-3 col-md-3 col-xs-3">'+ credential.url +'</div><div class="col-lg-2 col-md-2 col-xs-2">'+ credential.username +'</div><div class="col-lg-4 col-md-4 col-xs-4"><div class="row"><div class="col-lg-6 col-md-6 col-xs-6">'+ credential.creationDate +'</div><div class="entry-actions"><div class="col-lg-2"></div><div class="col-lg-2"><a><i id="'+ randID +'" class="material-icons hastext link">delete</i></a></div><div class="col-lg-2"><a id="open_'+credential.url+'" href="#"><i class="material-icons hastext link">open_in_new</i></a></div></div></div></div>';
@@ -163,7 +163,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 	};
 	var displaySearchResults = exports.displaySearchResults = function(results){
 		$('#searchEntryContainer *').empty();
-		$('#searchResults-category').append('<h2 class="search-result-header"><i class="material-icons">book</i> in Reuse Passwords</h2>');
+		$('#searchResults-category').append('<h2 class="search-result-header"><i class="material-icons">book</i> in Reused Passwords</h2>');
 		$('#searchResults-unique').append('<h2 class="search-result-header"><i class="material-icons">list</i> in Unique Passwords</h2>');
 		if(results!=0){
 			for(key in results){
@@ -269,6 +269,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 			if(pws < 180){progressBarColor = "progress-bar-danger";}else{progressBarColor = "progress-bar-success";}
 			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><div id="pwhint_stored"><i class="material-icons hastext">lock_outline</i><span class="pwd-hidden">*******</span><span type="cat" cat="'+name+'" class="showPW">show</span><span>Password Strength: </span><span><div class="progress strength mp-strength"><div class="progress-bar '+progressBarColor+'" style="width:'+pwStrengthCalc+'"></div></div></span><br><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" hint="'+ hint +'" oldValue="'+ name +'">Edit category</a><a id="directAddEntry" class="btn btn-mp light" data-toggle="modal" data-value="'+name+'" data-target="#modal-newEntry">Add Entry</a></div></div><hr>');
 		}else{
+			if(hint=="") hint=name;
 			entryContainer.append('<h2 class="row-header">'+name+'</h2><div><i class="material-icons hastext">lightbulb_outline</i> Your personal hint for this password: <strong>"'+hint+'"</strong><br><a id="editCategory" class="btn btn-mp light" data-toggle="modal" data-target="#modalCategory" hint="'+ hint +'" oldValue="'+ name +'">Edit category</a><a id="directAddEntry" class="btn btn-mp light" data-toggle="modal" data-value="'+name+'" data-target="#modal-newEntry">Add Entry</a></div><hr>');
 		}
 			//configure modal here (event.relatedTarget is created dynamically)
@@ -304,6 +305,8 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 				var e = document.createElement('option');
 				e.textContent = c;
 				document.querySelector('#categoryDropdown').append(e);
+				document.querySelector('select').append(e);
+				// document.querySelector().append(e);
 
 			}
 		};
@@ -475,7 +478,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 	var showPWInput = exports.showPWInput = function(){
 		var storePW = ($('#btnAddPWD').text() === 'set password') ? true : false;
 		var txt = (storePW) ? 'remove password' : 'set password';
-		var msg = (storePW) ? 'A Reuse Password will be stored.' : 'Save a hint that helps to remember your password instead of storing it.';
+		var msg = (storePW) ? 'A Reused Password will be stored.' : 'Save a hint that helps to remember your password instead of storing it.';
 		var icon = (storePW) ? 'lock_outline':'lightbulb_outline';
 		$('#btnAddPWD').html(txt);
 		$('#pw-hint span').html(msg);
@@ -534,7 +537,7 @@ define(['scripts/tools/tools', 'scripts/tools/showPW','scripts/tools/crypt','jqu
 				$('#category-hint').val(hint);
 
 				var txt = (hasPW) ? 'remove password' : 'set password';
-				var msg = (hasPW) ? 'A Reuse Password will be stored.' : 'Save a hint that helps to remember your password instead of storing it.';
+				var msg = (hasPW) ? 'A Reused Password will be stored.' : 'Save a hint that helps to remember your password instead of storing it.';
 				var icon = (hasPW) ? 'lock_outline':'lightbulb_outline';
 				var pw = (hasPW) ? '*******' : '';
 				$('#btnAddPWD').html(txt);

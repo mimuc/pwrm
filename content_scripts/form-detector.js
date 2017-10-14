@@ -52,7 +52,7 @@ function findForms(){
     var inputUN = $(this).find('input.highlightInput').first().val();
     browser.runtime.sendMessage({task: "checkAccount", content: {username: inputUN, url : URL}});
     var type;
-    if($(this).find('.mp-password.login')){
+    if($(this).find('.mp-password.login')){ //macht keinen sinn..logged ja dann nur logins von seiten die bereits im PWRM gespeichert sind
       type = "Login";
     }
     if($(this).find('.mp-password.signup')){

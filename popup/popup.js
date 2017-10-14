@@ -211,7 +211,7 @@ function triggerStore(){
   if(selectedOption == "option-category"){
     var inputCategoryDropdown = document.querySelectorAll('option:checked');
     entryCategory = inputCategoryDropdown[0].value;
-
+    console.log("entryCategory: " + entryCategory);
   }else{ //option-pwd
     // password = JSON.stringify(CryptoJS.SHA512(document.querySelector('#enterPWD').value));
     password = document.querySelector('#enterPWD').value;
