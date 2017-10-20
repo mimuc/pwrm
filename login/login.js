@@ -66,6 +66,10 @@ function openManager(){
 	gettingAllWindows.then(function(aRes){
 		var gettingCurrent = browser.windows.getCurrent();
 		gettingCurrent.then(function(cRes){
+
+			var createTab = chrome.tabs.create({
+						"url": chrome.extension.getURL("background/background.html")
+			});
 			for (var i = 0; i < aRes.length; i++) {
 				if(aRes.length == 1){
 					// console.log("length: 1");
@@ -74,6 +78,7 @@ function openManager(){
 						"url": chrome.extension.getURL("background/background.html"),
 						"state": "maximized"
 					});
+					
 				}else{
 					if(aRes[i].id != cRes.id && aRes[i].type == "normal"){
 					//no other window is opened -> open in new window
@@ -82,14 +87,14 @@ function openManager(){
 					var removing = browser.windows.remove(cRes.id);
 					var createTab = chrome.tabs.create({
 						"url": chrome.extension.getURL("background/background.html"),
-						"windowId": aRes[i].id,
+						"windowId": aRes[i].id
 					});
 					createTab.then(function(){
 						browser.windows.update(aRes[i].id,{"focused":true})
 					});
+					
 
 				}else{
-					alert("wurscht");
 					chrome.tabs.create({
 						"url": chrome.extension.getURL("background/background.html")
 					});
