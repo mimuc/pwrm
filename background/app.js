@@ -7,9 +7,9 @@
 requirejs.config({
 	baseUrl: '',
 	paths: {
-		"jquery" : "scripts/jquery/jquery",
-		"bootstrap" : "scripts/bootstrap/bootstrap",
-		"psl" : "scripts/tools/psl.min",
+		jquery : "scripts/jquery/jquery",
+		bootstrap : "scripts/bootstrap/bootstrap",
+		psl : "scripts/tools/psl.min"
 
 	}
 });

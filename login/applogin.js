@@ -5,10 +5,15 @@
 // directory.
 
 requirejs.config({
-	baseUrl: '../background',
 	
+	paths: {
+		SM: 'storagemanagement',
+		aes: '../background/scripts/cryptojs/rollups/aes',
+		pbkdf2: '../background/scripts/cryptojs/rollups/pbkdf2',
+		rsa: '../background/scripts/cryptico/rsa',
+		cryptico: '../background/scripts/cryptico/cryptico'
+
+	}
 });
 
-// Start loading the main app file. Put all of
-// your application logic in there.
-requirejs(['']);
+requirejs(['login.js']);

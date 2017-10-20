@@ -142,7 +142,8 @@ $(document).keypress(function(e) {
 
 function doChallenge(passphrase, success, failure){
 	browser.storage.sync.get('challenge').then((results) =>{
-		require(['../background/scripts/tools/storagemanagement', '../background/scripts/tools/crypt'], function(SM, crypt){
+		require(['../background/scripts/tools/storagemanagement', 'logincrypt', 
+			], function(SM, crypt){
 			SM.getChallenge(function(res){
 				// console.log(res);
 				console.log(res);
@@ -266,7 +267,3 @@ function initLogin(){
 	$('.login').removeClass("hidden");
 
 }
-
-
-
-
