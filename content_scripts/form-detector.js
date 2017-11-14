@@ -7,7 +7,7 @@ mi.textContent = '@font-face { font-family: material-icons; src: url("'
 + '"); }';
 document.head.appendChild(mi);
 
-
+console.log("test");
 /* trigger storage lookup for matching accounts */
 window.addEventListener("DOMContentLoaded", init());
 
